@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <script src="lib/scrypt.js"></script>
+    <script>
+        var scrypt = scrypt_module_factory();
+        var password = scrypt.crypto_scrypt(scrypt.encode_utf8("pleaseletmein"),
+                scrypt.encode_utf8("http://www.google.com/"),
+                1024, 8, 1, 64)
+        console.log(password);
+    </script>
+    </body>
+</html>

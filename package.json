@@ -1,0 +1,22 @@
+{
+  "name": "UniquePasswordBuilder",
+  "version": "0.0.1",
+  "description": "A tool to generate strong password unique per site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulgreg/UniquePasswordBuilder.git"
+  },
+  "author": "",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/paulgreg/UniquePasswordBuilder/issues"
+  },
+  "homepage": "https://github.com/paulgreg/UniquePasswordBuilder",
+  "dependencies": {
+    "gulp": "^3.8.1"
+  }
+}

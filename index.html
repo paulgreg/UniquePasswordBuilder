@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="index, follow"/>
+        <meta name="author" content="Gr&eacute;gory Paul"/>
+        <title>Unique Password Builder Bookmarklet</title>
+        <link rel="icon" type="image/png" href="lock.png" />
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <style>
+            body                {   margin: 1em; }
+            h2                  {   border-bottom: 1px solid black; width: 98%; margin: .75em 0 .5em 0;}
+            h2.important        {   color: #F22; }
+            a                   {   text-decoration: underline; }
+            pre                 {   border: 1px solid black; padding: .25em; background-color: #EFE; }
+            fieldset            {   border: 1px solid black; background-color: #EFE; padding: .5em; }
+            fieldset span       {   border: 1px solid black; padding: 0 .25em; }
+            label,input         {   display: inline !important; }
+            input               {   margin-left: .25em; }
+            input[type=password]{   width: 10em; }
+            input[type=number]  {   width: 4em; }
+            input[type=url]     {   width: 95%; }
+        </style>
+        <script>
+            window.uniquePasswordBuilderBlockAutoLaunch = true; // Block the bookmarklet "auto-launch"
+        </script>
+        <script src="dist/upb.min.js"></script>
+    </head>
+    <body>
+        <h1>Unique Password Builder Bookmarklet</h1>
+
+        <h2>Try it yourself :</h2>
+        <p>Here is a form which allow you to try and see the generated password for any URL you set in the field :</p>
+        <ol>
+            <li>Type your password in field below,</li>
+            <li>Optionally, change the URL,</li>
+            <li>Click on "generate password" link,</li>
+            <li>Your initial password is now hashed with the URL, making a unique password per site. Beware : if the procotol (http/https) or domains changes, the password will be different.</li>
+        </ol>
+        <fieldset>
+            <label>Password:<input type="password" /></label>, <label><input type="checkbox" /> reveal password in clear text: </label><span></span><br/>
+            <label class="url"><abbr title="Uniform Resource Locator">URL</abbr>:<input type="url" /></label><br/>
+            (eventually, you can change the <label>number of rounds:<input type="number" value="1024" />)<label><br/>
+        </fieldset>
+
+        <h2>What is it ?</h2>
+        <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.<br/>
+        Unique Password Builder is a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> that will add a "generate password" link after all password fields (like in the example above). After entering your master password, you should click on the bookmarklet, then click on the "generate password" link added by the bookmarklet. That will compute your master password with the URL so it makes a different password for each website.</p>
+
+        <h2 class="important">Disclaimer / security concerns</h2>
+        <p>Generating passwords is a sensitive piece of code, so, I strongly suggest you get the <a href="https://github.com/paulgreg/UniquePasswordBuilder">source code</a> (eventually inspect it) and host the code (including that page) yourself on a SSL/TLS server.</p>
+        <p>If you’re not convinced, tell yourself what if I change the password generation code, if there’s a critical bug or if that page is deleted some day...</p>
+
+        <h2>Installation</h2>
+        <ol>
+            <li>Copy (in the clipboard) the following piece of code :
+            <li><pre class="simple">javascript:</pre>
+            <li>Bookmark that page and paste the copied code inside the adress field of the bookmark,
+        </ol>
+        <p>It’s done !</p>
+
+        <h2>Usage</h2>
+        <ol>
+            <li>Go to any login form,
+            <li>Type your <strong>master password</strong> in the password field,
+            <li>Click on the bookmarklet,
+            <li>Each password field should then be followed by a "generate password" link,
+            <li>Clicking on that link will generate a unique password for that field (the bookmarklet will fetch your initial password from the field, transform it and populate the generated password in the same field),
+            <li>Optionnaly, before generating the password, you can open the developper console to see the new generated password and information about the URL used.
+        </ol>
+        <p>It’s done, you can submit the form to login.</p>
+
+        <h2>Under the hood</h2>
+        <p><a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, is used to generate the password for a site.</p>
+        <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
+        <h3>Exemple for password 'abcdef' and URL 'https://login.yourdomain.com/login'</h3>
+        <pre>')CBIjF?U!g6hW,)D' = scrypt('abcdef', 'https://'+'login.yourdomain.com', 1024, 8, 1, 64)</pre>
+        <p>
+            <strong>Beware that, if your master password, the protocol or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
+            If that happens, you can always generate the old password using the form above with previous information.
+        </p>
+        <p>The code includes <a href="https://github.com/tonyg/js-scrypt">js-scrypt</a>, a library from Tony Garnock-Jones. Many thanks !</p>
+        <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on Google code</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
+
+        <h2>Make it stronger...</h2>
+        <p>We use 1024 rounds for scrypt by default but you can change that number (see "window.uniquePasswordBuilderRounds" in the bookmarklet above).</p>
+        <p>You can adjust it to the value you want. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
+
+        <script defer="defer">
+            (function() {
+
+                // Construct bookmarklet code
+                document.querySelector('pre.simple').innerHTML += "(function(){window.uniquePasswordBuilderRounds=1024;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
+
+                // Init location
+                var urlInput = document.querySelector('fieldset input[type=url]');
+                urlInput.value = window.location.protocol + '//' + window.location.host;
+
+                // Set listener on password field
+                var passwordInput = document.querySelector('fieldset input[type=password]');
+                var roundsInput = document.querySelector('fieldset input[type=number]');
+                var span = document.querySelector('fieldset span');
+                var check = document.querySelector('fieldset input[type=checkbox]');
+                setInterval(function() {
+                    span.innerHTML = (check.checked) ? passwordInput.value : "********";
+                }, 100);
+
+                var initUniquePasswordBuilder = function(evt) {
+                    var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
+                    roundsInput.value = rounds;
+                    var parts = urlInput.value.split('/'); // Extract protocol and host from input value
+                    var upb = new UniquePasswordBuilder({ protocol:parts[0], host:parts[2]}, rounds);
+                    upb.insertGenerateActions();
+                    var e = evt || window.event;
+                    if (e) e.cancelBubble = true;
+                    if (e && e.stopPropagation) e.stopPropagation();
+                    if (e && e.preventDefault) e.preventDefault();
+                }
+
+                // Init UniquePasswordBuilder
+                initUniquePasswordBuilder();
+
+                // When user changes the URL, relaunch the bookmarklet
+                if (urlInput.addEventListener) {
+                    urlInput.addEventListener('change', initUniquePasswordBuilder, false);
+                    roundsInput.addEventListener('change', initUniquePasswordBuilder, false);
+                }
+                else if (urlInput.attachEvent) {
+                    urlInput.attachEvent('onchange', initUniquePasswordBuilder);
+                    roundsInput.attachEvent('onchange', initUniquePasswordBuilder);
+                }
+            })();
+        </script>
+    </body>
+</html>

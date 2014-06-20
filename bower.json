@@ -1,0 +1,25 @@
+{
+  "name": "UniquePasswordBuilder",
+  "version": "0.0.1",
+  "homepage": "https://github.com/paulgreg/UniquePasswordBuilder",
+  "authors": [
+    "Grégory Paul <paulgreg@gmail.com>"
+  ],
+  "description": "A tool to generate strong password unique per site",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "master": "https://github.com/paulgreg/UniquePasswordBuilder/archive/master.zip",
+    "js-scrypt": "https://github.com/tonyg/js-scrypt.git",
+    "qunit": "~1.14.0"
+  }
+}

@@ -17,7 +17,7 @@ var fireEvent = function(element,event) {
 
 module('Under the hood');
 
-test("scrypt generation https://www.grc.com/sqrl/scrypt.htm", function() {
+test("check scrypt generation against https://www.grc.com/sqrl/scrypt.htm first test case", function() {
     // Given
     var scrypt = scrypt_module_factory();
 

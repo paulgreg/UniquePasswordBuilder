@@ -71,7 +71,7 @@
         <p>It’s done, you can submit the form to login.</p>
 
         <h2>Under the hood</h2>
-        <p><a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, is used to generate the password for a site.</p>
+        <p>We use <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, to generate the password for a site.</p>
         <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
         <h3>Exemple for password 'abcdef' and URL 'https://login.yourdomain.com/login'</h3>
         <pre>')CBIjF?U!g6hW,)D' = scrypt('abcdef', 'https://'+'login.yourdomain.com', 1024, 8, 1, 64)</pre>

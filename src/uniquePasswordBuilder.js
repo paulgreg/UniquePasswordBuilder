@@ -48,7 +48,7 @@ var UniquePasswordBuilder = (function() {
 
         generateUniquePassword: function(masterPassword) {
             var outputPassword = masterPassword;
-            var hashedPassword = this._scrypt.crypto_scrypt(this._scrypt.encode_utf8(outputPassword), this._scrypt.encode_utf8(this._host), this._rounds, 8, 1, 64)
+            var hashedPassword = this._scrypt.crypto_scrypt(this._scrypt.encode_utf8(outputPassword), this._scrypt.encode_utf8(this._host), this._rounds, 8, 1, 32)
             outputPassword = this.makeHashHumanReadable(hashedPassword);
 
             var roundsMessage = (this._rounds > 1) ? ' (in ' + this._rounds + ' rounds)' : '';
@@ -65,8 +65,8 @@ var UniquePasswordBuilder = (function() {
             ];
 
             var password = '';
-            for(i = 0; i < array.length; i+=4) {
-                var v = array[i] + array[i+1] + array[i+2] + array[i+3];
+            for(i = 0; i < array.length; i+=2) {
+                var v = array[i] + array[i+1];
                 password += availableChars[v % availableChars.length];
             }
             return password;

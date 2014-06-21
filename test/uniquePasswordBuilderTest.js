@@ -17,15 +17,15 @@ var fireEvent = function(element,event) {
 
 module('Under the hood');
 
-test("scrypt generation", function() {
+test("scrypt generation https://www.grc.com/sqrl/scrypt.htm", function() {
     // Given
     var scrypt = scrypt_module_factory();
 
     // When
-    var hashedPassword = scrypt.crypto_scrypt(scrypt.encode_utf8("password"), scrypt.encode_utf8("http://www.google.com/"), 1024, 8, 1, 64)
+    var hashedPassword = scrypt.crypto_scrypt(scrypt.encode_utf8(""), scrypt.encode_utf8(""), 512, 256, 1, 32)
 
     // Then
-    deepEqual( hashedPassword.subarray(), new Uint8Array([150, 168, 201, 232, 17, 182, 150, 77, 43, 138, 240, 5, 167, 144, 209, 44, 167, 162, 175, 120, 6, 135, 20, 43, 243, 35, 171, 236, 51, 45, 61, 20, 248, 45, 226, 120, 244, 136, 105, 47, 154, 208, 89, 244, 223, 172, 87, 147, 64, 192, 141, 66, 244, 67, 255, 226, 122, 141, 38, 103, 86, 46, 17, 20]), "scrypt generation problem" );
+    deepEqual( hashedPassword.subarray(), new Uint8Array([0xa8, 0xea, 0x62, 0xa6, 0xe1, 0xbf, 0xd2, 0x0e, 0x42, 0x75, 0x01, 0x15, 0x95, 0x30, 0x7a, 0xa3, 0x02, 0x64, 0x5c, 0x18, 0x01, 0x60, 0x0e, 0xf5, 0xcd, 0x79, 0xbf, 0x9d, 0x88, 0x4d, 0x91, 0x1c]), "scrypt generation problem" );
 });
 
 test("makeHashHumanReadable", function() {

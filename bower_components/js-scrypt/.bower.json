@@ -1,0 +1,14 @@
+{
+  "name": "js-scrypt",
+  "homepage": "https://github.com/tonyg/js-scrypt",
+  "_release": "941cbde3b1",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "941cbde3b1605251762f25af1b20765b271fd65d"
+  },
+  "_source": "https://github.com/tonyg/js-scrypt.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/tonyg/js-scrypt.git",
+  "_direct": true
+}

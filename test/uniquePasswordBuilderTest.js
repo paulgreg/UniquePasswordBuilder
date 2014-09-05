@@ -39,7 +39,7 @@ test("makeHashHumanReadable", function() {
     ok( generatedPassword, "(.K_xz491A]!5e[U", "makeHashHumanReadble transformation problem" );
 });
 
-var githubTlsDefaultPassword = "(1_.x#cs1N=UfqRc";
+var githubTlsDefaultPassword = "T3%:(Rhxi)K99-_n";
 
 test("generateUniquePassword for https://github.com with 'default-password'", function() {
     // Given
@@ -52,7 +52,7 @@ test("generateUniquePassword for https://github.com with 'default-password'", fu
     equal( generatedPassword, githubTlsDefaultPassword, "generateUniquePassword problem" );
 });
 
-var githubTlsDefaultPassword1Round = "xQfk+.suVGBZQx3u";
+var githubTlsDefaultPassword1Round = "YzWUCD(6L]Y;37+s";
 
 test("generateUniquePassword for https://github.com with 'default-password' for 1 round", function() {
     // Given
@@ -66,7 +66,7 @@ test("generateUniquePassword for https://github.com with 'default-password' for 
     notEqual( githubTlsDefaultPassword, githubTlsDefaultPassword1Round, "same password than a single round" );
 });
 
-var githubDefaultPassword = "X6;V4C?-Aqlyr]R2";
+var githubDefaultPassword = "x80.%W&I4!9b1R+$";
 
 test("generateUniquePassword for http://github.com with 'default-password'", function() {
     // Given
@@ -80,7 +80,7 @@ test("generateUniquePassword for http://github.com with 'default-password'", fun
     notEqual( generatedPassword, githubTlsDefaultPassword, "same password without protocol");
 });
 
-var googleTlsDefaultPassword = "BV?%iJF7j$xx%xRr";
+var googleTlsDefaultPassword = "B!kjuovp)3ZKMToJ";
 
 test("generateUniquePassword for https://www.google.com with 'default-password'", function() {
     // Given
@@ -95,7 +95,7 @@ test("generateUniquePassword for https://www.google.com with 'default-password'"
     notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");
 });
 
-var googleTlsDefaultPassword2 = ";1KsE=HI-Uw[61x&";
+var googleTlsDefaultPassword2 = "prY3LZxVt#]Nz;8i";
 
 test("generateUniquePassword for https://www.google.com with 'default-password2'", function() {
     // Given
@@ -111,7 +111,7 @@ test("generateUniquePassword for https://www.google.com with 'default-password2'
     notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");
 });
 
-var googleTlsDefaultPasswordRounds512 = "jC.9NcRHXY=#rmX;";
+var googleTlsDefaultPasswordRounds512 = "zK!C?WxCy)+aO-G$";
 
 test("generateUniquePassword for https://www.google.com with 'default-password' with 512 rounds", function() {
     // Given
@@ -128,7 +128,7 @@ test("generateUniquePassword for https://www.google.com with 'default-password' 
     notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");
 });
 
-var googleTlsDefaultPasswordRounds2048 = "q.xVYHbU!$6RWteO";
+var googleTlsDefaultPasswordRounds2048 = "a[#VFS%JL&NUsJ3z";
 
 test("generateUniquePassword for https://www.google.com with 'default-password' with 2048 rounds", function() {
     // Given
@@ -204,7 +204,7 @@ test("login normal case", function() {
     equal( field.value, googleTlsDefaultPassword, "Clicking on the link didn’t do anything");
 });
 
-var googleOldPassword = "!#[SM4rtyRPIbe2r";
+var googleOldPassword = "Q?zkT5ZTJ-dR-oAT";
 
 test("password creation case with 3 fields : old, new and confirmation", function() {
     // Given

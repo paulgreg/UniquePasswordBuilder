@@ -111,7 +111,7 @@
                     roundsInput.value = rounds;
                     var parts = urlInput.value.split('/'); // Extract protocol and host from input value
                     var upb = new UniquePasswordBuilder({ protocol:parts[0], host:parts[2]}, rounds);
-                    upb.insertGenerateActions();
+                    upb.insertGenerateActions(passwordInput.value);
                     var e = evt || window.event;
                     if (e) e.cancelBubble = true;
                     if (e && e.stopPropagation) e.stopPropagation();
@@ -124,10 +124,12 @@
                 // When user changes the URL, relaunch the bookmarklet
                 if (urlInput.addEventListener) {
                     urlInput.addEventListener('change', initUniquePasswordBuilder, false);
+                    passwordInput.addEventListener('change', initUniquePasswordBuilder, false);
                     roundsInput.addEventListener('change', initUniquePasswordBuilder, false);
                 }
                 else if (urlInput.attachEvent) {
                     urlInput.attachEvent('onchange', initUniquePasswordBuilder);
+                    passwordInput.attachEvent('change', initUniquePasswordBuilder);
                     roundsInput.attachEvent('onchange', initUniquePasswordBuilder);
                 }
             })();

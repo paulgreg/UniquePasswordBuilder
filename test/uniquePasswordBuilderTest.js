@@ -194,13 +194,12 @@ test("login normal case", function() {
     initContext('#case-login');
 
     // When
-    upb.insertGenerateActions();
-    var field = document.querySelector('#testing-zone input[type=password]');
-    field.value = "default-password";
+    upb.insertGenerateActions("default-password");
     var link = document.querySelector('#testing-zone input[type=password] + a.uniquePasswordBuilder');
     fireEvent(link, 'click');
 
     // Then
+    var field = document.querySelector('#testing-zone input[type=password]');
     equal( field.value, googleTlsDefaultPassword, "Clicking on the link didn’t do anything");
 });
 
@@ -212,17 +211,17 @@ test("password creation case with 3 fields : old, new and confirmation", functio
     initContext('#case-creation-3-fields');
 
     // When
-    upb.insertGenerateActions();
-    var fields = document.querySelectorAll('#testing-zone input[type=password]');
-    fields[0].value = "old-password";
-    fields[1].value = "default-password";
-    fields[2].value = "default-password";
+    upb.insertGenerateActions("old-password");
     var links = document.querySelectorAll('#testing-zone input[type=password] + a.uniquePasswordBuilder');
     fireEvent(links[0], 'click');
+
+    upb.insertGenerateActions("default-password");
+    links = document.querySelectorAll('#testing-zone input[type=password] + a.uniquePasswordBuilder');
     fireEvent(links[1], 'click');
     fireEvent(links[2], 'click');
 
     // Then
+    var fields = document.querySelectorAll('#testing-zone input[type=password]');
     equal( fields[0].value, googleOldPassword, "Clicking on the link didn’t do anything");
     equal( fields[1].value, googleTlsDefaultPassword, "Clicking on the link didn’t do anything");
     equal( fields[2].value, googleTlsDefaultPassword, "Clicking on the link didn’t do anything");

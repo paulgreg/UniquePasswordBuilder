@@ -8,7 +8,10 @@ var UniquePasswordBuilder = (function() {
 
     UniquePasswordBuilder.prototype = {
 
-        insertGenerateActions: function() {
+        insertGenerateActions: function(masterPassword) {
+            // generate master password
+            var generatedPassword = this.generateUniquePassword(masterPassword);
+            delete masterPassword;
             // cleanup : remove previous link
             var allPreviousLinks = document.querySelectorAll('a.uniquePasswordBuilder');
             for(var i = 0; i < allPreviousLinks.length; i++) {
@@ -25,16 +28,13 @@ var UniquePasswordBuilder = (function() {
                 link.setAttribute('class', 'uniquePasswordBuilder');
                 link.setAttribute('style', 'padding:5px;cursor:pointer;');
                 link.appendChild(document.createTextNode("generate password"));
-                this.addLinkAction(link, passwordInput);
+                this.addLinkAction(link, passwordInput, generatedPassword);
                 passwordInput.parentNode.insertBefore(link, passwordInput.nextSibling);
             }
         },
 
-        addLinkAction: function(link, passwordInput) {
+        addLinkAction: function(link, passwordInput, generatedPassword) {
             var generateHandler = function(evt) {
-                var currentPassword = passwordInput.value;
-                passwordInput.value = '';
-                var generatedPassword = this.generateUniquePassword(currentPassword);
                 passwordInput.value = generatedPassword;
                 var e = evt || window.event;
                 e.cancelBubble = true;
@@ -76,7 +76,9 @@ var UniquePasswordBuilder = (function() {
     var blockAutoLaunch = window.uniquePasswordBuilderBlockAutoLaunch === true;
     if (!blockAutoLaunch) {
         var u = new UniquePasswordBuilder(window.location, window.uniquePasswordBuilderRounds);
-        u.insertGenerateActions();
+        var password = prompt('Master password ?');
+        u.insertGenerateActions(password);
+        delete password;
     }
 
     return UniquePasswordBuilder;

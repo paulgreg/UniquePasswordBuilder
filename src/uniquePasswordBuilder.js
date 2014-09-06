@@ -76,7 +76,7 @@ var UniquePasswordBuilder = (function() {
     var blockAutoLaunch = window.uniquePasswordBuilderBlockAutoLaunch === true;
     if (!blockAutoLaunch) {
         form = document.createElement("form");
-        form.setAttribute('style', 'position:absolute;top:10px;left:10px;border:1px solid black;padding:10px 10px 8px 10px;background-color:white;font-size:12px;z-index:10000000;');
+        form.setAttribute('style', 'position:absolute;top:10px;right:10px;border:1px solid black;padding:10px 10px 8px 10px;background-color:white;font-size:12px;z-index:10000000;');
         input = document.createElement("input");
         input.id = 'uniquePasswordBuilderPassword';
         input.setAttribute('type', 'password');

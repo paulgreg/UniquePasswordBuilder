@@ -75,10 +75,33 @@ var UniquePasswordBuilder = (function() {
 
     var blockAutoLaunch = window.uniquePasswordBuilderBlockAutoLaunch === true;
     if (!blockAutoLaunch) {
-        var u = new UniquePasswordBuilder(window.location, window.uniquePasswordBuilderRounds);
-        var password = prompt('Master password ?');
-        u.insertGenerateActions(password);
-        delete password;
+        form = document.createElement("form");
+        form.setAttribute('style', 'position:absolute;top:10px;left:10px;border:1px solid black;padding:5px;background-color:white;font-size:12px;z-index:10000000;');
+        input = document.createElement("input");
+        input.id = 'uniquePasswordBuilderPassword';
+        input.setAttribute('type', 'password');
+        label = document.createElement("label");
+        label.setAttribute("for", "uniquePasswordBuilderPassword");
+        label.innerText = "Master password : "
+
+        form.appendChild(label);
+        form.appendChild(input);
+        document.body.appendChild(form);
+
+        var passwordEntered = function(e) {
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+            var u = new UniquePasswordBuilder(window.location, window.uniquePasswordBuilderRounds);
+            u.insertGenerateActions(input.value);
+            input.remove();
+            label.remove();
+            form.remove();
+        }
+
+        if (form.addEventListener)
+            form.addEventListener('submit', passwordEntered, false);
+        else if (form.attachEvent)
+            form.attachEvent('onsubmit', passwordEntered);
     }
 
     return UniquePasswordBuilder;

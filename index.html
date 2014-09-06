@@ -46,7 +46,8 @@
 
         <h2>What is it ?</h2>
         <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.<br/>
-        Unique Password Builder is a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> that will add a "generate password" link after all password fields (like in the example above). After entering your master password, you should click on the bookmarklet, then click on the "generate password" link added by the bookmarklet. That will compute your master password with the URL so it makes a different password for each website.</p>
+        Unique Password Builder is a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> that will ask your <strong>master password</strong> and then add a "generate password" link after all password fields (like in the example above).
+        Clicking on that link will compute your master password using the current domain so it makes a different but very strong password for each website.</p>
 
         <h2 class="important">Disclaimer / security concerns</h2>
         <p>Generating passwords is a sensitive piece of code, so, I strongly suggest you get the <a href="https://github.com/paulgreg/UniquePasswordBuilder">source code</a> (eventually inspect it) and host the code (including that page) yourself on a SSL/TLS server.</p>
@@ -63,11 +64,12 @@
         <h2>Usage</h2>
         <ol>
             <li>Go to any login form,
-            <li>Type your <strong>master password</strong> in the password field,
             <li>Click on the bookmarklet,
-            <li>Each password field should then be followed by a "generate password" link,
-            <li>Clicking on that link will generate a unique password for that field (the bookmarklet will fetch your initial password from the field, transform it and populate the generated password in the same field),
-            <li>Optionnaly, before generating the password, you can open the developper console to see the new generated password and information about the URL used.
+            <li>A form asking your "master passord" will appear,
+            <li>Type your <strong>master password</strong> in that password field and press <strong>enter</strong>,
+            <li>Each password field on the page should then be followed by a "generate password" link,
+            <li>Clicking on that link will generate a password, unique for that URL and master password, into the field,
+            <li>Optionally, before pressing enter, you can open the developer console to see the new generated password and information about the URL used.
         </ol>
         <p>It’s done, you can submit the form to login.</p>
 
@@ -77,7 +79,7 @@
         <h3>Exemple for password 'abcdef' and URL 'https://login.yourdomain.com/login'</h3>
         <pre>')CBIjF?U!g6hW,)D' = scrypt('abcdef', 'https://'+'login.yourdomain.com', 1024, 8, 1, 64)</pre>
         <p>
-            <strong>Beware that, if your master password, the protocol or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
+            <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
         </p>
         <p>The code includes <a href="https://github.com/tonyg/js-scrypt">js-scrypt</a>, a library from Tony Garnock-Jones. Many thanks !</p>

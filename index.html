@@ -123,6 +123,7 @@
 
                 var generatePasswordAndUnmask = function(evt) {
                     if (evt.keyCode === 13) {
+                        initUniquePasswordBuilder();
                         document.querySelector('a.uniquePasswordBuilder').click();
                         check.checked = true;
                         var e = evt || window.event;

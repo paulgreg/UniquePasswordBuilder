@@ -123,10 +123,14 @@
                 // Init UniquePasswordBuilder
                 initUniquePasswordBuilder();
 
-                var generatePasswordAndUnmask = function(e) {
-                    if (e.keyCode === 13) {
+                var generatePasswordAndUnmask = function(evt) {
+                    if (evt.keyCode === 13) {
                         document.querySelector('a.uniquePasswordBuilder').click();
                         check.checked = true;
+                        var e = evt || window.event;
+                        if (e) e.cancelBubble = true;
+                        if (e && e.stopPropagation) e.stopPropagation();
+                        if (e && e.preventDefault) e.preventDefault();
                     }
                 }
 

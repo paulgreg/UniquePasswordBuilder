@@ -8,7 +8,10 @@ var UniquePasswordBuilder = (function() {
 
     UniquePasswordBuilder.prototype = {
 
-        insertGenerateActions: function() {
+        insertGenerateActions: function(masterPassword) {
+            // generate master password
+            var generatedPassword = this.generateUniquePassword(masterPassword);
+            delete masterPassword;
             // cleanup : remove previous link
             var allPreviousLinks = document.querySelectorAll('a.uniquePasswordBuilder');
             for(var i = 0; i < allPreviousLinks.length; i++) {
@@ -25,16 +28,13 @@ var UniquePasswordBuilder = (function() {
                 link.setAttribute('class', 'uniquePasswordBuilder');
                 link.setAttribute('style', 'padding:5px;cursor:pointer;');
                 link.appendChild(document.createTextNode("generate password"));
-                this.addLinkAction(link, passwordInput);
+                this.addLinkAction(link, passwordInput, generatedPassword);
                 passwordInput.parentNode.insertBefore(link, passwordInput.nextSibling);
             }
         },
 
-        addLinkAction: function(link, passwordInput) {
+        addLinkAction: function(link, passwordInput, generatedPassword) {
             var generateHandler = function(evt) {
-                var currentPassword = passwordInput.value;
-                passwordInput.value = '';
-                var generatedPassword = this.generateUniquePassword(currentPassword);
                 passwordInput.value = generatedPassword;
                 var e = evt || window.event;
                 e.cancelBubble = true;
@@ -75,8 +75,35 @@ var UniquePasswordBuilder = (function() {
 
     var blockAutoLaunch = window.uniquePasswordBuilderBlockAutoLaunch === true;
     if (!blockAutoLaunch) {
-        var u = new UniquePasswordBuilder(window.location, window.uniquePasswordBuilderRounds);
-        u.insertGenerateActions();
+        form = document.createElement("form");
+        form.setAttribute('style', 'position:absolute;top:10px;right:10px;border:1px solid black;padding:10px 10px 8px 10px;background-color:white;font-size:12px;z-index:10000000;');
+        input = document.createElement("input");
+        input.id = 'uniquePasswordBuilderPassword';
+        input.setAttribute('type', 'password');
+        input.setAttribute('style', 'border:1px solid black;');
+        label = document.createElement("label");
+        label.setAttribute("for", "uniquePasswordBuilderPassword");
+        label.textContent = "Master password : "
+        label.setAttribute('style', 'display:inline-block;');
+
+        form.appendChild(label);
+        form.appendChild(input);
+        document.body.appendChild(form);
+
+        var passwordEntered = function(e) {
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+            var u = new UniquePasswordBuilder(window.location, window.uniquePasswordBuilderRounds);
+            u.insertGenerateActions(input.value);
+            input.remove();
+            label.remove();
+            form.remove();
+        }
+
+        if (form.addEventListener)
+            form.addEventListener('submit', passwordEntered, false);
+        else if (form.attachEvent)
+            form.attachEvent('onsubmit', passwordEntered);
     }
 
     return UniquePasswordBuilder;

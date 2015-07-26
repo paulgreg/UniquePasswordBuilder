@@ -18,7 +18,6 @@
     "tests"
   ],
   "dependencies": {
-    "master": "https://github.com/paulgreg/UniquePasswordBuilder/archive/master.zip",
     "js-scrypt": "https://github.com/tonyg/js-scrypt.git",
     "qunit": "~1.14.0"
   }

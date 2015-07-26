@@ -4,22 +4,33 @@ var uglify = require('gulp-uglify');
 var rimraf = require('rimraf');
 
 var paths = {
-  scripts: [ 'bower_components/js-scrypt/browser/scrypt.js', 'src/uniquePasswordBuilder.js' ]
+    index: [
+        'bower_components/js-scrypt/browser/scrypt.js',
+        'src/passwordgeneration.js'
+    ],
+    bookmarklet: [
+        'bower_components/js-scrypt/browser/scrypt.js',
+        'src/passwordgeneration.js',
+        'src/ui.js',
+        'src/bookmarklet.js'
+    ]
 };
 
 gulp.task('clean', function(cb){
   rimraf('dist/', cb);
 });
 
-gulp.task('scripts', ['clean'], function() {
-  return gulp.src(paths.scripts)
+gulp.task('bookmarklet', function() {
+  return gulp.src(paths.bookmarklet)
     .pipe(uglify())
     .pipe(concat('upb.min.js'))
     .pipe(gulp.dest('dist'));
 });
-
-gulp.task('watch', function() {
-  gulp.watch(paths.scripts, ['scripts']);
+gulp.task('index', function() {
+  return gulp.src(paths.index)
+    .pipe(uglify())
+    .pipe(concat('index.min.js'))
+    .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['clean', 'scripts']);
+gulp.task('default', ['clean', 'index', 'bookmarklet']);

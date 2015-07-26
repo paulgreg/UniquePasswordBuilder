@@ -1,5 +1,6 @@
 {
   "name": "js-scrypt",
+  "version": "0.5.0",
   "homepage": "https://github.com/tonyg/js-scrypt",
   "authors": [
     "Colin Percival",
@@ -18,14 +19,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "_release": "1427dcb6f5",
-  "_resolution": {
-    "type": "branch",
-    "branch": "master",
-    "commit": "1427dcb6f58385fb83aafeb6d5ec05b3d1d72ec2"
-  },
-  "_source": "https://github.com/tonyg/js-scrypt.git",
-  "_target": "*",
-  "_originalSource": "https://github.com/tonyg/js-scrypt.git"
+  ]
 }

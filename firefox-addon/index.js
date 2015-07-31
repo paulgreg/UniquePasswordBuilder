@@ -1,16 +1,17 @@
-var self = require('sdk/self');
-var data = require("sdk/self").data;
+var self             = require('sdk/self');
+var data             = require("sdk/self").data;
+var tabs             = require("sdk/tabs");
+var storage          = require("sdk/simple-storage").storage;
+var clipboard        = require("sdk/clipboard");
+var { Panel }        = require("sdk/panel");
 var { ToggleButton } = require("sdk/ui/button/toggle");
-var panels = require("sdk/panel");
-var tabs = require("sdk/tabs");
-var storage = require("sdk/simple-storage").storage;
 
 var height = {
-    initial: 200,
-    expand: 260
+    initial: 202,
+    expand: 262
 };
 
-var panel = panels.Panel({
+var panel = Panel({
     contentURL: data.url("panel.html"),
     contentScriptFile: [
         data.url("panel.js"),
@@ -27,7 +28,12 @@ var panel = panels.Panel({
                 storage[message.action] = message.value;
                 break;
             case 'details':
+                panel.hide();
                 tabs.open("http://paulgreg.me/UniquePasswordBuilder/");
+                break;
+            case 'done':
+                panel.hide();
+                clipboard.set(message.value);
                 break;
         }
     },

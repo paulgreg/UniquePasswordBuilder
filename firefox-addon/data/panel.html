@@ -12,7 +12,7 @@
             input, select, #output   { flex-grow: 1; }
             #output                  { border: 1px dashed black; padding: .25em .1em; text-align: center; }
             #details                 { position: relative; text-align: right; }
-            .hide                    { display: none; }
+            .hidden                  { display: none; }
         </style>
     </head>
     <body>
@@ -22,7 +22,7 @@
                 <label>Password: <input type="password" id="password" /></label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
-                <div class="options hide">
+                <div class="options hidden">
                     <label>rounds
                         <select id="rounds">
                             <option value="256">256</option>
@@ -36,7 +36,7 @@
                     </label>
                     <label>key index: <input type="number" id="keyindex" value="0" /></label>
                 </div>
-                <label><span id="output"></span></label>
+                <label><span id="output"></span><img class="copy hidden" src="copy.png" title="copy and close" width="32" height="32" /></label>
             </fieldset>
         </form>
         <a href="" id="details">More information</a>

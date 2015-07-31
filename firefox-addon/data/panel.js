@@ -6,11 +6,12 @@ var outputSpan                    = document.getElementById('output');
 var detailsLink                   = document.getElementById('details');
 var optionsLink                   = document.querySelector('a.options');
 var optionsDiv                    = document.querySelector('div.options');
+var copyImg                       = document.querySelector('img.copy');
 
 var timeout = null;
-var delay = function(fn) {
+var delay = function(fn, evt) {
     clearTimeout(timeout);
-    timeout = setTimeout(fn, 200);
+    timeout = setTimeout(fn.bind(undefined, evt), 250);
 }
 
 var go = function(evt) {
@@ -21,17 +22,24 @@ var go = function(evt) {
         var parts = urlInput.value.split('/'); // Extract protocol and host from input value
         urlInput.value = parts[0] + '//' + parts[2] + '/';
         outputSpan.classList.remove('error');
-        outputSpan.innerHTML = UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, true);
+        copyImg.classList.remove('hidden');
+        var password = UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, true);
+        outputSpan.innerHTML = password;
+        if (evt && evt.keyCode === 13) {
+            passwordInput.value = "";
+            self.postMessage({ action: 'done', value: password });
+        }
     } catch(e) {
         outputSpan.classList.add('error');
+        copyImg.classList.add('hidden');
         outputSpan.innerHTML = e;
     }
 }
 
-var delayedGo = delay.bind(this, go);
+var delayedGo = delay.bind(undefined, go);
 
-passwordInput.addEventListener('keyup', delayedGo, false);
 urlInput.addEventListener('keyup', delayedGo, false);
+passwordInput.addEventListener('keyup', delayedGo, false);
 roundsInput.addEventListener('change', delayedGo, false);
 keyindexInput.addEventListener('keyup', delayedGo, false);
 keyindexInput.addEventListener('change', delayedGo, false);
@@ -39,31 +47,41 @@ passwordInput.addEventListener('keyup', delayedGo, false)
 
 var notify = function(key) {
     return function() {
-        self.postMessage({'action': key, 'value': this.value});
+        self.postMessage({ action: key, 'value': this.value });
     }
 }
 roundsInput.addEventListener('change', notify('rounds'), false);
 keyindexInput.addEventListener('keyup', notify('keyindex'), false);
 keyindexInput.addEventListener('change', notify('keyindex'), false);
 
-detailsLink.addEventListener('click', function(e) {
-    self.postMessage({'action': 'details'});
+optionsLink.addEventListener('click', function(e) {
+    optionsDiv.classList.toggle('hidden');
+    self.postMessage({ action: 'options', 'value': !optionsDiv.classList.contains('hidden') });
     e.preventDefault();
 }, false);
 
-optionsLink.addEventListener('click', function(e) {
-    optionsDiv.classList.toggle('hide');
-    self.postMessage({'action': 'options', 'value': !optionsDiv.classList.contains('hide') });
+copyImg.addEventListener('click', function() {
+    self.postMessage({ action: 'done', value: outputSpan.innerHTML });
+    passwordInput.value = "";
+}, false)
+
+detailsLink.addEventListener('click', function(e) {
+    self.postMessage({ action: 'details' });
     e.preventDefault();
 }, false);
 
 self.on('message', function(message) {
+    passwordInput.value = "";
     urlInput.value = message.url;
     roundsInput.value = message.rounds || 1024;
     keyindexInput = message.keyindex || 0;
 
     if (message.options === true) {
-        optionsDiv.classList.remove('hide');
+        optionsDiv.classList.remove('hidden');
     }
+
     go();
+
+    passwordInput.focus();
 });
+

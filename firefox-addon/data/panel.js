@@ -24,7 +24,7 @@ var go = function(evt) {
         outputSpan.classList.remove('error');
         copyImg.classList.remove('hidden');
         var password = UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, true);
-        outputSpan.innerHTML = password;
+        outputSpan.textContent = password;
         if (evt && evt.keyCode === 13) {
             passwordInput.value = "";
             self.postMessage({ action: 'done', value: password });
@@ -32,7 +32,7 @@ var go = function(evt) {
     } catch(e) {
         outputSpan.classList.add('error');
         copyImg.classList.add('hidden');
-        outputSpan.innerHTML = e;
+        outputSpan.textContent = e;
     }
 }
 
@@ -61,7 +61,7 @@ optionsLink.addEventListener('click', function(e) {
 }, false);
 
 copyImg.addEventListener('click', function() {
-    self.postMessage({ action: 'done', value: outputSpan.innerHTML });
+    self.postMessage({ action: 'done', value: outputSpan.textContent });
     passwordInput.value = "";
 }, false)
 

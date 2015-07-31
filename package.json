@@ -16,11 +16,12 @@
     "url": "https://github.com/paulgreg/UniquePasswordBuilder/issues"
   },
   "homepage": "https://github.com/paulgreg/UniquePasswordBuilder",
-  "dependencies": {
+  "devDependencies": {
     "bower": "^1.4.1",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-uglify": "^1.2.0",
+    "jpm": "^1.0.0",
     "rimraf": "^2.4.2"
   }
 }

@@ -16,7 +16,7 @@
         return password;
     };
 
-    upb.generate = function(location, rounds, masterPassword, keyIndex) {
+    upb.generate = function(location, rounds, masterPassword, keyIndex, nolog) {
         if (!masterPassword) {
             throw new Error('master password should not be empty');
         }
@@ -36,7 +36,7 @@
         var hashedPassword = scrypt.crypto_scrypt(scrypt.encode_utf8(masterPassword), scrypt.encode_utf8(salt), rounds, 8, 1, 32)
         var outputPassword = upb.makeHashHumanReadable(hashedPassword);
 
-        if (console && console.log) {
+        if (!nolog && console && console.log) {
             var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
             var roundsMessage = (rounds > 1) ? ' (in ' + rounds + ' rounds)' : '';
             console.log('UniquePasswordBuilder - Generated password: ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + roundsMessage);

@@ -1,0 +1,14 @@
+{
+  "title": "UniquePasswordBuilder Addon",
+  "name": "uniquepasswordbuilder-addon",
+  "version": "0.0.1",
+  "description": "A strong password generator per site",
+  "main": "index.js",
+  "author": "Grégory Paul",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "GPLv2",
+  "icon": "data/icon.png"
+}

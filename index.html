@@ -6,7 +6,7 @@
         <meta name="author" content="Gr&eacute;gory Paul"/>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no" />
         <title>Unique Password Builder Bookmarklet</title>
-        <link rel="icon" type="image/png" href="lock.png" />
+        <link rel="icon" type="image/png" href="icon.png" />
         <link href="css/bootstrap.min.css" rel="stylesheet" />
         <style>
             body                     { margin: 1em; }
@@ -23,8 +23,8 @@
             @media (max-width:800px) {
                 label, select, input { display: block; width: 98%; }
             }
-        </style>
-        <script src="dist/index.min.js"></script>
+        </style>-main
+        <script src="dist/upb-main.min.js"></script>
     </head>
     <body>
         <h1>Unique Password Builder Bookmarklet</h1>
@@ -104,14 +104,12 @@
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
-                urlInput.value                    = window.location.protocol + '//' + window.location.host;
-
-                // Set listener on password field
                 var passwordInput                 = document.getElementById('password');
                 var roundsInput                   = document.getElementById('rounds');
                 var keyindexInput                 = document.getElementById('keyindex');
                 var outputSpan                    = document.getElementById('output');
-                var timeSpan                      = document.getElementById('time');
+
+                urlInput.value                    = window.location.protocol + '//' + window.location.host;
 
                 var timeout = null;
                 var delay = function(fn) {

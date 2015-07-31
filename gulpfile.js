@@ -16,9 +16,12 @@ var paths = {
     ]
 };
 
-gulp.task('clean', function(cb){
+
+gulp.task('clean-dist', function(cb){
   rimraf('dist/', cb);
 });
+
+gulp.task('clean', ['clean-dist']);
 
 gulp.task('bookmarklet', function() {
   return gulp.src(paths.bookmarklet)
@@ -26,11 +29,25 @@ gulp.task('bookmarklet', function() {
     .pipe(concat('upb.min.js'))
     .pipe(gulp.dest('dist'));
 });
+
 gulp.task('index', function() {
   return gulp.src(paths.index)
     .pipe(uglify())
-    .pipe(concat('index.min.js'))
+    .pipe(concat('upb-main.min.js'))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['clean', 'index', 'bookmarklet']);
+
+gulp.task('addon-copy-icon', function() {
+    gulp.src('./icon.png')
+    .pipe(gulp.dest('./firefox-addon/data'));
+});
+
+gulp.task('addon-copy-js', ['index'], function() {
+    gulp.src('./dist/upb-main.min.js')
+    .pipe(gulp.dest('./firefox-addon/data'));
+});
+
+gulp.task('addon', ['addon-copy-icon', 'addon-copy-js']);
+
+gulp.task('default', ['clean', 'index', 'bookmarklet', 'addon']);

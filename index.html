@@ -6,25 +6,35 @@
         <meta name="author" content="Gr&eacute;gory Paul"/>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no" />
         <title>Unique Password Builder Bookmarklet</title>
-        <link rel="icon" type="image/png" href="lock.png" />
-        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="icon.png" />
         <style>
-            body                     { margin: 1em; }
-            h2                       { border-bottom: 1px solid black; width: 98%; margin: .75em 0 .5em 0;}
-            h2.important             { color: #F22; }
-            .error                   { border: 2px solid #F22; color: #F22; font-weight: bold; }
-            a                        { text-decoration: underline; }
-            pre                      { border: 1px solid black; padding: .25em; background-color: #EFE; }
-            fieldset                 { border: 1px solid black; background-color: #EFE; padding: .5em; }
-            label                    { display: flex; }
-            input, select, #output   { margin-left: .25em; flex-grow: 1; }
-            #output                  { border: 1px dashed black; padding: .25em .5em; }
+            body                      { margin: .75em; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; color: #333; font-size: 1em; }
+
+            h1, h2, h3, h4, h5, h6    { margin: 0px; font-weight: bold; text-rendering: optimizelegibility; }
+            h1                        { font-size: 30px; line-height: 1.25em; }
+            h2                        { border-bottom: 1px solid black; width: 98%; margin: .75em 0 .5em 0;}
+
+            p                         { margin: 0px 0px 9px; line-height: 1.25em; }
+
+            h2.important              { color: #F22; }
+            .error                    { border: 2px solid #F22; color: #F22; font-weight: bold; }
+            a                         { text-decoration: underline; }
+            pre                       { border: 1px solid black; padding: .25em; background-color: #EFE; }
+            fieldset                  { border: 1px solid black; background-color: #EFE; padding: .5em; }
+            label                     { display: flex; color: #333; }
+            input, select, #output    { margin-left: .25em; flex-grow: 1; }
+            #output                   { border: 1px dashed black; padding: .25em .5em; }
+            a.options                 { text-align: right; display: block; margin: 0 0 .5em 0; }
+            .hidden                   { display: none; }
+
+            input:focus, select:focus { border-color: rgba(82, 168, 236, 0.8); box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
+            input, select             { padding: 4px; margin-bottom: 9px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
+            input                     { height: 18px;}
 
             @media (max-width:800px) {
                 label, select, input { display: block; width: 98%; }
             }
         </style>
-        <script src="dist/index.min.js"></script>
     </head>
     <body>
         <h1>Unique Password Builder Bookmarklet</h1>
@@ -34,32 +44,40 @@
             <fieldset>
                 <label>Your master password: <input type="password" id="password" /></label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
-                <label>Optional - rounds (power of two):
-                    <select id="rounds">
-                        <option value="256">256</option>
-                        <option value="512">512</option>
-                        <option value="1024" selected="selected">1024</option>
-                        <option value="2048">2048</option>
-                        <option value="4096">4096</option>
-                        <option value="8192">8192</option>
-                        <option value="16384">16384</option>
-                    </select>
-                </label>
-                <label>Optional - key index: <input type="number" id="keyindex" value="0" /></label>
+                <a href="" class="options">options</a>
+                <div class="options hidden">
+                    <label>rounds:
+                        <select id="rounds">
+                            <option value="256">256</option>
+                            <option value="512">512</option>
+                            <option value="1024" selected="selected">1024</option>
+                            <option value="2048">2048</option>
+                            <option value="4096">4096</option>
+                            <option value="8192">8192</option>
+                            <option value="16384">16384</option>
+                        </select>
+                    </label>
+                    <label>key index: <input type="number" id="keyindex" value="0" /></label>
+                </div>
                 <label>Generated password: <span id="output"></span></label>
             </fieldset>
         </form>
 
         <h2>What is it ?</h2>
-        <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.<br/>
-        Unique Password Builder is a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> that will ask your <strong>master password</strong> and then add a "generate password" link after all password fields.
-        Clicking on that link will compute your master password using the current domain so it makes a different but very strong password for each website.</p>
+        <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.</p>
+        <p>You can use Unique Password Builder via :
+            <ul>
+                <li>a <a href="https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon/">Firefox Addon</a> generating your password that you can then copy and paste,
+                <li>or a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> for other browsers that will ask your <strong>master password</strong> and then add a "generate password" link after all password fields.
+                Clicking on that link will compute your master password using the current domain so it makes a different but very strong password for each website.
+            </ul>
+        </p>
 
         <h2 class="important">Disclaimer / security concerns</h2>
         <p>Generating passwords is a sensitive piece of code, so, I strongly suggest you get the <a href="https://github.com/paulgreg/UniquePasswordBuilder">source code</a> (eventually inspect it) and host the code (including that page) yourself on a SSL/TLS server.</p>
         <p>If you’re not convinced, tell yourself what if I change the password generation code, if there’s a critical bug or if that page is deleted some day...</p>
 
-        <h2>Installation</h2>
+        <h2>Bookmarklet installation</h2>
         <ol>
             <li>Copy (in the clipboard) the following piece of code :
             <li><pre class="simple">javascript:</pre>
@@ -67,7 +85,7 @@
         </ol>
         <p>It’s done !</p>
 
-        <h2>Usage</h2>
+        <h2>Bookmarklet usage</h2>
         <ol>
             <li>Go to any login form,
             <li>Click on the bookmarklet,
@@ -88,14 +106,17 @@
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
         </p>
-        <p>The code includes <a href="https://github.com/tonyg/js-scrypt">js-scrypt</a>, a library from Tony Garnock-Jones. Many thanks !</p>
+        <p>the "key index" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
+        <p>The Firefox Addon, that page and the bookmarklet shares code about password generation. You can use one or the other and still get the same password with the same parameters.</p>
+        <p>The code includes <a href="https://github.com/tonyg/js-scrypt">js-scrypt</a>, a library from Tony Garnock-Jones and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
         <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 
         <h2>Make it stronger...</h2>
-        <p>We use 1024 rounds for scrypt by default (see "window.uniquePasswordBuilderRounds" in the bookmarklet above).</p>
+        <p>We use 1024 rounds for scrypt by default (see "rounds" in form or "window.uniquePasswordBuilderRounds" in the bookmarklet above).</p>
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
         <p>The key index is useful when a site asks you to change your password. You can increment the key index for that site so the generated password will be different.</p>
 
+        <script src="dist/upb-main.min.js"></script>
         <script defer="defer">
             (function() {
 
@@ -104,14 +125,14 @@
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
-                urlInput.value                    = window.location.protocol + '//' + window.location.host;
-
-                // Set listener on password field
                 var passwordInput                 = document.getElementById('password');
                 var roundsInput                   = document.getElementById('rounds');
                 var keyindexInput                 = document.getElementById('keyindex');
                 var outputSpan                    = document.getElementById('output');
-                var timeSpan                      = document.getElementById('time');
+                var optionsLink                   = document.querySelector('a.options');
+                var optionsDiv                    = document.querySelector('div.options');
+
+                urlInput.value                    = window.location.protocol + '//' + window.location.host;
 
                 var timeout = null;
                 var delay = function(fn) {
@@ -119,7 +140,7 @@
                     timeout = setTimeout(fn, 250);
                 }
 
-                var go = function(evt) {
+                var go = function() {
                     try {
                         var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
                         var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
@@ -135,22 +156,20 @@
 
                 var delayedGo = delay.bind(this, go);
 
-                if (urlInput.addEventListener) {
-                    passwordInput.addEventListener('keyup', delayedGo, false);
-                    urlInput.addEventListener('keyup', delayedGo, false);
-                    roundsInput.addEventListener('change', delayedGo, false);
-                    keyindexInput.addEventListener('keyup', delayedGo, false);
-                    keyindexInput.addEventListener('change', delayedGo, false);
-                    passwordInput.addEventListener('keyup', delayedGo, false)
+                var toggleOptions = function(e) {
+                    e.preventDefault();
+                    optionsDiv.classList.toggle('hidden');
                 }
-                else if (urlInput.attachEvent) {
-                    passwordInput.attachEvent('onkeyup', delayedGo);
-                    urlInput.attachEvent('onkeyup', delayedGo);
-                    roundsInput.attachEvent('onchange', delayedGo);
-                    keyindexInput.attachEvent('onkeyup', delayedGo);
-                    keyindexInput.attachEvent('onchange', delayedGo);
-                    passwordInput.attachEvent('onkeyup', delayedGo)
-                }
+
+                passwordInput.addEventListener('keyup', delayedGo, false);
+                urlInput.addEventListener('keyup', delayedGo, false);
+                roundsInput.addEventListener('change', delayedGo, false);
+                keyindexInput.addEventListener('keyup', delayedGo, false);
+                keyindexInput.addEventListener('change', delayedGo, false);
+                passwordInput.addEventListener('keyup', delayedGo, false);
+                optionsLink.addEventListener('click', toggleOptions, false);
+
+                go();
 
             })();
         </script>

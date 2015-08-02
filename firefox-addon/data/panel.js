@@ -74,7 +74,7 @@ self.on('message', function(message) {
     passwordInput.value = "";
     urlInput.value = message.url;
     roundsInput.value = message.rounds || 1024;
-    keyindexInput = message.keyindex || 0;
+    keyindexInput.value = message.keyindex || 0;
 
     if (message.options === true) {
         optionsDiv.classList.remove('hidden');

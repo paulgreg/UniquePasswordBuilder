@@ -2,7 +2,7 @@
     "id": "UniquePasswordBuilder@paulgreg.me",
     "title": "UniquePasswordBuilder Addon",
     "name": "uniquepasswordbuilder-addon",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A strong password generator per site",
     "main": "index.js",
     "author": "Grégory Paul",

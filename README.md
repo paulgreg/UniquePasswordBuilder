@@ -26,4 +26,4 @@ To run the addon, type `./node_modules/.bin/jpm run` and `./node_modules/.bin/jp
 Attribution
 --------------
 
-Icons comes from [Piotr Adam Kwiatkowski](http://ikons.piotrkwiatkowski.co.uk/). Thanks
+The code includes [js-scrypt](https://github.com/tonyg/js-scrypt), a library from Tony Garnock-Jones and icons are from [Piotr Adam Kwiatkowski](http://ikons.piotrkwiatkowski.co.uk/). Many thanks !

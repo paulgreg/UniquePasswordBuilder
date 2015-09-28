@@ -44,7 +44,7 @@ gulp.task('addon-copy-icon', function() {
 });
 
 gulp.task('addon-copy-js', ['index'], function() {
-    gulp.src('./dist/upb-main.min.js')
+    gulp.src(paths.index)
     .pipe(gulp.dest('./firefox-addon/data'));
 });
 

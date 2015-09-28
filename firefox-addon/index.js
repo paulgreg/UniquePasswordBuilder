@@ -15,7 +15,8 @@ var panel = Panel({
     contentURL: data.url("panel.html"),
     contentScriptFile: [
         data.url("panel.js"),
-        data.url("upb-main.min.js")
+        data.url("scrypt.js"),
+        data.url("passwordgeneration.js")
     ],
     width: 410,
     height: height.initial,

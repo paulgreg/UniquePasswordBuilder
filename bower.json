@@ -18,7 +18,7 @@
     "tests"
   ],
   "dependencies": {
-    "js-scrypt": "https://github.com/tonyg/js-scrypt.git",
-    "qunit": "~1.14.0"
+    "qunit": "~1.19.0",
+    "scrypt-async": "~1.1.0"
   }
 }

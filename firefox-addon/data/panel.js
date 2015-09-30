@@ -23,12 +23,13 @@ var go = function(evt) {
         urlInput.value = parts[0] + '//' + parts[2] + '/';
         outputSpan.classList.remove('error');
         copyImg.classList.remove('hidden');
-        var password = UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, true);
-        outputSpan.textContent = password;
-        if (evt && evt.keyCode === 13) {
-            passwordInput.value = "";
-            self.postMessage({ action: 'done', value: password });
-        }
+        UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {
+            outputSpan.textContent = password;
+            if (evt && evt.keyCode === 13) {
+                passwordInput.value = "";
+                self.postMessage({ action: 'done', value: password });
+            }
+        }, true);
     } catch(e) {
         outputSpan.classList.add('error');
         copyImg.classList.add('hidden');

@@ -18,11 +18,12 @@
     var passwordEntered = function(e) {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
-        var generatedPassword = upb.generate(window.location, window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex);
-        upb.insertGenerateActions(generatedPassword);
-        input.remove();
-        label.remove();
-        form.remove();
+        upb.generate(window.location, window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
+            upb.insertGenerateActions(generatedPassword);
+            input.remove();
+            label.remove();
+            form.remove();
+        });
     }
 
     if (form.addEventListener) {

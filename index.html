@@ -108,7 +108,7 @@
         </p>
         <p>the "key index" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
         <p>The Firefox Addon, that page and the bookmarklet shares code about password generation. You can use one or the other and still get the same password with the same parameters.</p>
-        <p>The code includes <a href="https://github.com/tonyg/js-scrypt">js-scrypt</a>, a library from Tony Garnock-Jones and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
+        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a>, a library from Dmitry Chestnykh and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
         <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 
         <h2>Make it stronger...</h2>
@@ -147,7 +147,9 @@
                         keyindexInput.value = keyindex;
                         var parts = urlInput.value.split('/'); // Extract protocol and host from input value
                         outputSpan.className = '';
-                        outputSpan.innerHTML = UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, rounds, passwordInput.value, keyindex);
+                        UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, rounds, passwordInput.value, keyindex, function(generatedPassword) {
+                            outputSpan.innerHTML = generatedPassword;
+                        });
                     } catch(e) {
                         outputSpan.className = 'error';
                         outputSpan.innerHTML = e;

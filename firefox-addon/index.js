@@ -15,7 +15,7 @@ var panel = Panel({
     contentURL: data.url("panel.html"),
     contentScriptFile: [
         data.url("panel.js"),
-        data.url("scrypt.js"),
+        data.url("scrypt-async.js"),
         data.url("passwordgeneration.js")
     ],
     width: 410,

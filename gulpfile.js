@@ -5,11 +5,11 @@ var rimraf = require('rimraf');
 
 var paths = {
     index: [
-        'bower_components/scrypt-async/scrypt-async.js',
+        'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js'
     ],
     bookmarklet: [
-        'bower_components/scrypt-async/scrypt-async.js',
+        'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
         'src/ui.js',
         'src/bookmarklet.js'

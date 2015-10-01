@@ -1,16 +1,14 @@
 {
   "name": "UniquePasswordBuilder",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A tool to generate strong password unique per site",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/paulgreg/UniquePasswordBuilder.git"
   },
-  "author": "",
+  "author": "Grégory PAUL",
   "license": "GPLv2",
   "bugs": {
     "url": "https://github.com/paulgreg/UniquePasswordBuilder/issues"
@@ -22,6 +20,10 @@
     "gulp-concat": "^2.6.0",
     "gulp-uglify": "^1.2.0",
     "jpm": "^1.0.0",
+    "qunitjs": "^1.19.0",
     "rimraf": "^2.4.2"
+  },
+  "dependencies": {
+    "scrypt-async": "^1.1.0"
   }
 }

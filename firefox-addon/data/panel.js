@@ -20,7 +20,7 @@ var go = function(evt) {
         var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
         keyindexInput.value = keyindex;
         var parts = urlInput.value.split('/'); // Extract protocol and host from input value
-        urlInput.value = parts[0] + '//' + parts[2] + '/';
+        urlInput.value = parts[0] + '//' + (parts[2] ? parts[2] + '/' : '');
         outputSpan.classList.remove('error');
         copyImg.classList.remove('hidden');
         UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {

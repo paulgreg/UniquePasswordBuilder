@@ -14,25 +14,44 @@ var delay = function(fn, evt) {
     timeout = setTimeout(fn.bind(undefined, evt), 250);
 }
 
+var setErrorMessage = function(message, error) {
+    if (error) {
+        outputSpan.classList.add('error');
+    }
+    copyImg.classList.add('hidden');
+    outputSpan.textContent = message;
+}
+
 var go = function(evt) {
     try {
-        var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
-        var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
-        keyindexInput.value = keyindex;
-        var parts = urlInput.value.split('/'); // Extract protocol and host from input value
         outputSpan.classList.remove('error');
-        copyImg.classList.remove('hidden');
-        UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {
-            outputSpan.textContent = password;
-            if (evt && evt.keyCode === 13) {
-                passwordInput.value = "";
-                self.postMessage({ action: 'done', value: password });
-            }
-        }, true);
+        var password = passwordInput.value;
+        if (password.length === 0) {
+            setErrorMessage('Please type a strong password');
+        } else if (!/[a-z]/.test(password)) {
+            setErrorMessage('Password needs lower-case characters', true);
+        } else if (!/[A-Z]/.test(password)) {
+            setErrorMessage('Password needs upper-case characters', true);
+        } else if (!/[1-9]/.test(password)) {
+            setErrorMessage('Password needs numerical characters', true);
+        } else if (password.length < 8) {
+            setErrorMessage('Password should be at least 8 characters', true);
+        } else {
+            var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
+            var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
+            keyindexInput.value = keyindex;
+            var parts = urlInput.value.split('/'); // Extract protocol and host from input value
+            copyImg.classList.remove('hidden');
+            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {
+                outputSpan.textContent = password;
+                if (evt && evt.keyCode === 13) {
+                    passwordInput.value = "";
+                    self.postMessage({ action: 'done', value: password });
+                }
+            }, true);
+        }
     } catch(e) {
-        outputSpan.classList.add('error');
-        copyImg.classList.add('hidden');
-        outputSpan.textContent = e;
+        setErrorMessage(e, true);
     }
 }
 

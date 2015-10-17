@@ -4,3 +4,4 @@ node_modules/gulp-uglify
 node_modules/jpm
 node_modules/rimraf
 node_modules/gulp
+node_modules/http-server/

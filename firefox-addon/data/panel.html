@@ -10,7 +10,10 @@
             fieldset                 { border: 1px solid black; background-color: #EFE; padding: .5em; }
             label                    { display: flex; white-space: nowrap; width: 370px; margin: .25em; align-items: center; }
             input, select, #output   { flex-grow: 1; }
+            input[type=checkbox]     { margin-left: auto; }
             #output                  { border: 1px dashed black; padding: .25em .1em; text-align: center; }
+            #output.hide             { background-color: black; }
+            #output.error.hide       { background-color: none; }
             #details                 { position: relative; text-align: right; }
             .hidden                  { display: none; }
         </style>
@@ -34,7 +37,8 @@
                             <option value="16384">16384</option>
                         </select>
                     </label>
-                    <label>key index: <input type="number" id="keyindex" value="0" /></label>
+                    <label>password index: <input type="number" id="keyindex" value="0" /></label>
+                    <label>Set black background to hide password: <input type="checkbox" id="revealpassword" /></label>
                 </div>
                 <label><span id="output"></span><img class="copy hidden" src="copy.png" title="copy and close" width="32" height="32" /></label>
             </fieldset>

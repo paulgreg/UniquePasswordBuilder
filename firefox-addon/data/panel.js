@@ -4,6 +4,7 @@ var roundsInput                   = document.getElementById('rounds');
 var keyindexInput                 = document.getElementById('keyindex');
 var outputSpan                    = document.getElementById('output');
 var detailsLink                   = document.getElementById('details');
+var revealpasswordInput           = document.getElementById('revealpassword');
 var optionsLink                   = document.querySelector('a.options');
 var optionsDiv                    = document.querySelector('div.options');
 var copyImg                       = document.querySelector('img.copy');
@@ -25,6 +26,8 @@ var setErrorMessage = function(message, error) {
 var go = function(evt) {
     try {
         outputSpan.classList.remove('error');
+        outputSpan.classList.remove('hide');
+
         var password = passwordInput.value;
         if (password.length === 0) {
             setErrorMessage('Please type a strong password');
@@ -42,6 +45,9 @@ var go = function(evt) {
             keyindexInput.value = keyindex;
             var parts = urlInput.value.split('/'); // Extract protocol and host from input value
             copyImg.classList.remove('hidden');
+            if (revealpasswordInput.checked === true) {
+                outputSpan.classList.add('hide');
+            }
             UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {
                 outputSpan.textContent = password;
                 if (evt && evt.keyCode === 13) {
@@ -89,12 +95,18 @@ detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
 }, false);
 
+revealpasswordInput.addEventListener('click', function(e) {
+    self.postMessage({ action: 'revealpassword', value: revealpasswordInput.checked });
+    go();
+}, false);
+
+
 self.on('message', function(message) {
     passwordInput.value = "";
     urlInput.value = message.url;
     roundsInput.value = message.rounds || 1024;
     keyindexInput.value = message.keyindex || 0;
-
+    revealpasswordInput.checked = message.revealpassword;
     if (message.options === true) {
         optionsDiv.classList.remove('hidden');
     }

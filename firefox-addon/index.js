@@ -8,7 +8,7 @@ var { ToggleButton } = require("sdk/ui/button/toggle");
 
 var height = {
     initial: 202,
-    expand: 262
+    expand: 282
 };
 
 var panel = Panel({
@@ -26,6 +26,7 @@ var panel = Panel({
                 this.height = message.value ? height.expand : height.initial;
             case 'rounds':
             case 'keyindex':
+            case 'revealpassword':
                 storage[message.action] = message.value;
                 break;
             case 'details':
@@ -57,7 +58,8 @@ var button = ToggleButton({
                 'url': tabs.activeTab.url,
                 'rounds': storage.rounds,
                 'keyindex': storage.keyindex,
-                'options': storage.options
+                'options': storage.options,
+                'revealpassword': storage.revealpassword
             });
             panel.show({
                 position: button

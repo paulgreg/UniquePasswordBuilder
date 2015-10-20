@@ -43,12 +43,12 @@ var go = function(evt) {
             var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
             var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
             keyindexInput.value = keyindex;
-            var parts = urlInput.value.split('/'); // Extract protocol and host from input value
             copyImg.classList.remove('hidden');
             if (revealpasswordInput.checked === true) {
                 outputSpan.classList.add('hide');
             }
-            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2] }, rounds, passwordInput.value, keyindex, function(password) {
+            var url = new URL(urlInput.value);
+            UniquePasswordBuilder.generate(url, rounds, passwordInput.value, keyindex, function(password) {
                 outputSpan.textContent = password;
                 if (evt && evt.keyCode === 13) {
                     passwordInput.value = "";

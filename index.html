@@ -155,7 +155,7 @@
                             setErrorMessage('Password needs lower-case characters', true);
                         } else if (!/[A-Z]/.test(password)) {
                             setErrorMessage('Password needs upper-case characters', true);
-                        } else if (!/[1-9]/.test(password)) {
+                        } else if (!/[\d]/.test(password)) {
                             setErrorMessage('Password needs numerical characters', true);
                         } else if (password.length < 8) {
                             setErrorMessage('Password should be at least 8 characters', true);

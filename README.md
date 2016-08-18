@@ -15,7 +15,7 @@ UniquePasswordBuilder is available via 3 tools :
 
 ## Build the webpage and the bookmarklet
 
-Launch `npm install` and `bower install`, then launch `gulp` which will concatenete and uglify JS files.
+Launch `npm install` then launch `gulp` which will concatenete and uglify JS files.
 
 ## Build the Addon
 

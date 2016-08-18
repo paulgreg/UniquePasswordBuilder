@@ -38,16 +38,11 @@ gulp.task('index', function() {
 });
 
 
-gulp.task('addon-copy-icon', function() {
-    gulp.src('./icon.png')
-    .pipe(gulp.dest('./firefox-addon/data'));
-});
-
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
-    .pipe(gulp.dest('./firefox-addon/data'));
+    .pipe(gulp.dest('./firefox-addon'));
 });
 
-gulp.task('addon', ['addon-copy-icon', 'addon-copy-js']);
+gulp.task('addon', ['addon-copy-js']);
 
 gulp.task('default', ['clean', 'index', 'bookmarklet', 'addon']);

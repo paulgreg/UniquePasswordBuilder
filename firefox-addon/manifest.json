@@ -1,12 +1,11 @@
 {
   "manifest_version": 2,
   "name": "UniquePasswordBuider",
-  "version": "0.2.0",
+  "version": "0.2.1",
     "description": "A strong password generator per site",
     "homepage": "http://paulgreg.me/UniquePasswordBuilder/",
   "icons": {
-    "48": "lock.png",
-    "96": "lock.png"
+    "96": "imgs/lock.png"
   },
   "permissions": [
     "activeTab",
@@ -14,9 +13,8 @@
     "clipboardWrite"
   ],
   "browser_action": {
-    "default_icon": "lock.png",
+    "default_icon": "imgs/lock.png",
     "default_title": "UniquePaswordBuilder",
     "default_popup": "index.html"
-  },
-  "web_accessible_resources": []
+  }
 }

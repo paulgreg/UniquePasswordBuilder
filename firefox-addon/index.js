@@ -97,12 +97,11 @@ optionsLink.addEventListener('click', function(e) {
 
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
+    window.close();
     browser.tabs.create({
         url: "http://paulgreg.me/UniquePasswordBuilder/"
     });
-    window.close();
 }, false);
-
 
 copyImg.addEventListener('click', () => {
     outputTextarea.disabled = false;
@@ -122,7 +121,6 @@ roundsInput.addEventListener('change', save, false);
 keyindexInput.addEventListener('keyup', save, false);
 keyindexInput.addEventListener('change', save, false);
 
-
 document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.get('prefs', (data) => {
         load(data);
@@ -134,4 +132,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-

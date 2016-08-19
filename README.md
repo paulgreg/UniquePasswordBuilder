@@ -15,13 +15,12 @@ UniquePasswordBuilder is available via 3 tools :
 
 ## Build the webpage and the bookmarklet
 
-Launch `npm install` then launch `gulp` which will concatenete and uglify JS files.
+Launch `npm install` then launch `gulp` which will concatenate and uglify JS files.
 
 ## Build the Addon
 
-Gulp generates files (data/upb-main.min.js and data/icon.png) which are copied into the data directory. So be sure to launch `gulp` the first time and each time you change JS source files.
-Then, you need to install the [Firefox SDK Add-on](https://addons.mozilla.org/en-US/developers/docs/sdk/latest/) via a `npm install jpm`.
-To run the addon, type `./node_modules/.bin/jpm run` and `./node_modules/.bin/jpm xpi` to build the package.
+Gulp generates files (data/upb-main.min.js) which are copied into the data directory.
+So be sure to launch `gulp` the first time and each time you change JS source files.
 
 Attribution
 --------------

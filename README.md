@@ -10,7 +10,7 @@ UniquePasswordBuilder is available via 3 tools :
 
   * a [web page](http://paulgreg.me/UniquePasswordBuilder),
   * a [bookmarklet](http://paulgreg.me/UniquePasswordBuilder),
-  * a [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon).
+  * a [Firefox](https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon) and [Chrome](https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie) Add-on.
 
 
 ## Build the webpage and the bookmarklet

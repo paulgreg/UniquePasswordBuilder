@@ -40,7 +40,7 @@ gulp.task('index', function() {
 
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
-    .pipe(gulp.dest('./firefox-addon'));
+    .pipe(gulp.dest('./addon'));
 });
 
 gulp.task('addon', ['addon-copy-js']);

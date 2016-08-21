@@ -98,7 +98,7 @@ optionsLink.addEventListener('click', function(e) {
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
     window.close();
-    browser.tabs.create({
+    chrome.tabs.create({
         url: "http://paulgreg.me/UniquePasswordBuilder/"
     });
 }, false);

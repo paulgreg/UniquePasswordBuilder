@@ -97,10 +97,8 @@ optionsLink.addEventListener('click', function(e) {
 
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
+    chrome.tabs.create({ url: "https://paulgreg.me/UniquePasswordBuilder/" });
     window.close();
-    chrome.tabs.create({
-        url: "http://paulgreg.me/UniquePasswordBuilder/"
-    });
 }, false);
 
 copyImg.addEventListener('click', () => {

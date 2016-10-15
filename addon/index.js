@@ -122,11 +122,13 @@ keyindexInput.addEventListener('change', save, false);
 document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.get('prefs', (data) => {
         load(data);
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            passwordInput.value = "";
-            urlInput.value = tabs[0].url || "";
-            compute();
-            passwordInput.focus();
-        });
+        setTimeout(() => {
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                passwordInput.value = "";
+                urlInput.value = tabs[0].url || "";
+                compute();
+                passwordInput.focus();
+            });
+        }, 50)
     });
 });

@@ -122,6 +122,7 @@ keyindexInput.addEventListener('change', save, false);
 document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.get('prefs', (data) => {
         load(data);
+        // timeout to mitigate that bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1310019
         setTimeout(() => {
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 passwordInput.value = "";

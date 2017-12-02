@@ -1,6 +1,6 @@
 {
   "name": "UniquePasswordBuilder",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A tool to generate strong password unique per site",
   "main": "index.js",
   "scripts": {},

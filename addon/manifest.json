@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "short_name": "UniquePasswordBuider",
     "name": "UniquePasswordBuider",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "description": "A strong password generator per site",
     "homepage_url": "https://paulgreg.me/UniquePasswordBuilder/",
     "icons": {

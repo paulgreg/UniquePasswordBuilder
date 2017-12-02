@@ -16,7 +16,7 @@
         return password;
     };
 
-    upb.generate = function(location, difficulty, masterPassword, keyIndex, callback, nolog) {
+    upb.generate = function(location, difficulty, masterPassword, userSalt, callback, nolog) {
         if (!masterPassword) {
             throw new Error('master password should not be empty');
         }
@@ -30,8 +30,8 @@
         var logN = Math.log2(difficulty);
         var host = location.protocol + '//' + location.host;
 
-        var keyIndex = keyIndex && keyIndex != 0 ? "-keyidx:" + keyIndex : "";
-        var salt = host + keyIndex;
+        var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
+        var salt = host + userSalt;
 
         scrypt(masterPassword, salt, logN, 8, 32, function(hashedPassword) {
             var outputPassword = upb.makeHashHumanReadable(hashedPassword);

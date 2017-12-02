@@ -22,11 +22,11 @@
         <h1>Unique Password Builder</h1>
         <form>
             <fieldset>
-                <label>Password: <input type="password" id="password" /></label>
-                <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
+                <label>Password:&nbsp;<input type="password" id="password" /></label>
+                <label><abbr title="Uniform Resource Locator">URL</abbr>:&nbsp;<input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
-                    <label>difficulty
+                    <label>difficulty:&nbsp;
                         <select id="difficulty">
                             <option value="256">256</option>
                             <option value="512">512</option>
@@ -37,8 +37,8 @@
                             <option value="16384">16384</option>
                         </select>
                     </label>
-                    <label>password index: <input type="number" id="keyindex" value="0" /></label>
-                    <label>Set black background to hide password: <input type="checkbox" id="revealpassword" /></label>
+                    <label>user salt:&nbsp;<input type="text" id="usersalt" value="" /></label>
+                    <label>Set black background to hide password:&nbsp;<input type="checkbox" id="revealpassword" /></label>
                 </div>
                 <label><textarea id="output" rows="1" disabled></textarea><img class="copy hidden" src="imgs/copy.png" title="copy and close" width="32" height="32" /></label>
             </fieldset>

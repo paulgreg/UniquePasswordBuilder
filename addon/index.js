@@ -1,7 +1,7 @@
 var urlInput            = document.getElementById('url');
 var passwordInput       = document.getElementById('password');
 var difficultyInput         = document.getElementById('difficulty');
-var keyindexInput       = document.getElementById('keyindex');
+var usersaltInput       = document.getElementById('usersalt');
 var outputTextarea      = document.getElementById('output');
 var detailsLink         = document.getElementById('details');
 var revealpasswordInput = document.getElementById('revealpassword');
@@ -13,7 +13,7 @@ function save () {
     chrome.storage.local.set({
         'prefs': {
             'difficulty': difficultyInput.value,
-            'keyindex': keyindexInput.value,
+            'usersalt': usersaltInput.value,
             'revealpassword': revealpasswordInput.checked,
             'options': !optionsDiv.classList.contains('hidden')
         }
@@ -23,7 +23,7 @@ function save () {
 function load (data) {
     if (data && data.prefs) {
         difficultyInput.value = data.prefs.difficulty || "8192";
-        keyindexInput.value = data.prefs.keyindex || 0;
+        usersaltInput.value = data.prefs.usersalt || '';
         revealpasswordInput.checked = data.prefs.revealpassword;
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
@@ -57,8 +57,7 @@ function compute (evt) {
             setErrorMessage('Password should be at least 8 characters', true);
         } else {
             var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
-            var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
-            keyindexInput.value = keyindex;
+            var usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
             copyImg.classList.remove('hidden');
             if (revealpasswordInput.checked === true) {
                 outputTextarea.classList.add('hide');
@@ -72,7 +71,7 @@ function compute (evt) {
                 window.close();
             } else {
                 var url = new URL(urlInput.value);
-                UniquePasswordBuilder.generate(url, difficulty, passwordInput.value, keyindex, function(password) {
+                UniquePasswordBuilder.generate(url, difficulty, passwordInput.value, usersalt, function(password) {
                     outputTextarea.value = password;
                 }, true);
             }
@@ -85,8 +84,8 @@ function compute (evt) {
 urlInput.addEventListener('keyup', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
 difficultyInput.addEventListener('change', compute, false);
-keyindexInput.addEventListener('keyup', compute, false);
-keyindexInput.addEventListener('change', compute, false);
+usersaltInput.addEventListener('keyup', compute, false);
+usersaltInput.addEventListener('change', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
 
 optionsLink.addEventListener('click', function(e) {
@@ -116,8 +115,8 @@ revealpasswordInput.addEventListener('click', function(e) {
 }, false);
 
 difficultyInput.addEventListener('change', save, false);
-keyindexInput.addEventListener('keyup', save, false);
-keyindexInput.addEventListener('change', save, false);
+usersaltInput.addEventListener('keyup', save, false);
+usersaltInput.addEventListener('change', save, false);
 
 document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.get('prefs', (data) => {

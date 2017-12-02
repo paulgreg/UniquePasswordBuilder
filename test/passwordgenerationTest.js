@@ -147,7 +147,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 204
 
 });
 
-var googleTlsDefaultPasswordKeyIndex1 = "$L?j4rP2KNVqMZes";
+var googleTlsDefaultPasswordOldKeyIndex1 = "$L?j4rP2KNVqMZes";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 1", function(assert) {
      var done = assert.async();
@@ -155,7 +155,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
     // When
      UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 1, function(generatedPassword) {
          // Then
-         equal( generatedPassword, googleTlsDefaultPasswordKeyIndex1, "generate problem" );
+         equal( generatedPassword, googleTlsDefaultPasswordOldKeyIndex1, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
@@ -166,7 +166,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      });
 });
 
-var googleTlsDefaultPasswordKeyIndex2 = "&JOyZ:iv4,t.Xts:";
+var googleTlsDefaultPasswordOldKeyIndex2 = "&JOyZ:iv4,t.Xts:";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 2", function(assert) {
      var done = assert.async();
@@ -174,14 +174,29 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
     // When
     UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 2, function(generatedPassword) {
         // Then
-        equal( generatedPassword, googleTlsDefaultPasswordKeyIndex2, "generate problem" );
+        equal( generatedPassword, googleTlsDefaultPasswordOldKeyIndex2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty2048, "same password than google");
-        notEqual( generatedPassword, googleTlsDefaultPasswordKeyIndex1, "same password than google");
+        notEqual( generatedPassword, googleTlsDefaultPasswordOldKeyIndex1, "same password than google");
         notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");
+        done();
+    });
+
+});
+
+var googleTlsDefaultPasswordUserSaltSomething= "#9SmwDDRUe$GwJx#";
+
+QUnit.test("generate for https://www.google.com with 'default-password' with userSalt something", function(assert) {
+     var done = assert.async();
+    // Given
+    // When
+    UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 'something', function(generatedPassword) {
+        // Then
+        equal( generatedPassword, googleTlsDefaultPasswordUserSaltSomething, "generate problem" );
+        notEqual( generatedPassword, googleTlsDefaultPasswordOldKeyIndex1, "same password than google" );
         done();
     });
 

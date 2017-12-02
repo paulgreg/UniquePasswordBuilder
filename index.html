@@ -42,7 +42,7 @@
         <h2>Try it yourself :</h2>
         <form>
             <fieldset>
-                <label>Your master password: <input type="password" id="password" /></label>
+                <label>your master password: <input type="password" id="password" /></label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
@@ -57,9 +57,9 @@
                             <option value="16384">16384</option>
                         </select>
                     </label>
-                    <label>key index: <input type="number" id="keyindex" value="0" /></label>
+                    <label>user salt : <input type="text" id="usersalt" value="" /></label>
                 </div>
-                <label>Generated password: <span id="output"></span></label>
+                <label>generated password: <span id="output"></span></label>
             </fieldset>
         </form>
 
@@ -106,7 +106,7 @@
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
         </p>
-        <p>the "key index" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
+        <p>the "user salt" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
         <p>The Firefox or Chrome addon, that page and the bookmarklet shares code about password generation. You can use one or the other and still get the same password with the same parameters.</p>
         <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a>, a library from Dmitry Chestnykh and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
         <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
@@ -114,7 +114,7 @@
         <h2>Make it stronger...</h2>
         <p>We use 8192 difficulty for scrypt by default (see "difficulty" in form or "window.uniquePasswordBuilderDifficulty" in the bookmarklet above).</p>
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
-        <p>The key index is useful when a site asks you to change your password. You can increment the key index for that site so the generated password will be different.</p>
+        <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks</a>.</p>
 
         <script src="dist/upb-main.min.js"></script>
         <script defer="defer">
@@ -126,13 +126,16 @@
                 // Init location
                 var urlInput                      = document.getElementById('url');
                 var passwordInput                 = document.getElementById('password');
-                var difficultyInput                   = document.getElementById('difficulty');
-                var keyindexInput                 = document.getElementById('keyindex');
+                var difficultyInput               = document.getElementById('difficulty');
+                var usersaltInput                 = document.getElementById('usersalt');
                 var outputSpan                    = document.getElementById('output');
                 var optionsLink                   = document.querySelector('a.options');
                 var optionsDiv                    = document.querySelector('div.options');
 
                 urlInput.value                    = window.location.protocol + '//' + window.location.host;
+
+                if (localStorage.difficulty) difficultyInput.value = localStorage.difficulty;
+                if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
 
                 var timeout = null;
                 var delay = function(fn) {
@@ -161,10 +164,13 @@
                             setErrorMessage('Password should be at least 8 characters', true);
                         } else {
                             var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
-                            var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
-                            keyindexInput.value = keyindex;
+                            var usersalt = usersaltInput.value;
+
+                            localStorage.difficulty = difficulty;
+                            localStorage.usersalt = usersalt;
+
                             var parts = urlInput.value.split('/'); // Extract protocol and host from input value
-                            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, difficulty, password, keyindex, function(generatedPassword) {
+                            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, difficulty, password, usersalt, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
                             });
                         }
@@ -183,8 +189,8 @@
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 urlInput.addEventListener('keyup', delayedGo, false);
                 difficultyInput.addEventListener('change', delayedGo, false);
-                keyindexInput.addEventListener('keyup', delayedGo, false);
-                keyindexInput.addEventListener('change', delayedGo, false);
+                usersaltInput.addEventListener('keyup', delayedGo, false);
+                usersaltInput.addEventListener('change', delayedGo, false);
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
 

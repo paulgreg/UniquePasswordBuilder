@@ -4,7 +4,7 @@
     "name": "UniquePasswordBuider",
     "version": "0.2.5",
     "description": "A strong password generator per site",
-    "homepage_url": "http://paulgreg.me/UniquePasswordBuilder/",
+    "homepage_url": "https://paulgreg.me/UniquePasswordBuilder/",
     "icons": {
         "16": "imgs/lock.png",
         "48": "imgs/lock.png",

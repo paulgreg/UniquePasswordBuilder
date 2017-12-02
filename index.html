@@ -46,14 +46,14 @@
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
-                    <label>rounds:
-                        <select id="rounds">
+                    <label>difficulty:
+                        <select id="difficulty">
                             <option value="256">256</option>
                             <option value="512">512</option>
-                            <option value="1024" selected="selected">1024</option>
+                            <option value="1024">1024</option>
                             <option value="2048">2048</option>
                             <option value="4096">4096</option>
-                            <option value="8192">8192</option>
+                            <option value="8192" selected="selected">8192</option>
                             <option value="16384">16384</option>
                         </select>
                     </label>
@@ -101,7 +101,7 @@
         <p>We use <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, to generate the password for a site.</p>
         <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
         <h3>Exemple for password 'abcdef' and URL 'https://login.yourdomain.com/login'</h3>
-        <pre>')CBIjF?U!g6hW,)D' = scrypt('abcdef', 'https://'+'login.yourdomain.com', 1024, 8, 1, 64)</pre>
+        <pre>'1LL0nBM&amp;;VF=fdga' = scrypt('default-password', 'https://www.google.com', 8192, 8, 1, 64)</pre>
         <p>
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
@@ -112,7 +112,7 @@
         <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 
         <h2>Make it stronger...</h2>
-        <p>We use 1024 rounds for scrypt by default (see "rounds" in form or "window.uniquePasswordBuilderRounds" in the bookmarklet above).</p>
+        <p>We use 8192 difficulty for scrypt by default (see "difficulty" in form or "window.uniquePasswordBuilderDifficulty" in the bookmarklet above).</p>
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
         <p>The key index is useful when a site asks you to change your password. You can increment the key index for that site so the generated password will be different.</p>
 
@@ -121,12 +121,12 @@
             (function() {
 
                 // Construct bookmarklet code
-                document.querySelector('pre.simple').innerHTML += "(function(){window.uniquePasswordBuilderRounds=1024;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
+                document.querySelector('pre.simple').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
                 var passwordInput                 = document.getElementById('password');
-                var roundsInput                   = document.getElementById('rounds');
+                var difficultyInput                   = document.getElementById('difficulty');
                 var keyindexInput                 = document.getElementById('keyindex');
                 var outputSpan                    = document.getElementById('output');
                 var optionsLink                   = document.querySelector('a.options');
@@ -160,11 +160,11 @@
                         } else if (password.length < 8) {
                             setErrorMessage('Password should be at least 8 characters', true);
                         } else {
-                            var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
+                            var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
                             var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
                             keyindexInput.value = keyindex;
                             var parts = urlInput.value.split('/'); // Extract protocol and host from input value
-                            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, rounds, password, keyindex, function(generatedPassword) {
+                            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, difficulty, password, keyindex, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
                             });
                         }
@@ -182,7 +182,7 @@
 
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 urlInput.addEventListener('keyup', delayedGo, false);
-                roundsInput.addEventListener('change', delayedGo, false);
+                difficultyInput.addEventListener('change', delayedGo, false);
                 keyindexInput.addEventListener('keyup', delayedGo, false);
                 keyindexInput.addEventListener('change', delayedGo, false);
                 passwordInput.addEventListener('keyup', delayedGo, false);

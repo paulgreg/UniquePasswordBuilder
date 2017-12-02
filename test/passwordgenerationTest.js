@@ -33,7 +33,7 @@ QUnit.test("makeHashHumanReadable", function(assert) {
     assert.ok( generatedPassword, "(.K_xz491A]!5e[U", "makeHashHumanReadble transformation problem" );
 });
 
-var githubTlsDefaultPassword = "T3%:(Rhxi)K99-_n";
+var githubTlsDefaultPassword = "70hm7XFowvMz#PZY";
 
 QUnit.test("generate for https://github.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -63,7 +63,7 @@ QUnit.test("generate for https://github.com with 'default-password' for 2 round"
 
 });
 
-var githubDefaultPassword = "x80.%W&I4!9b1R+$";
+var githubDefaultPassword = "fe$$XA1Lcfb_f973";
 
 QUnit.test("generate for http://github.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -78,7 +78,7 @@ QUnit.test("generate for http://github.com with 'default-password'", function(as
 
 });
 
-var googleTlsDefaultPassword = "B!kjuovp)3ZKMToJ";
+var googleTlsDefaultPassword = "1LL0nBM&;VF=fdga";
 
 QUnit.test("generate for https://www.google.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -93,7 +93,7 @@ QUnit.test("generate for https://www.google.com with 'default-password'", functi
     });
 });
 
-var googleTlsDefaultPassword2 = "prY3LZxVt#]Nz;8i";
+var googleTlsDefaultPassword2 = "%U(xBW_SFxb]XbG.";
 
 QUnit.test("generate for https://www.google.com with 'default-password2'", function(assert) {
      var done = assert.async();
@@ -110,7 +110,7 @@ QUnit.test("generate for https://www.google.com with 'default-password2'", funct
 
 });
 
-var googleTlsDefaultPasswordRounds512 = "zK!C?WxCy)+aO-G$";
+var googleTlsDefaultPasswordDifficulty512 = "zK!C?WxCy)+aO-G$";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with 512 rounds", function(assert) {
      var done = assert.async();
@@ -118,7 +118,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 512
     // When
     UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, 512, 'default-password', 0, function(generatedPassword) {
         // Then
-        equal( generatedPassword, googleTlsDefaultPasswordRounds512, "generate problem" );
+        equal( generatedPassword, googleTlsDefaultPasswordDifficulty512, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
         notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
@@ -128,7 +128,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 512
 
 });
 
-var googleTlsDefaultPasswordRounds2048 = "a[#VFS%JL&NUsJ3z";
+var googleTlsDefaultPasswordDifficulty2048 = "a[#VFS%JL&NUsJ3z";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with 2048 rounds", function(assert) {
      var done = assert.async();
@@ -136,8 +136,8 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 204
     // When
      UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, 2048, 'default-password', 0, function(generatedPassword) {
          // Then
-         equal( generatedPassword, googleTlsDefaultPasswordRounds2048, "generate problem" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordRounds512, "same password than google" );
+         equal( generatedPassword, googleTlsDefaultPasswordDifficulty2048, "generate problem" );
+         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
          notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
@@ -147,7 +147,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 204
 
 });
 
-var googleTlsDefaultPasswordKeyIndex1 = "4eRW_X;ggO#R_0HL";
+var googleTlsDefaultPasswordKeyIndex1 = "$L?j4rP2KNVqMZes";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 1", function(assert) {
      var done = assert.async();
@@ -156,17 +156,17 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 1, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordKeyIndex1, "generate problem" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordRounds512, "same password than google" );
+         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordRounds2048, "same password than google");
+         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty2048, "same password than google");
          notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
          notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");
          done();
      });
 });
 
-var googleTlsDefaultPasswordKeyIndex2 = "86j4qEK&&OV-qQ,c";
+var googleTlsDefaultPasswordKeyIndex2 = "&JOyZ:iv4,t.Xts:";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 2", function(assert) {
      var done = assert.async();
@@ -175,10 +175,10 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
     UniquePasswordBuilder.generate({protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 2, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordKeyIndex2, "generate problem" );
-        notEqual( generatedPassword, googleTlsDefaultPasswordRounds512, "same password than google" );
+        notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
-        notEqual( generatedPassword, googleTlsDefaultPasswordRounds2048, "same password than google");
+        notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty2048, "same password than google");
         notEqual( generatedPassword, googleTlsDefaultPasswordKeyIndex1, "same password than google");
         notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPassword, "same password than github");

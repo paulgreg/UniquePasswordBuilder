@@ -16,18 +16,18 @@
         return password;
     };
 
-    upb.generate = function(location, rounds, masterPassword, keyIndex, callback, nolog) {
+    upb.generate = function(location, difficulty, masterPassword, keyIndex, callback, nolog) {
         if (!masterPassword) {
             throw new Error('master password should not be empty');
         }
 
-        var rounds = rounds || 1024;
-        if (!upb.isPowerOfTwo(rounds)) {
-            throw new Error('rounds should be a power of two, got ' + rounds);
+        var difficulty = difficulty || 8192;
+        if (!upb.isPowerOfTwo(difficulty)) {
+            throw new Error('difficulty should be a power of two, got ' + difficulty);
         }
 
         var t = +new Date();
-        var logN = Math.log2(rounds);
+        var logN = Math.log2(difficulty);
         var host = location.protocol + '//' + location.host;
 
         var keyIndex = keyIndex && keyIndex != 0 ? "-keyidx:" + keyIndex : "";
@@ -38,8 +38,8 @@
 
             if (!nolog && console && console.log) {
                 var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
-                var roundsMessage = (rounds > 1) ? ' (in ' + rounds + ' rounds)' : '';
-                console.log('UniquePasswordBuilder - Generated password: ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + roundsMessage);
+                var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' difficulty)' : '';
+                console.log('UniquePasswordBuilder - Generated password: ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + difficultyMessage);
             }
             callback(outputPassword);
         });

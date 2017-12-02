@@ -18,7 +18,7 @@
     var passwordEntered = function(e) {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
-        upb.generate(window.location, window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
+        upb.generate(window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
             upb.insertGenerateActions(generatedPassword);
             input.remove();
             label.remove();

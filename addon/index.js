@@ -1,6 +1,6 @@
 var urlInput            = document.getElementById('url');
 var passwordInput       = document.getElementById('password');
-var roundsInput         = document.getElementById('rounds');
+var difficultyInput         = document.getElementById('difficulty');
 var keyindexInput       = document.getElementById('keyindex');
 var outputTextarea      = document.getElementById('output');
 var detailsLink         = document.getElementById('details');
@@ -12,7 +12,7 @@ var copyImg             = document.querySelector('img.copy');
 function save () {
     chrome.storage.local.set({
         'prefs': {
-            'rounds': roundsInput.value,
+            'difficulty': difficultyInput.value,
             'keyindex': keyindexInput.value,
             'revealpassword': revealpasswordInput.checked,
             'options': !optionsDiv.classList.contains('hidden')
@@ -22,12 +22,12 @@ function save () {
 
 function load (data) {
     if (data && data.prefs) {
-        roundsInput.value = data.prefs.rounds || "1024";
+        difficultyInput.value = data.prefs.difficulty || "8192";
         keyindexInput.value = data.prefs.keyindex || 0;
         revealpasswordInput.checked = data.prefs.revealpassword;
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
-        roundsInput.value = 1024;
+        difficultyInput.value = 8192;
     }
 }
 
@@ -56,7 +56,7 @@ function compute (evt) {
         } else if (password.length < 8) {
             setErrorMessage('Password should be at least 8 characters', true);
         } else {
-            var rounds = (parseInt(roundsInput.value, 10) > 0) ? parseInt(roundsInput.value, 10) : 1;
+            var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
             var keyindex = (parseInt(keyindexInput.value, 10) > 0) ? parseInt(keyindexInput.value, 10) : 0;
             keyindexInput.value = keyindex;
             copyImg.classList.remove('hidden');
@@ -72,7 +72,7 @@ function compute (evt) {
                 window.close();
             } else {
                 var url = new URL(urlInput.value);
-                UniquePasswordBuilder.generate(url, rounds, passwordInput.value, keyindex, function(password) {
+                UniquePasswordBuilder.generate(url, difficulty, passwordInput.value, keyindex, function(password) {
                     outputTextarea.value = password;
                 }, true);
             }
@@ -84,7 +84,7 @@ function compute (evt) {
 
 urlInput.addEventListener('keyup', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
-roundsInput.addEventListener('change', compute, false);
+difficultyInput.addEventListener('change', compute, false);
 keyindexInput.addEventListener('keyup', compute, false);
 keyindexInput.addEventListener('change', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
@@ -115,7 +115,7 @@ revealpasswordInput.addEventListener('click', function(e) {
     compute();
 }, false);
 
-roundsInput.addEventListener('change', save, false);
+difficultyInput.addEventListener('change', save, false);
 keyindexInput.addEventListener('keyup', save, false);
 keyindexInput.addEventListener('change', save, false);
 

@@ -31,6 +31,7 @@
             input, select             { padding: 4px; margin-bottom: 9px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
             input                     { height: 18px;}
             button                    { height: 29px; margin-left: 10px; background-color: #EFE; }
+            .small                    { font-size: 11px;}
 
             @media (max-width:800px) {
                 label, select, input { display: block; width: 98%; }
@@ -45,6 +46,7 @@
             <fieldset>
                 <label>your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
+                <label id="usefulUrl" class="small"></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
                     <label>difficulty:
@@ -126,6 +128,7 @@
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
+                var usefulUrl                     = document.getElementById('usefulUrl');
                 var passwordInput                 = document.getElementById('password');
                 var difficultyInput               = document.getElementById('difficulty');
                 var usersaltInput                 = document.getElementById('usersalt');
@@ -155,6 +158,14 @@
                     try {
                         outputSpan.className = '';
                         var password = passwordInput.value;
+                        var parts = urlInput.value.split('/'); // Extract protocol and host from input value
+                        var urlParts = { protocol:parts[0], host:parts[2] };
+                        if (urlParts.protocol || urlParts.host) {
+                            usefulUrl.textContent = 'Used part to generate password: ' + (urlParts.protocol || '') + '//' + (urlParts.host || '');
+                        } else {
+                            usefulUrl.textContent = '';
+                        }
+
                         if (password.length === 0) {
                             setErrorMessage('Please type a strong password');
                         } else if (!/[a-z]/.test(password)) {
@@ -172,9 +183,8 @@
                             localStorage.difficulty = difficulty;
                             localStorage.usersalt = usersalt;
 
-                            var parts = urlInput.value.split('/'); // Extract protocol and host from input value
                             outputSpan.innerHTML = "Generating password...";
-                            UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, difficulty, password, usersalt, function(generatedPassword) {
+                            UniquePasswordBuilder.generate(urlParts, difficulty, password, usersalt, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
                                 copyToClipboardBtn.className = '';
                             });

@@ -43,7 +43,7 @@
         <h2>Try it yourself :</h2>
         <form>
             <fieldset>
-                <label>your master password: <input type="password" id="password" /></label>
+                <label>your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
@@ -157,7 +157,7 @@
                         outputSpan.className = '';
                         var password = passwordInput.value;
                         if (password.length === 0) {
-                            setErrorMessage('Please type a strong password (alpha-numeric, lower & upper case)');
+                            setErrorMessage('Please type a strong password');
                         } else if (!/[a-z]/.test(password)) {
                             setErrorMessage('Password needs lower-case characters', true);
                         } else if (!/[A-Z]/.test(password)) {

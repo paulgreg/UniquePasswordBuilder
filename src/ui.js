@@ -26,7 +26,7 @@
         var allPasswordInputs = document.querySelectorAll('input[type=password]');
         for(var i = 0; i < allPasswordInputs.length; i++) {
             var passwordInput = allPasswordInputs[i];
-            link = document.createElement("a");
+            var link = document.createElement("a");
             link.setAttribute('class', 'uniquePasswordBuilder');
             link.setAttribute('style', 'padding:5px;cursor:pointer;');
             link.appendChild(document.createTextNode("generate password"));

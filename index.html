@@ -100,8 +100,8 @@
         <h2>Under the hood</h2>
         <p>We use <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, to generate the password for a site.</p>
         <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
-        <h3>Exemple for password 'abcdef' and URL 'https://login.yourdomain.com/login'</h3>
-        <pre>'1LL0nBM&amp;;VF=fdga' = scrypt('default-password', 'https://www.google.com', 8192, 8, 1, 64)</pre>
+        <h3>Exemple for password 'ThisIsAMasterPassword4UniquePasswordBuilder' and URL 'https://login.yourdomain.com/login'</h3>
+        <pre>'-4qYW0P?;j.wBuFV' = scrypt('ThisIsAMasterPassword4UniquePasswordBuilder', 'https://login.yourdomain.com/login', 8192, 8, 1, 64)</pre>
         <p>
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
@@ -114,7 +114,7 @@
         <h2>Make it stronger...</h2>
         <p>We use 8192 difficulty for scrypt by default (see "difficulty" in form or "window.uniquePasswordBuilderDifficulty" in the bookmarklet above).</p>
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
-        <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks</a>.</p>
+        <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
 
         <script src="dist/upb-main.min.js"></script>
         <script defer="defer">
@@ -153,7 +153,7 @@
                         outputSpan.className = '';
                         var password = passwordInput.value;
                         if (password.length === 0) {
-                            setErrorMessage('Please type a strong password');
+                            setErrorMessage('Please type a strong password (alpha-numeric, lower & upper case)');
                         } else if (!/[a-z]/.test(password)) {
                             setErrorMessage('Password needs lower-case characters', true);
                         } else if (!/[A-Z]/.test(password)) {

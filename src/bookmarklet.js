@@ -1,12 +1,12 @@
 (function(upb) {
 
-    form = document.createElement("form");
+    var form = document.createElement("form");
     form.setAttribute('style', 'position:absolute;top:10px;right:10px;border:1px solid black;padding:10px 10px 8px 10px;background-color:white;font-size:12px;z-index:10000000;');
-    input = document.createElement("input");
+    var input = document.createElement("input");
     input.id = 'uniquePasswordBuilderPassword';
     input.setAttribute('type', 'password');
     input.setAttribute('style', 'border:1px solid black;');
-    label = document.createElement("label");
+    var label = document.createElement("label");
     label.setAttribute("for", "uniquePasswordBuilderPassword");
     label.textContent = "Master password : "
     label.setAttribute('style', 'display:inline-block;');

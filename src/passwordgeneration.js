@@ -9,7 +9,7 @@
         ];
 
         var password = '';
-        for(i = 0; i < array.length; i+=2) {
+        for(var i = 0; i < array.length; i+=2) {
             var v = array[i] + array[i+1];
             password += availableChars[v % availableChars.length];
         }

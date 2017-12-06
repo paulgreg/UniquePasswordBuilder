@@ -30,6 +30,7 @@
             input:focus, select:focus { border-color: rgba(82, 168, 236, 0.8); box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
             input, select             { padding: 4px; margin-bottom: 9px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
             input                     { height: 18px;}
+            button                    { height: 29px; margin-left: 10px; background-color: #EFE; }
 
             @media (max-width:800px) {
                 label, select, input { display: block; width: 98%; }
@@ -59,7 +60,7 @@
                     </label>
                     <label>user salt : <input type="text" id="usersalt" value="" /></label>
                 </div>
-                <label>generated password: <span id="output"></span></label>
+                <label>generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
             </fieldset>
         </form>
 
@@ -130,6 +131,7 @@
                 var difficultyInput               = document.getElementById('difficulty');
                 var usersaltInput                 = document.getElementById('usersalt');
                 var outputSpan                    = document.getElementById('output');
+                var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
                 var optionsLink                   = document.querySelector('a.options');
                 var optionsDiv                    = document.querySelector('div.options');
 
@@ -147,6 +149,7 @@
                 var setErrorMessage = function(message, error) {
                     outputSpan.className = error ? 'error' : '';
                     outputSpan.innerHTML = message;
+                    copyToClipboardBtn.className = 'hidden';
                 }
 
                 var go = function() {
@@ -173,6 +176,7 @@
                             var parts = urlInput.value.split('/'); // Extract protocol and host from input value
                             UniquePasswordBuilder.generate({ protocol:parts[0], host:parts[2]}, difficulty, password, usersalt, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
+                                copyToClipboardBtn.className = '';
                             });
                         }
                     } catch(e) {
@@ -187,6 +191,17 @@
                     optionsDiv.classList.toggle('hidden');
                 }
 
+                var copyToClipboard = function() {
+                    var password = outputSpan.textContent;
+                    var hiddenInputToCopy = document.createElement("input");
+                    document.body.appendChild(hiddenInputToCopy);
+                    hiddenInputToCopy.value = password;
+                    hiddenInputToCopy.select();
+                    document.execCommand("copy");
+                    hiddenInputToCopy.remove();
+                    return false;
+                }
+
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 urlInput.addEventListener('keyup', delayedGo, false);
                 difficultyInput.addEventListener('change', delayedGo, false);
@@ -194,6 +209,7 @@
                 usersaltInput.addEventListener('change', delayedGo, false);
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
+                copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
 
                 go();
 

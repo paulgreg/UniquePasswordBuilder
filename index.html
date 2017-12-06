@@ -49,8 +49,14 @@
                 <label id="usefulUrl" class="small"></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
+                    <label>Algorithm:
+                        <select id="algorithm">
+                            <option value="scrypt" selected="selected">Scrypt</option>
+                            <option value="argon2">Argon2</option>
+                        </select>
+                    </label>
                     <label>difficulty:
-                        <select id="difficulty">
+                        <select id="difficultyScrypt">
                             <option value="256">256</option>
                             <option value="512">512</option>
                             <option value="1024">1024</option>
@@ -59,6 +65,7 @@
                             <option value="8192" selected="selected">8192</option>
                             <option value="16384">16384</option>
                         </select>
+                        <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
                     <label>user salt : <input type="text" id="usersalt" value="" /></label>
                 </div>
@@ -83,7 +90,11 @@
         <h2>Bookmarklet installation</h2>
         <ol>
             <li>Copy (in the clipboard) the following piece of code :
-                <pre class="simple">javascript:</pre></li>
+                <ul>
+                    <li>For 'scrypt' hash algorithm (default): <pre class="simple" id="bookmarkletScrypt">javascript:</pre></li>
+                    <li>For 'argon2' hash algorithm: <pre class="simple" id="bookmarkletArgon2">javascript:</pre></li>
+                </ul>
+            </li>
             <li>Create a bookmark and paste the copied code inside the <strong>address field</strong> of the bookmark,</li>
         </ol>
         <p>It’s done !</p>
@@ -101,7 +112,9 @@
         <p>It’s done, you can submit the form to login.</p>
 
         <h2>Under the hood</h2>
-        <p>We use <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a>, a password-based key derivation function created by Colin Percival, to generate the password for a site.</p>
+        <p>We use 2 password-based <a href="https://en.wikipedia.org/wiki/Key_derivation_function">key derivation functions</a> (depending of your options) to generate the password for a site.:
+            <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a> (by Colin Percival) and <a href="http://en.wikipedia.org/wiki/Argon2">argon2</a> (by Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich).
+
         <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
         <h3>Exemple for password 'ThisIsAMasterPassword4UniquePasswordBuilder' and URL 'https://login.yourdomain.com/login'</h3>
         <pre>'-4qYW0P?;j.wBuFV' = scrypt('ThisIsAMasterPassword4UniquePasswordBuilder', 'https://login.yourdomain.com/login', 8192, 8, 1, 64)</pre>
@@ -109,9 +122,11 @@
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
         </p>
+
         <p>the "user salt" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
         <p>The Firefox or Chrome addon, that page and the bookmarklet shares code about password generation. You can use one or the other and still get the same password with the same parameters.</p>
-        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a>, a library from Dmitry Chestnykh and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
+        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a>, a library from Dmitry Chestnykh,
+            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
         <p>Thanks to <a href="https://twitter.com/pmiossec">Philippe Miossec</a> for its contributions.</p>
         <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 
@@ -125,13 +140,16 @@
             (function() {
 
                 // Construct bookmarklet code
-                document.querySelector('pre.simple').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
+                document.querySelector('pre#bookmarkletScrypt').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
+                document.querySelector('pre#bookmarkletArgon2').innerHTML += "(function(){window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty=10;window.argon2AsmPath='"+ window.location.href +"';document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
                 var usefulUrl                     = document.getElementById('usefulUrl');
                 var passwordInput                 = document.getElementById('password');
-                var difficultyInput               = document.getElementById('difficulty');
+                var algorithmInput                = document.getElementById('algorithm');
+                var difficultyScryptInput         = document.getElementById('difficultyScrypt');
+                var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
                 var usersaltInput                 = document.getElementById('usersalt');
                 var outputSpan                    = document.getElementById('output');
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
@@ -140,7 +158,10 @@
 
                 urlInput.value                    = window.location.protocol + '//' + window.location.host;
 
-                if (localStorage.difficulty) difficultyInput.value = localStorage.difficulty;
+
+                if (localStorage.algorithm) algorithmInput.value = localStorage.algorithm;
+                if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
+                if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2;
                 if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
 
                 var timeout = null;
@@ -178,14 +199,18 @@
                         } else if (password.length < 8) {
                             setErrorMessage('Password should be at least 8 characters', true);
                         } else {
-                            var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
+                            var algorithm = algorithmInput.value;
+                            var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
+                            var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
                             var usersalt = usersaltInput.value;
 
-                            localStorage.difficulty = difficulty;
+                            localStorage.algorithm = algorithm;
+                            localStorage.difficulty = difficultyScryptInput.value;
+                            localStorage.difficultyArgon2 = difficultyArgon2Input.value;
                             localStorage.usersalt = usersalt;
 
                             outputSpan.innerHTML = "Generating password...";
-                            UniquePasswordBuilder.generate(urlParts, difficulty, password, usersalt, function(generatedPassword) {
+                            UniquePasswordBuilder.generate(algorithm, urlParts, difficulty, password, usersalt, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
                                 copyToClipboardBtn.className = '';
                             });
@@ -213,15 +238,23 @@
                     return false;
                 }
 
+                var changeAlgorithm = function() {
+                    difficultyScryptInput.className = algorithmInput.value == 'scrypt' ? '' : 'hidden';
+                    difficultyArgon2Input.className = algorithmInput.value == 'argon2' ? '' : 'hidden';
+                    delayedGo();
+                }
+
+                algorithmInput.addEventListener('change', changeAlgorithm, false);
                 passwordInput.addEventListener('keyup', delayedGo, false);
                 urlInput.addEventListener('keyup', delayedGo, false);
-                difficultyInput.addEventListener('change', delayedGo, false);
+                difficultyScryptInput.addEventListener('change', delayedGo, false);
+                difficultyArgon2Input.addEventListener('change', delayedGo, false);
                 usersaltInput.addEventListener('keyup', delayedGo, false);
                 usersaltInput.addEventListener('change', delayedGo, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
 
-                go();
+                changeAlgorithm();
 
 
                 if ('serviceWorker' in navigator) {

@@ -26,8 +26,14 @@
                 <label><abbr title="Uniform Resource Locator">URL</abbr>:&nbsp;<input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
+                    <label>Algorithm:
+                        <select id="algorithm">
+                            <option value="scrypt" selected="selected">Scrypt</option>
+                            <option value="argon2">Argon2</option>
+                        </select>
+                    </label>
                     <label>difficulty:&nbsp;
-                        <select id="difficulty">
+                        <select id="difficultyScrypt">
                             <option value="256">256</option>
                             <option value="512">512</option>
                             <option value="1024">1024</option>
@@ -36,6 +42,7 @@
                             <option value="8192">8192</option>
                             <option value="16384">16384</option>
                         </select>
+                        <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
                     <label>user salt:&nbsp;<input type="text" id="usersalt" value="" /></label>
                     <label>Set black background to hide password:&nbsp;<input type="checkbox" id="revealpassword" /></label>
@@ -45,6 +52,7 @@
         </form>
         <a href="#" id="details">More information</a>
         <script src="scrypt-async.js"></script>
+        <script src="argon2.js"></script>
         <script src="passwordgeneration.js"></script>
         <script src="index.js"></script>
     </body>

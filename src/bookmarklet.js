@@ -18,12 +18,15 @@
     var passwordEntered = function(e) {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
-        upb.generate(window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
+        var algorithm = window.uniquePasswordBuilderAlgorithm || 'scrypt';
+        var argon2AsmPath = window.argon2AsmPath;
+        console.log('argon2AsmPath', argon2AsmPath);
+        upb.generate(algorithm, window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
             upb.insertGenerateActions(generatedPassword);
             input.remove();
             label.remove();
             form.remove();
-        });
+        }, true, {argon2AsmPath: argon2AsmPath});
     }
 
     if (form.addEventListener) {

@@ -45,7 +45,7 @@
         <form>
             <fieldset>
                 <label>your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
-                <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="url" id="url" /></label>
+                <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="text" id="url" /></label>
                 <label id="usefulUrl" class="small"></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
@@ -181,9 +181,13 @@
                         outputSpan.className = '';
                         var password = passwordInput.value;
                         var parts = urlInput.value.split('/'); // Extract protocol and host from input value
-                        var urlParts = { protocol:parts[0], host:parts[2] };
-                        if (urlParts.protocol || urlParts.host) {
-                            usefulUrl.textContent = 'Used part to generate password: ' + (urlParts.protocol || '') + '//' + (urlParts.host || '');
+                        var urlParts = parts.length === 1 ? urlInput.value : { protocol:parts[0], host:parts[2] };
+                        if (urlParts || urlParts.protocol || urlParts.host) {
+                            if(typeof(urlParts) === 'string') {
+                                usefulUrl.textContent = 'Key to generate password: ' + urlParts;
+                            } else {
+                                usefulUrl.textContent = 'Used part to generate password: ' + (urlParts.protocol || '') + '//' + (urlParts.host || '');
+                            }
                         } else {
                             usefulUrl.textContent = '';
                         }

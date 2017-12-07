@@ -21,7 +21,7 @@
             throw new Error('master password should not be empty');
         }
 
-        var host = location.protocol + '//' + location.host;
+        var host = typeof(location) === "string" ? location : location.protocol + '//' + location.host;
         var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
         var salt = host + userSalt;
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="robots" content="index, follow"/>
@@ -66,13 +66,12 @@
 
         <h2>What is it ?</h2>
         <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.</p>
-        <p>You can use Unique Password Builder via :
-            <ul>
-                <li><a href="https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie/">Chrome</a> add-ons generating your password that you can then copy and paste,</li>
-                <li>or a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> for other browsers that will ask your <strong>master password</strong> and then add a "generate password" link after all password fields.
-                Clicking on that link will compute your master password using the current domain so it makes a different but very strong password for each website.</li>
-            </ul>
-        </p>
+        <p>You can use Unique Password Builder via :</p>
+        <ul>
+            <li><a href="https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie/">Chrome</a> add-ons generating your password that you can then copy and paste,</li>
+            <li>or a <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> for other browsers that will ask your <strong>master password</strong> and then add a "generate password" link after all password fields.
+            Clicking on that link will compute your master password using the current domain so it makes a different but very strong password for each website.</li>
+        </ul>
 
         <h2 class="important">Disclaimer / security concerns</h2>
         <p>Generating passwords is a sensitive piece of code, so, I strongly suggest you get the <a href="https://github.com/paulgreg/UniquePasswordBuilder">source code</a> (eventually inspect it) and host the code (including that page) yourself on a SSL/TLS server.</p>
@@ -119,7 +118,7 @@
         <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
 
         <script src="dist/upb-main.min.js"></script>
-        <script defer="defer">
+        <script>
             (function() {
 
                 // Construct bookmarklet code

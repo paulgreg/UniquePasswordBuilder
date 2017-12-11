@@ -135,13 +135,13 @@
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
         <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
 
-        <script src="dist/upb-main.min.js"></script>
+        <script src="upb-main.min.js"></script>
         <script>
             (function() {
 
                 // Construct bookmarklet code
-                document.querySelector('pre#bookmarkletScrypt').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
-                document.querySelector('pre#bookmarkletArgon2').innerHTML += "(function(){window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty=10;window.argon2AsmPath='"+ window.location.href +"';document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"dist/upb.min.js';})();";
+                document.querySelector('pre#bookmarkletScrypt').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();";
+                document.querySelector('pre#bookmarkletArgon2').innerHTML += "(function(){window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty=10;window.argon2AsmPath='"+ window.location.href +"';document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();";
 
                 // Init location
                 var urlInput                      = document.getElementById('url');

@@ -43,11 +43,17 @@ gulp.task('index', function() {
 });
 
 gulp.task('argon2', function() {
-  return gulp.src(paths.argon2)
+    return gulp.src(paths.argon2)
+      .pipe(gulp.dest('dist'))
+      .pipe(gulp.dest('addon'))
+      ;
+    });
+
+gulp.task('html', function() {
+    return gulp.src('index.html')
     .pipe(gulp.dest('dist'))
-    .pipe(gulp.dest('addon'))
     ;
-  });
+    });
 
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
@@ -56,4 +62,4 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('default', ['clean', 'index', 'bookmarklet', 'addon', 'argon2']);
+gulp.task('default', ['clean', 'html', 'index', 'bookmarklet', 'addon', 'argon2']);

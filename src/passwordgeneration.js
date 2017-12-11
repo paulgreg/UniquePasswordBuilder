@@ -55,7 +55,7 @@
                 hashLen: 32, // desired hash length
                 // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
                 type: argon2.ArgonType.Argon2d, // or argon2.ArgonType.Argon2i
-                distPath: params === undefined ? './dist/' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
+                distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
             }).then(function (hash) {
                 var outputPassword = upb.makeHashHumanReadable(hash.hash);
 

@@ -22,11 +22,11 @@
         }
 
         var host = typeof(location) === "string" ? location : location.protocol + '//' + location.host;
-        var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
-        var salt = host + userSalt;
 
         var t = +new Date();
         if(algorithm === 'scrypt') {
+            var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
+            var salt = host + userSalt;
             var difficulty = difficulty || 8192;
             if (!upb.isPowerOfTwo(difficulty)) {
                 throw new Error('difficulty should be a power of two, got ' + difficulty);
@@ -44,11 +44,14 @@
                 callback(outputPassword);
             });
         } else {
-            var difficulty = difficulty || 1;
+            var difficulty = difficulty || 10;
+            var salt = host + '|' + (userSalt || '0');
+            //Good long salt generated with http://passwordsgenerator.net/
+            var uniqueSalt = salt + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNPHB_c7ZDBK91Jo0h^F7#2P9Kqw9NWP?e!u#3RCwgzr^eS+4SZV4|=qx=f*2CIH+Wf4J$^J9hx=Ogsn3JBhz_nR@hy80fKGy?Or6@#FZ@Kh&';
             // https://github.com/antelle/argon2-browser
             argon2.hash({
                 pass: masterPassword,
-                salt: salt,
+                salt: uniqueSalt,
                 // optional
                 time: difficulty, // the number of iterations
                 // mem: 1024, // used memory, in KiB

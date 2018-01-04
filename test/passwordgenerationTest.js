@@ -256,7 +256,7 @@ QUnit.test("check argon2 generation against https://github.com/P-H-C/phc-winner-
    })
 });
 
-var githubTlsDefaultPasswordArgon2 = "cz0%XEe&eX;2J_VY";
+var githubTlsDefaultPasswordArgon2 = "%KeOc1QZ0:+j&1Wb";
 
 QUnit.test("generate for https://github.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -272,7 +272,7 @@ QUnit.test("generate for https://github.com with 'default-password'", function(a
 });
 
 
-var githubTlsDefaultPassword1RoundArgon2 = "eQzx4qY6xtKYR5xA";
+var githubTlsDefaultPassword1RoundArgon2 = "AZzxs_ZPw5lILpnc";
 
 QUnit.test("generate for https://github.com with 'default-password' for 2 round", function(assert) {
      var done = assert.async();
@@ -287,7 +287,7 @@ QUnit.test("generate for https://github.com with 'default-password' for 2 round"
 
 });
 
-var githubDefaultPasswordArgon2 = "1rYp_XyAt&BaCqjD";
+var githubDefaultPasswordArgon2 = "c618THRvVAE(Gmo%";
 
 QUnit.test("generate for http://github.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -302,7 +302,7 @@ QUnit.test("generate for http://github.com with 'default-password'", function(as
 
 });
 
-var googleTlsDefaultPasswordArgon2 = "8QrV7cq(qK:jAtQq";
+var googleTlsDefaultPasswordArgon2 = "GZpc+3KlbxSkBRlT";
 
 QUnit.test("generate for https://www.google.com with 'default-password'", function(assert) {
      var done = assert.async();
@@ -317,7 +317,7 @@ QUnit.test("generate for https://www.google.com with 'default-password'", functi
     }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
 });
 
-var googleTlsDefaultPassword2Argon2 = "Tc:twvRoRCgAJ..h";
+var googleTlsDefaultPassword2Argon2 = "0.8lr6GEF;x8CaWR";
 
 QUnit.test("generate for https://www.google.com with 'default-password2'", function(assert) {
      var done = assert.async();
@@ -334,13 +334,13 @@ QUnit.test("generate for https://www.google.com with 'default-password2'", funct
 
 });
 
-var googleTlsDefaultPasswordArgon2Difficulty100 = "MS:Gq0N+r=GL8)+E";
+var googleTlsDefaultPasswordArgon2Difficulty100 = "YD!A;D,p;nhENu6)";
 
-QUnit.test("generate for https://www.google.com with 'default-password' with 100 rounds", function(assert) {
+QUnit.test("generate for https://www.google.com with 'default-password' with 15 rounds", function(assert) {
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 100, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 15, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
@@ -351,13 +351,13 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 100
     }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
 });
 
-var googleTlsDefaultPasswordArgon2Difficulty200 = "t7Szr.XIrf33VcQd";
+var googleTlsDefaultPasswordArgon2Difficulty200 = "3w=z]J;%YTx5A2%f";
 
-QUnit.test("generate for https://www.google.com with 'default-password' with 200 rounds", function(assert) {
+QUnit.test("generate for https://www.google.com with 'default-password' with 20 rounds", function(assert) {
      var done = assert.async();
     // Given
     // When
-     UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 200, 'default-password', 0, function(generatedPassword) {
+     UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 20, 'default-password', 0, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty200, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
@@ -369,7 +369,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 200
      }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
 });
 
-var googleTlsDefaultPasswordArgon2OldKeyIndex1 = "GwKN6XiAj[#!,c_C";
+var googleTlsDefaultPasswordArgon2OldKeyIndex1 = "HEZh$xdW8n_eC1qG";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 1", function(assert) {
      var done = assert.async();
@@ -388,7 +388,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
 });
 
-var googleTlsDefaultPasswordArgon2OldKeyIndex2 = "q5r?Ci%#!#pFQ1+!";
+var googleTlsDefaultPasswordArgon2OldKeyIndex2 = "RV!zQ#lKEBS=aLX.";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 2", function(assert) {
      var done = assert.async();
@@ -409,7 +409,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
 
 });
 
-var googleTlsDefaultPasswordArgon2UserSaltSomething= ".4PO4aHQKFBrmHQ,";
+var googleTlsDefaultPasswordArgon2UserSaltSomething= "V(#N&JN61Mf8yOL2";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with userSalt something", function(assert) {
      var done = assert.async();

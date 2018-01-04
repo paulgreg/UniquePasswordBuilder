@@ -71,7 +71,7 @@
                     var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' difficulty)' : '';
                     console.log('UniquePasswordBuilder - Generated password (scrypt): ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + difficultyMessage);
                 }
-                callback(outputPassword);
+                callback(outputPassword, hashedPassword);
             });
         } else {
             var difficulty = difficulty || 10;
@@ -110,7 +110,7 @@
                         console.log('Argon2 results', hashArgon2d.hash, hashArgon2d.hashHex, hashArgon2d.encoded, outputPassword)
                         console.log('UniquePasswordBuilder - Generated password (argon2): ' + outputPassword + ' for salt (domain + user salt): ' + salt + timeMessage + difficultyMessage);
                     }
-                    callback(outputPassword);
+                    callback(outputPassword, hashArgon2d.hash);
             });
         })
         .catch(function (err) { console.error(err.message, err.code)});

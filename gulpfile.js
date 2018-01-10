@@ -50,7 +50,7 @@ gulp.task('argon2', function() {
     });
 
 gulp.task('html', function() {
-    return gulp.src('index.html')
+    return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
     .pipe(gulp.dest('dist'))
     ;
     });

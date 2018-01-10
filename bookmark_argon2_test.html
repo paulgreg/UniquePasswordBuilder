@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        <script>
+        window.uniquePasswordBuilderAlgorithm='argon2';
+        window.uniquePasswordBuilderDifficulty=10;
+        window.argon2AsmPath='https://pmiossec.github.io/UniquePasswordBuilder/';
+        window.noLog=false;
+        var displayPassword = function() {
+            var pwd = document.getElementById("password").value;
+            document.getElementById("show_password").innerHTML = pwd;
+        }
+        </script>
+        <script src="upb.min.js"></script>
+        <h1>Argon2 test page</h1>
+        password field: <input type="password" id="password" onfocus="displayPassword()" /><br/>
+        password value: <div id="show_password" ></div>
+    </body>
+</html>

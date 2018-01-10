@@ -20,13 +20,13 @@
         if (e.stopPropagation) e.stopPropagation();
         var algorithm = window.uniquePasswordBuilderAlgorithm || 'scrypt';
         var argon2AsmPath = window.argon2AsmPath;
-        console.log('argon2AsmPath', argon2AsmPath);
+        var noLog = window.noLog !== false;
         upb.generate(algorithm, window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
             upb.insertGenerateActions(generatedPassword);
             input.remove();
             label.remove();
             form.remove();
-        }, true, {argon2AsmPath: argon2AsmPath});
+        }, noLog, {argon2AsmPath: argon2AsmPath});
     }
 
     if (form.addEventListener) {

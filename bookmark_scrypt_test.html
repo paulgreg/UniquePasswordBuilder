@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        <script>
+        window.uniquePasswordBuilderAlgorithm='scrypt';
+        window.uniquePasswordBuilderDifficulty=8192;
+        window.noLog=false;
+        var displayPassword = function() {
+            var pwd = document.getElementById("password").value;
+            document.getElementById("show_password").innerHTML = pwd;
+        }
+        </script>
+        <script src="upb.min.js"></script>
+        <h1>Scrypt test page</h1>
+        password field: <input type="password" id="password" onfocus="displayPassword()" /><br/>
+        password value: <div id="show_password" ></div>
+    </body>
+</html>

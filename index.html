@@ -89,11 +89,10 @@
 
         <h2>Bookmarklet installation</h2>
         <ol>
-            <li>Copy (in the clipboard) the following piece of code :
-                <ul>
-                    <li>For 'scrypt' hash algorithm (default): <pre class="simple" id="bookmarkletScrypt">javascript:</pre></li>
-                    <li>For 'argon2' hash algorithm: <pre class="simple" id="bookmarkletArgon2">javascript:</pre></li>
-                </ul>
+            <li>
+                Select the algorithm you want and click on the corresponding button to copy the bookmarklet code in the clipboard:<br>
+                <button id="bookmarkletScrypt">'scrypt' hash algorithm (default)</button>
+                or <button id="bookmarkletArgon2">'argon2' hash algorithm</button>
             </li>
             <li>Create a bookmark and paste the copied code inside the <strong>address field</strong> of the bookmark,</li>
         </ol>
@@ -138,10 +137,6 @@
         <script src="upb-main.min.js"></script>
         <script>
             (function() {
-
-                // Construct bookmarklet code
-                document.querySelector('pre#bookmarkletScrypt').innerHTML += "(function(){window.uniquePasswordBuilderDifficulty=8192;document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();";
-                document.querySelector('pre#bookmarkletArgon2').innerHTML += "(function(){window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty=10;window.argon2AsmPath='"+ window.location.href +"';document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();";
 
                 // Init location
                 var urlInput                      = document.getElementById('url');
@@ -231,11 +226,28 @@
                     optionsDiv.classList.toggle('hidden');
                 }
 
+                var copyScryptBookmarkletToClipboard = function() {
+                    copyBookmarkletToClipboard("window.uniquePasswordBuilderAlgorithm='scrypt';window.uniquePasswordBuilderDifficulty=8192;");
+                }
+
+                var copyArgon2BookmarkletToClipboard = function() {
+                    copyBookmarkletToClipboard("window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty=10;window.argon2AsmPath='"+ window.location.href + "'");
+                }
+
+                var copyBookmarkletToClipboard = function(algotithmParameters) {
+                    var bookmarklet = "(function(){" + algotithmParameters + ";document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();";
+                    copyTextToClipboard(bookmarklet);
+                }
+
                 var copyToClipboard = function() {
                     var password = outputSpan.textContent;
+                    copyTextToClipboard(password);
+                }
+
+                var copyTextToClipboard = function(value) {
                     var hiddenInputToCopy = document.createElement("input");
                     document.body.appendChild(hiddenInputToCopy);
-                    hiddenInputToCopy.value = password;
+                    hiddenInputToCopy.value = value;
                     hiddenInputToCopy.select();
                     document.execCommand("copy");
                     hiddenInputToCopy.remove();
@@ -257,7 +269,8 @@
                 usersaltInput.addEventListener('change', delayedGo, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
-
+                document.getElementById('bookmarkletScrypt').addEventListener('click', copyScryptBookmarkletToClipboard, false);
+                document.getElementById('bookmarkletArgon2').addEventListener('click', copyArgon2BookmarkletToClipboard, false);
                 changeAlgorithm();
 
 

@@ -21,7 +21,7 @@
         var algorithm = window.uniquePasswordBuilderAlgorithm || 'scrypt';
         var argon2AsmPath = window.argon2AsmPath;
         var noLog = window.noLog !== false;
-        upb.generate(algorithm, window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex, function(generatedPassword) {
+        upb.generate(algorithm, window.location, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, input.value, window.uniquePasswordBuilderKeyIndex || window.salt, function(generatedPassword) {
             upb.insertGenerateActions(generatedPassword);
             input.remove();
             label.remove();

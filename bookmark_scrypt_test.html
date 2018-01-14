@@ -4,8 +4,9 @@
     </head>
     <body>
         <script>
-        window.uniquePasswordBuilderAlgorithm='scrypt';
-        window.uniquePasswordBuilderDifficulty=8192;
+        window.uniquePasswordBuilderAlgorithm = 'scrypt';
+        window.uniquePasswordBuilderDifficulty = 8192;
+        window.uniquePasswordBuilderKeyIndex = 'A salt (default)';
         window.noLog=false;
         var displayPassword = function() {
             var pwd = document.getElementById("password").value;

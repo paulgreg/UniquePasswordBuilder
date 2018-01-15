@@ -49,6 +49,8 @@
             //Good long salt generated with http://passwordsgenerator.net/
             var uniqueSalt = salt + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNPHB_c7ZDBK91Jo0h^F7#2P9Kqw9NWP?e!u#3RCwgzr^eS+4SZV4|=qx=f*2CIH+Wf4J$^J9hx=Ogsn3JBhz_nR@hy80fKGy?Or6@#FZ@Kh&';
             // https://github.com/antelle/argon2-browser
+            // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
+            // so on change will generate different results...
             argon2.hash({
                 pass: masterPassword,
                 salt: uniqueSalt,
@@ -57,21 +59,33 @@
                 // mem: 1024, // used memory, in KiB
                 hashLen: 32, // desired hash length
                 // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
-                type: argon2.ArgonType.Argon2d, // or argon2.ArgonType.Argon2i
+                type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
                 distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
             }).then(function (hash) {
-                var outputPassword = upb.makeHashHumanReadable(hash.hash);
+                //  console.log("======>hash", hash.hashHex, hash.encoded);
+                argon2.hash({
+                    pass: hash.hashHex,
+                    salt: uniqueSalt,
+                    // optional
+                    time: difficulty, // the number of iterations
+                    // mem: 1024, // used memory, in KiB
+                    hashLen: 32, // desired hash length
+                    // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
+                    type: argon2.ArgonType.Argon2d, // or argon2.ArgonType.Argon2i
+                    distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
+                }).then(function (hash) {
+                    var outputPassword = upb.makeHashHumanReadable(hash.hash);
 
-                if (!nolog && console && console.log) {
-                    var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
-                    var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' iterations)' : '';
-                    console.log('Argon2 results', hash.hash, hash.hashHex, hash.encoded, outputPassword)
-                    console.log('UniquePasswordBuilder - Generated password (argon2): ' + outputPassword + ' for salt (domain + user salt): ' + salt + timeMessage + difficultyMessage);
-                }
-                callback(outputPassword);
-
-            })
-            .catch(function (err) { console.error(err.message, err.code)});
+                    if (!nolog && console && console.log) {
+                        var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
+                        var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' iterations Argon2d then ' + difficulty + ' iterations Argon2i)' : '';
+                        console.log('Argon2 results', hash.hash, hash.hashHex, hash.encoded, outputPassword)
+                        console.log('UniquePasswordBuilder - Generated password (argon2): ' + outputPassword + ' for salt (domain + user salt): ' + salt + timeMessage + difficultyMessage);
+                    }
+                    callback(outputPassword);
+            });
+        })
+        .catch(function (err) { console.error(err.message, err.code)});
         }
     };
 

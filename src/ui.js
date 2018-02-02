@@ -28,8 +28,8 @@
             var passwordInput = allPasswordInputs[i];
             var link = document.createElement("a");
             link.setAttribute('class', 'uniquePasswordBuilder');
-            link.setAttribute('style', 'padding:5px;cursor:pointer;');
-            link.appendChild(document.createTextNode("generate password"));
+            link.setAttribute('style', 'padding:5px;cursor:pointer;border-style: dashed; border-width: thin; margin: 5px;');
+            link.appendChild(document.createTextNode("fill password"));
             upb.addLinkAction(link, passwordInput, generatedPassword);
             passwordInput.parentNode.insertBefore(link, passwordInput.nextSibling);
         }

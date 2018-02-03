@@ -1,5 +1,6 @@
 (function(upb) {
 
+    var passwordLength = 16;
     upb.makeHashHumanReadable = function(array) {
         var availableChars = [
             '!','$','+','-','=','_','.',':',';',',','?','#','%','&','(',')','[',']',
@@ -32,7 +33,7 @@
         if (!masterPassword) {
             throw new Error('master password should not be empty');
         }
-
+        var hashLength = 2 * passwordLength;
         var t = +new Date();
         if(algorithm === 'scrypt') {
             var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
@@ -43,7 +44,7 @@
             }
             var logN = Math.log2(difficulty);
 
-            scrypt(masterPassword, salt, logN, 8, 32, function(hashedPassword) {
+            scrypt(masterPassword, salt, logN, 8, hashLength, function(hashedPassword) {
                 var outputPassword = upb.makeHashHumanReadable(hashedPassword);
 
                 if (!nolog && console && console.log) {
@@ -72,7 +73,7 @@
                     // optional
                     time: difficulty, // the number of iterations
                     // mem: 1024, // used memory, in KiB
-                    hashLen: 32, // desired hash length
+                    hashLen: hashLength, // desired hash length
                     // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
                     type: type, // argon2.ArgonType.Argon2i or argon2.ArgonType.Argon2d
                     distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash

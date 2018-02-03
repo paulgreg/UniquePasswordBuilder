@@ -79,8 +79,8 @@ function compute (evt) {
                 outputTextarea.disabled = true;
                 window.close();
             } else {
-                var url = new URL(urlInput.value);
-                UniquePasswordBuilder.generate(algorithm, url, difficulty, passwordInput.value, usersalt, function(password) {
+                var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+                UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
                     outputTextarea.value = password;
                 }, true);
             }

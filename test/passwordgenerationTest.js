@@ -52,7 +52,7 @@ QUnit.test("generate for https://github.com with 'default-password'", function(a
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'github.com'}, undefined, 'default-password', undefined, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://github.com', undefined, 'default-password', undefined, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPassword, "generate problem" );
         equal( generatedPassword.length, 16, "generate length problem" );
@@ -67,7 +67,7 @@ QUnit.test("generate for https://github.com with 'default-password' for 2 round"
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'github.com'}, 2, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://github.com', 2, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPassword1Round, "generate problem" );
         notEqual( githubTlsDefaultPassword, githubTlsDefaultPassword1Round, "same password than a single round" );
@@ -82,7 +82,7 @@ QUnit.test("generate for http://github.com with 'default-password'", function(as
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'http:',host:'github.com'}, undefined, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'http://github.com', undefined, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubDefaultPassword, "generate problem" );
         notEqual( generatedPassword, githubTlsDefaultPassword, "same password without protocol");
@@ -97,7 +97,7 @@ QUnit.test("generate for https://www.google.com with 'default-password'", functi
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', undefined, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPassword, "generate problem" );
         notEqual( generatedPassword, githubDefaultPassword, "same password than github" );
@@ -112,7 +112,7 @@ QUnit.test("generate for https://www.google.com with 'default-password2'", funct
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password2', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', undefined, 'default-password2', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPassword2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword, "same password than google" );
@@ -129,7 +129,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 512
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, 512, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', 512, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordDifficulty512, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword2, "same password than google" );
@@ -147,7 +147,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 204
      var done = assert.async();
     // Given
     // When
-     UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, 2048, 'default-password', 0, function(generatedPassword) {
+     UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', 2048, 'default-password', 0, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordDifficulty2048, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
@@ -166,7 +166,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      var done = assert.async();
     // Given
     // When
-     UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 1, function(generatedPassword) {
+     UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', undefined, 'default-password', 1, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordOldKeyIndex1, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
@@ -185,7 +185,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 2, function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', undefined, 'default-password', 2, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordOldKeyIndex2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordDifficulty512, "same password than google" );
@@ -206,7 +206,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with use
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 'something', function(generatedPassword) {
+    UniquePasswordBuilder.generate('scrypt', 'https://www.google.com', undefined, 'default-password', 'something', function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordUserSaltSomething, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordOldKeyIndex1, "same password than google" );
@@ -220,7 +220,7 @@ QUnit.test("rounds should be a power of two", function(assert) {
         function() {
             // Given
             // When
-           UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'github.com'}, 13, 'default-password')
+           UniquePasswordBuilder.generate('scrypt', 'https://github.com', 13, 'default-password')
         },
         "should fail"
     );
@@ -262,7 +262,7 @@ QUnit.test("generate for https://github.com with 'default-password'", function(a
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'github.com'}, undefined, 'default-password', undefined, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://github.com', undefined, 'default-password', undefined, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPasswordArgon2, "generate problem" );
         equal( generatedPassword.length, 16, "generate length problem" );
@@ -278,7 +278,7 @@ QUnit.test("generate for https://github.com with 'default-password' for 2 round"
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'github.com'}, 2, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://github.com', 2, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPassword1RoundArgon2, "generate problem" );
         notEqual( githubTlsDefaultPasswordArgon2, githubTlsDefaultPassword1RoundArgon2, "same password than a single round" );
@@ -308,7 +308,7 @@ QUnit.test("generate for https://www.google.com with 'default-password'", functi
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2, "generate problem" );
         notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
@@ -323,7 +323,7 @@ QUnit.test("generate for https://www.google.com with 'default-password2'", funct
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password2', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password2', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPassword2Argon2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
@@ -340,7 +340,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 15 
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 15, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', 15, 'default-password', 0, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
@@ -357,7 +357,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with 20 
      var done = assert.async();
     // Given
     // When
-     UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, 20, 'default-password', 0, function(generatedPassword) {
+     UniquePasswordBuilder.generate('argon2', 'https://www.google.com', 20, 'default-password', 0, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty200, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
@@ -375,7 +375,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      var done = assert.async();
     // Given
     // When
-     UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 1, function(generatedPassword) {
+     UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 1, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex1, "generate problem" );
          notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
@@ -394,7 +394,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with key
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 2, function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 2, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
@@ -415,7 +415,7 @@ QUnit.test("generate for https://www.google.com with 'default-password' with use
      var done = assert.async();
     // Given
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'https:',host:'www.google.com'}, undefined, 'default-password', 'something', function(generatedPassword) {
+    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 'something', function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2UserSaltSomething, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex1, "same password than google" );

@@ -172,15 +172,11 @@
                     try {
                         outputSpan.className = '';
                         var password = passwordInput.value;
-                        var parts = urlInput.value.split('/'); // Extract protocol and host from input value
-                        var urlParts = parts.length === 1 ? urlInput.value : { protocol:parts[0], host:parts[2] };
-                        if (urlParts || urlParts.protocol || urlParts.host) {
-                            if(typeof(urlParts) === 'string') {
-                                usefulUrl.textContent = 'Key to generate password: ' + urlParts;
-                            } else {
-                                usefulUrl.textContent = 'Used part to generate password: ' + (urlParts.protocol || '') + '//' + (urlParts.host || '');
-                            }
-                        } else {
+                        var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+                        if(locationSalt !== '') {
+                            usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
+                        }
+                        else {
                             usefulUrl.textContent = '';
                         }
 
@@ -206,7 +202,7 @@
                             localStorage.usersalt = usersalt;
 
                             outputSpan.innerHTML = "Generating password...";
-                            UniquePasswordBuilder.generate(algorithm, urlParts, difficulty, password, usersalt, function(generatedPassword) {
+                            UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, password, usersalt, function(generatedPassword) {
                                 outputSpan.innerHTML = generatedPassword;
                                 copyToClipboardBtn.className = '';
                             });

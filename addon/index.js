@@ -27,6 +27,7 @@ function save () {
 function load (data) {
     if (data && data.prefs) {
         algorithmInput.value = data.prefs.algorithm || "scrypt";
+        changeAlgorithm();
         difficultyScryptInput.value = data.prefs.difficulty || "8192";
         difficultyArgon2Input.value = data.prefs.difficultyArgon2 || 10;
         usersaltInput.value = data.prefs.usersalt || '';
@@ -131,6 +132,7 @@ revealpasswordInput.addEventListener('click', function(e) {
     compute();
 }, false);
 
+algorithmInput.addEventListener('change', save, false);
 difficultyScryptInput.addEventListener('change', save, false);
 difficultyArgon2Input.addEventListener('change', save, false);
 usersaltInput.addEventListener('keyup', save, false);

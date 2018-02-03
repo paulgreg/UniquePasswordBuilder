@@ -56,14 +56,19 @@
         } else {
             var difficulty = difficulty || 10;
             //Good long salt generated with http://passwordsgenerator.net/
-            var salt = locationSalt + '|' + (userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNPHB_c7ZDBK91Jo0h^F7#2P9Kqw9NWP?e!u#3RCwgzr^eS+4SZV4|=qx=f*2CIH+Wf4J$^J9hx=Ogsn3JBhz_nR@hy80fKGy?Or6@#FZ@Kh&';
+            var salt = locationSalt + '|' + (userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP';
             // https://github.com/antelle/argon2-browser
             // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
             // so on change will generate different results...
+            var slatLimit = 328;
+            if(salt.length > slatLimit) {
+                callback("Salt is too long :( Should be " + (salt.length - slatLimit) + " chars shorter...");
+                return;
+            }
             var applyArgon2 = function(password, type, argonCallback) {
                 return argon2.hash({
                     pass: password,
-                    salt: salt,
+                    salt: salt, //fail when salt length is >328
                     // optional
                     time: difficulty, // the number of iterations
                     // mem: 1024, // used memory, in KiB

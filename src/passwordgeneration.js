@@ -51,35 +51,29 @@
             // https://github.com/antelle/argon2-browser
             // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
             // so on change will generate different results...
-            argon2.hash({
-                pass: masterPassword,
-                salt: uniqueSalt,
-                // optional
-                time: difficulty, // the number of iterations
-                // mem: 1024, // used memory, in KiB
-                hashLen: 32, // desired hash length
-                // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
-                type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
-                distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
-            }).then(function (hash) {
-                //  console.log("======>hash", hash.hashHex, hash.encoded);
-                argon2.hash({
-                    pass: hash.hashHex,
+            var applyArgon2 = function(password, type, argonCallback) {
+                return argon2.hash({
+                    pass: password,
                     salt: uniqueSalt,
                     // optional
                     time: difficulty, // the number of iterations
                     // mem: 1024, // used memory, in KiB
                     hashLen: 32, // desired hash length
                     // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
-                    type: argon2.ArgonType.Argon2d, // or argon2.ArgonType.Argon2i
+                    type: type, // argon2.ArgonType.Argon2i or argon2.ArgonType.Argon2d
                     distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
-                }).then(function (hash) {
-                    var outputPassword = upb.makeHashHumanReadable(hash.hash);
+                }).then(argonCallback);
+            };
+
+            applyArgon2(masterPassword, argon2.ArgonType.Argon2i, function (hashArgon2i) {
+                //  console.log("======>hash", Argon2i.hashHex, Argon2i.encoded);
+                applyArgon2(hashArgon2i.hashHex, argon2.ArgonType.Argon2d, function (hashArgon2d) {
+                    var outputPassword = upb.makeHashHumanReadable(hashArgon2d.hash);
 
                     if (!nolog && console && console.log) {
                         var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
-                        var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' iterations Argon2d then ' + difficulty + ' iterations Argon2i)' : '';
-                        console.log('Argon2 results', hash.hash, hash.hashHex, hash.encoded, outputPassword)
+                        var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' iterations Argon2i then ' + difficulty + ' iterations Argon2d)' : '';
+                        console.log('Argon2 results', hashArgon2d.hash, hashArgon2d.hashHex, hashArgon2d.encoded, outputPassword)
                         console.log('UniquePasswordBuilder - Generated password (argon2): ' + outputPassword + ' for salt (domain + user salt): ' + salt + timeMessage + difficultyMessage);
                     }
                     callback(outputPassword);

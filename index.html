@@ -52,7 +52,7 @@
                     <label>Algorithm:
                         <select id="algorithm">
                             <option value="scrypt" selected="selected">Scrypt</option>
-                            <option value="argon2">Argon2</option>
+                            <option value="argon2">Argon2 (newer and more secure)</option>
                         </select>
                     </label>
                     <label>difficulty:
@@ -88,11 +88,11 @@
         <p>If you’re not convinced, tell yourself what if I change the password generation code, if there’s a critical bug or if that page is deleted some day...</p>
 
         <p>You could also verify the security of generated password using the site <a href="https://howsecureismypassword.net/" target="about:_blank">howsecureismypassword.net</a>
-            (<strong>don't try with one of the password you use</strong>, only some you just generated with dummy values...)</p>
+            (<strong>don't try with one of the password you use</strong>, only with some you just generated with dummy values...)</p>
 
         <h2>Bookmarklet installation</h2>
         <ol>
-            <li>Configure the <b>options</b> section above (or leave to its default values)</li>
+            <li>Configure the <b>options</b> section above (or leave to the default values).</li>
             <li><button id="copyBookmarkletToClipboard">Copy the bookmarklet code in the clipboard</button></li>
             <li>Create a bookmark and paste the copied code inside the <strong>address field</strong> of the bookmark,</li>
         </ol>
@@ -110,29 +110,37 @@
         </ol>
         <p>It’s done, you can submit the form to login.</p>
 
+        <h2>Which algorithm to choose?</h2>
+        <p>To better protect your <strong>master password</strong>, we recommand you to choose <strong>argon2</strong> algorithm which is newer and more secure.</p>
+        <p>Note that both <strong>scrypt</strong> (still there for compatibility) and <strong>argon2</strong> generate equally secured passwords.</p>
+
         <h2>Under the hood</h2>
-        <p>We use 2 password-based <a href="https://en.wikipedia.org/wiki/Key_derivation_function">key derivation functions</a> (depending of your options) to generate the password for a site.:
+        <p>We use 2 password-based <a href="https://en.wikipedia.org/wiki/Key_derivation_function">key derivation functions</a> (depending of your options) to generate the password for a site:
             <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a> (by Colin Percival) and <a href="http://en.wikipedia.org/wiki/Argon2">argon2</a> (by Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich).
 
-        <p>Protocol is "http://" or "https://" ; host is the complete domain (including subdomain).</p>
-        <h3>Exemple for password 'ThisIsAMasterPassword4UniquePasswordBuilder' and URL 'https://login.yourdomain.com/login'</h3>
-        <pre>'-4qYW0P?;j.wBuFV' = scrypt('ThisIsAMasterPassword4UniquePasswordBuilder', 'https://login.yourdomain.com/login', 8192, 8, 1, 64)</pre>
+        <p>To make the password unique for each site, we use 2 information: the <strong>protocol</strong> and the <strong>host</strong>.
+            The <strong>Protocol</strong> is "http://" or "https://" ; The <strong>host</strong> is the complete domain (including subdomain).</p>
+        <h3>Example for password 'ThisIsAMasterPassword4UniquePasswordBuilder' and URL 'https://login.yourdomain.com/login'</h3>
+        <pre>'-4qYW0P?;j.wBuFV' = scrypt('ThisIsAMasterPassword4UniquePasswordBuilder', 'https://login.yourdomain.com', 8192, 8, 1, 64)</pre>
         <p>
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
         </p>
 
-        <p>the "user salt" is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
-        <p>The Firefox or Chrome addon, that page and the bookmarklet shares code about password generation. You can use one or the other and still get the same password with the same parameters.</p>
-        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a>, a library from Dmitry Chestnykh,
-            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> and icons are from <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>. Many thanks !</p>
-        <p>Thanks to <a href="https://twitter.com/pmiossec">Philippe Miossec</a> for its contributions.</p>
-        <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
+        <p>The <strong>user salt</strong> is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
+        <p>The Firefox or Chrome addon, that page and the bookmarklet shares the code about password generation. You can use one or the other and still get the same password when using the same parameters.</p>
+        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a> (by Dmitry Chestnykh),
+            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> (by <a href="https://github.com/antelle/argon2-browser">Antelle</a>) and icons (by <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>). Many thanks !</p>
+        <p>Thanks to <a href="https://github.com/pmiossec/">Philippe Miossec</a> for its contributions.</p>
+        <p>You may <a href="https://github.com/paulgreg/UniquePasswordBuilder/">check the source code on github</a>, <a href="../test/uniquePasswordBuilderTest.html">launch unit tests</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 
         <h2>Make it stronger...</h2>
-        <p>We use 8192 difficulty for scrypt by default (see "difficulty" in form or "window.uniquePasswordBuilderDifficulty" in the bookmarklet above).</p>
+        <p>You could specify a <strong>user salt</strong> to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
+        <h3>For scrypt</h3>
+        <p>We use 8192 difficulty by default.</p>
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
-        <p>The user salt could be used to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
+        <h3>For argon2</h3>
+        <p>We use 10 difficulty by default. You could choose a greater value.</p>
 
         <script src="upb-main.min.js"></script>
         <script>

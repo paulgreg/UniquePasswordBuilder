@@ -35,7 +35,7 @@ function load (data) {
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
         algorithmInput.value = "scrypt";
-        difficultyInput.value = 8192;
+        difficultyScryptInput.value = 8192;
     }
 }
 

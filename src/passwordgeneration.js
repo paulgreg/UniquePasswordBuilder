@@ -29,6 +29,25 @@
         return (parts[0]|| '') + '//' + ( parts[2]  || '') ;
     };
 
+    upb.verifyPassword = function(password) {
+        if (password.length === 0) {
+            return { success: false, message: 'Please type a strong password', error: false};
+        }
+        if (!/[a-z]/.test(password)) {
+            return { success: false, message: 'Password needs lower-case characters', error: true};
+        }
+        if (!/[A-Z]/.test(password)) {
+            return { success: false, message: 'Password needs upper-case characters', error: true};
+        }
+        if (!/[\d]/.test(password)) {
+            return { success: false, message: 'Password needs numerical characters', error: true};
+        }
+        if (password.length < 8) {
+            return { success: false, message: 'Password should be at least 8 characters', error: true};
+        }
+        return { success: true, message: 'Generating password...', error: false};
+    }
+
     upb.generate = function(algorithm, locationSalt, difficulty, masterPassword, userSalt, callback, nolog, params) {
         if (!masterPassword) {
             throw new Error('master password should not be empty');

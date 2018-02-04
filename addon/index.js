@@ -59,16 +59,9 @@ function compute (evt) {
         outputTextarea.classList.remove('hide');
 
         var password = passwordInput.value;
-        if (password.length === 0) {
-            setErrorMessage('Please type a strong password');
-        } else if (!/[a-z]/.test(password)) {
-            setErrorMessage('Password needs lower-case characters', true);
-        } else if (!/[A-Z]/.test(password)) {
-            setErrorMessage('Password needs upper-case characters', true);
-        } else if (!/[\d]/.test(password)) {
-            setErrorMessage('Password needs numerical characters', true);
-        } else if (password.length < 8) {
-            setErrorMessage('Password should be at least 8 characters', true);
+        var result = UniquePasswordBuilder.verifyPassword(password);
+        if (!result.success) {
+            setErrorMessage(result.message, result.error);
         } else {
             var algorithm = algorithmInput.value;
             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);

@@ -10,6 +10,74 @@ var fireEvent = function(element,event) {
     }
 };
 
+QUnit.module('Password checking');
+
+QUnit.test("should not be empty", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('');
+
+    // Then
+    assert.equal( result.success, false);
+    assert.equal( result.message, 'Please type a strong password');
+    assert.equal( result.error, false);
+});
+
+QUnit.test("should contains lower-case characters", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('E');
+
+    // Then
+    assert.equal( result.success, false);
+    assert.equal( result.message, 'Password needs lower-case characters');
+    assert.equal( result.error, true);
+});
+
+QUnit.test("should contains upper-case characters", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('e');
+
+    // Then
+    assert.equal( result.success, false);
+    assert.equal( result.message, 'Password needs upper-case characters');
+    assert.equal( result.error, true);
+});
+
+QUnit.test("should contains numerical characters", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('Ee');
+
+    // Then
+    assert.equal( result.success, false);
+    assert.equal( result.message, 'Password needs numerical characters');
+    assert.equal( result.error, true);
+});
+
+QUnit.test("should contains at least 8 characters", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('Ee4');
+
+    // Then
+    assert.equal( result.success, false);
+    assert.equal( result.message, 'Password should be at least 8 characters');
+    assert.equal( result.error, true);
+});
+
+
+QUnit.test("should be ok", function(assert) {
+    // Given
+    // When
+    var result = UniquePasswordBuilder.verifyPassword('l2E456t8');
+
+    // Then
+    assert.equal( result.success, true);
+    assert.equal( result.error, false);
+});
+
 QUnit.module('Under the hood');
 
 QUnit.test("makeHashHumanReadable", function(assert) {

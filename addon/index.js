@@ -44,7 +44,13 @@ function setErrorMessage (message, error) {
         outputTextarea.classList.add('error');
     }
     copyImg.classList.add('hidden');
-    outputTextarea.value = message;
+    updatePasswordField(message);
+}
+
+function updatePasswordField (text) {
+    setTimeout(function () {
+        outputTextarea.value = text;
+    }, 0);
 }
 
 function compute (evt) {
@@ -82,7 +88,7 @@ function compute (evt) {
             } else {
                 var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
                 UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
-                    outputTextarea.value = password;
+                    updatePasswordField(password);
                 }, true);
             }
         }

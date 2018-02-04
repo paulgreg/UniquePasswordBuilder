@@ -167,8 +167,14 @@
 
                 var setErrorMessage = function(message, error) {
                     outputSpan.className = error ? 'error' : '';
-                    outputSpan.innerHTML = message;
+                    updatePasswordField(message);
                     copyToClipboardBtn.className = 'hidden';
+                }
+
+                var updatePasswordField = function(text) {
+                    setTimeout(function () {
+                        outputSpan.innerHTML = text;
+                    }, 0);
                 }
 
                 var go = function() {
@@ -204,9 +210,9 @@
                             localStorage.difficultyArgon2 = difficultyArgon2Input.value;
                             localStorage.usersalt = usersalt;
 
-                            outputSpan.innerHTML = "Generating password...";
+                            updatePasswordField("Generating password...");
                             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, password, usersalt, function(generatedPassword) {
-                                outputSpan.innerHTML = generatedPassword;
+                                updatePasswordField(generatedPassword);
                                 copyToClipboardBtn.className = '';
                             });
                         }

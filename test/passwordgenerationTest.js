@@ -491,3 +491,21 @@ QUnit.test("generate for https://www.google.com with 'default-password' with use
     }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
 
 });
+
+QUnit.module('getSaltOnLocation');
+
+QUnit.test("should get protocol and host on standard URL", function(assert) {
+    var r = UniquePasswordBuilder.getSaltOnLocation('https://github.com/paulgreg/UniquePasswordBuilder')
+    equal(r, 'https://github.com')
+});
+
+QUnit.test("should return string that are not an URL", function(assert) {
+    var r = UniquePasswordBuilder.getSaltOnLocation('someApp')
+    equal(r, 'someApp')
+});
+
+QUnit.test("should return string for `about` pages", function(assert) {
+    var r = UniquePasswordBuilder.getSaltOnLocation('about:debugging#addons')
+    equal(r, 'about:debugging#addons') // before #eef3ca9, it was about:debugging#addons//undefined (yes, it was bugged)
+});
+

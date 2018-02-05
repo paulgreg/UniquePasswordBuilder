@@ -44,8 +44,8 @@
         <h2>Try it yourself :</h2>
         <form>
             <fieldset>
-                <label>your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
-                <label><abbr title="Uniform Resource Locator">URL</abbr>: <input type="text" id="url" /></label>
+                <label>Your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
+                <label><abbr title="Uniform Resource Locator">URL</abbr> (or Key): <input type="text" id="url" placeholder="Paste here the URL of a website (or type a key)" /></label>
                 <label id="usefulUrl" class="small"></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
@@ -55,7 +55,7 @@
                             <option value="argon2">Argon2 (newer and more secure)</option>
                         </select>
                     </label>
-                    <label>difficulty:
+                    <label>Difficulty:
                         <select id="difficultyScrypt">
                             <option value="256">256 (2^8)</option>
                             <option value="512">512 (2^9)</option>
@@ -72,9 +72,9 @@
                         </select>
                         <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
-                    <label>user salt : <input type="text" id="usersalt" value="" maxlength="80" /></label>
+                    <label>User salt : <input type="text" id="usersalt" value="" maxlength="80" /></label>
                 </div>
-                <label>generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
+                <label>Generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
             </fieldset>
         </form>
 
@@ -121,7 +121,7 @@
 
         <h2>Under the hood</h2>
         <p>We use 2 password-based <a href="https://en.wikipedia.org/wiki/Key_derivation_function">key derivation functions</a> (depending of your options) to generate the password for a site:
-            <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a> (by Colin Percival) and <a href="http://en.wikipedia.org/wiki/Argon2">argon2</a> (by Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich).
+            <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a> (by <a href="https://twitter.com/cperciva">Colin Percival</a>) and <a href="http://en.wikipedia.org/wiki/Argon2">argon2</a> (by Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich).
 
         <p>To make the password unique for each site, we use 2 information: the <strong>protocol</strong> and the <strong>host</strong>.
             The <strong>Protocol</strong> is "http://" or "https://" ; The <strong>host</strong> is the complete domain (including subdomain).</p>
@@ -134,8 +134,8 @@
 
         <p>The <strong>user salt</strong> is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
         <p>The Firefox or Chrome addon, that page and the bookmarklet shares the code about password generation. You can use one or the other and still get the same password when using the same parameters.</p>
-        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a> (by Dmitry Chestnykh),
-            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> (by <a href="https://github.com/antelle/argon2-browser">Antelle</a>) and icons (by <a href="http://ikons.piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>). Many thanks !</p>
+        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a> (by <a href="https://github.com/dchest">Dmitry Chestnykh</a>),
+            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> (by <a href="https://github.com/antelle/argon2-browser">Antelle</a>) and icon set <a href="http://ikons.piotrkwiatkowski.co.uk/">ikons</a> (by <a href="http://piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>). Many thanks !</p>
         <p>Thanks to <a href="https://github.com/pmiossec">Philippe Miossec</a> for its contributions and argon2 support.</p>
         <p>You may check the <a href="https://github.com/paulgreg/UniquePasswordBuilder/">source code on github</a> or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
 

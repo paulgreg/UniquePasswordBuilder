@@ -23,9 +23,11 @@
             a                         { text-decoration: underline; }
             pre                       { border: 1px solid black; padding: .25em; background-color: #70b1e254; white-space: pre-wrap; }
             fieldset                  { border: 1px solid black; padding: .5em; }
-            label                     { display: flex; color: #333; align-items: center; margin-top: 5px;}
+            label                     { display: flex; color: black; align-items: center; margin-top: 5px;}
             input, select, #output    { margin-left: .25em; flex-grow: 1; }
             #output                   { border: 1px dashed black; padding: .25em .5em; background-color: #70b1e254;}
+            #output.hide              { background-color: black; }
+            #output.error.hide        { background-color: none; }
             .icons                    { margin: 5px 0 0 5px; }
             a.options                 { text-align: right; display: block; margin: 0 0 .5em 0; }
             .hidden                   { display: none; }
@@ -33,6 +35,8 @@
             input:focus, select:focus { border-color: #52a8eccc; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
             input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
             input                     { height: 18px;}
+            label.checkbox            { display: block;}
+            input[type="checkbox"]    { vertical-align:middle; }
             button                    { height: 29px; margin-left: 10px; background-color: #70b1e254; border-style: solid; border-color: #54a6e4c0;}
             .small                    { font-size: 11px;}
 
@@ -78,6 +82,7 @@
                         <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
                     <label>User salt : <input type="text" id="usersalt" value="" maxlength="80" /></label>
+                    <label class="checkbox">Hide sensitive data:&nbsp;<input type="checkbox" id="hideSensitiveData" /></label>
                 </div>
                 <label>Generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
             </fieldset>
@@ -170,6 +175,7 @@
                 var difficultyScryptInput         = document.getElementById('difficultyScrypt');
                 var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
                 var usersaltInput                 = document.getElementById('usersalt');
+                var hideSensitiveData             = document.getElementById('hideSensitiveData');
                 var outputSpan                    = document.getElementById('output');
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
                 var optionsLink                   = document.querySelector('a.options');
@@ -192,6 +198,7 @@
                 if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
                 if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2;
                 if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
+                if (localStorage.hideSensitiveData) hideSensitiveData.checked = localStorage.hideSensitiveData;
 
                 var timeout = null;
                 var delay = function(fn) {
@@ -231,7 +238,8 @@
                                 return;
                             }
 
-                            displayIcons();
+                            hideData();
+
                             var algorithm = algorithmInput.value;
                             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
                             var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
@@ -241,6 +249,7 @@
                             localStorage.difficulty = difficultyScryptInput.value;
                             localStorage.difficultyArgon2 = difficultyArgon2Input.value;
                             localStorage.usersalt = usersalt;
+                            localStorage.hideSensitiveData = hideSensitiveData.checked;
 
                             updatePasswordField("Generating password...");
                             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, password, usersalt, function(generatedPassword) {
@@ -250,6 +259,16 @@
                         }
                     } catch(e) {
                         setErrorMessage(e, true);
+                    }
+                }
+
+                var hideData = function() {
+                    if (hideSensitiveData.checked) {
+                        passwordIconMemo.classList.add('hidden');
+                        outputSpan.classList.add('hide');
+                    } else {
+                        outputSpan.classList.remove('hide');
+                        displayIcons();
                     }
                 }
 
@@ -300,6 +319,7 @@
                 difficultyArgon2Input.addEventListener('change', delayedGo, false);
                 usersaltInput.addEventListener('keyup', delayedGo, false);
                 usersaltInput.addEventListener('change', delayedGo, false);
+                hideSensitiveData.addEventListener('change', hideData, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
                 displayInfosLink.addEventListener('click', displayInfos, false);

@@ -191,18 +191,21 @@
                     try {
                         outputSpan.className = '';
                         var password = passwordInput.value;
-                        var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
-                        if(locationSalt !== '') {
-                            usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
-                        }
-                        else {
-                            usefulUrl.textContent = '';
-                        }
 
                         var result = UniquePasswordBuilder.verifyPassword(password);
                         if (!result.success) {
                             setErrorMessage(result.message, result.error);
                         } else {
+                            var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+                            if(locationSalt !== '') {
+                                usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
+                            }
+                            else {
+                                usefulUrl.textContent = '';
+                                setErrorMessage('Please enter an url / key', true);
+                                return;
+                            }
+
                             var algorithm = algorithmInput.value;
                             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
                             var difficulty = (difficultyValue > 0) ? difficultyValue : 1;

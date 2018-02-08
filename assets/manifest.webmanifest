@@ -1,6 +1,6 @@
 {
     "name": "Unique Password Builder",
-    "short_name": "UPB",
+    "short_name": "Password Builder",
     "description": "A password builder to generate a strong and different password for each website",
     "start_url": "index.html#pwa",
     "lang": "en-EN",

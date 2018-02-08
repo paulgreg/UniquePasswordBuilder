@@ -83,6 +83,10 @@ function compute (evt) {
                 window.close();
             } else {
                 const locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+                if(locationSalt === '') {
+                    setErrorMessage('Please enter an url / key', true);
+                    return;
+                }
                 UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
                     updatePasswordField(password);
                 }, true);

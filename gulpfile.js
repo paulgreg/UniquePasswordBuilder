@@ -55,6 +55,11 @@ gulp.task('html', function() {
     ;
     });
 
+gulp.task('assets', function() {
+    return gulp.src(['assets\\sw.js', 'assets\\icon.png'])
+    .pipe(gulp.dest('dist'))
+    ;
+});
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
     .pipe(gulp.dest('./addon'));
@@ -62,4 +67,4 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('default', ['clean', 'html', 'index', 'bookmarklet', 'addon', 'argon2']);
+gulp.task('default', ['clean', 'html', 'index', 'assets', 'bookmarklet', 'addon', 'argon2']);

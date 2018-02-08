@@ -1,8 +1,8 @@
 {
-    "name": "UniquePasswordBuilder",
-    "short_name": "UniquePasswordBuilder",
+    "name": "Unique Password Builder",
+    "short_name": "UPB",
     "description": "A password builder to generate a strong and different password for each website",
-    "start_url": "index.html",
+    "start_url": "index.html#pwa",
     "lang": "en-EN",
     "display": "standalone",
     "theme_color": "#70b1e254",

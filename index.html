@@ -40,9 +40,8 @@
         </style>
     </head>
     <body>
-        <h1>Unique Password Builder Bookmarklet</h1>
+        <h1>Unique Password Builder</h1>
 
-        <h2>Try it yourself :</h2>
         <form>
             <fieldset>
                 <label>Your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
@@ -79,11 +78,14 @@
             </fieldset>
         </form>
 
+<a href="" id="displayInfos" class="hidden">More informations</a>
+<div id="infos">
+
         <h2>What is it ?</h2>
         <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.</p>
         <p>You can use Unique Password Builder via one of these options :</p>
         <ul>
-            <li>This page,</li>
+            <li>This page (which is a Progressive Web App and that you can install as an app on mobile),</li>
             <li><a href="https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie/">Chrome</a> add-ons generating your password that you can then copy and paste,</li>
             <li>A <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> for other browsers that will ask your <strong>master password</strong> and then add a "fill password" link after all password fields.
             Clicking on that link will compute a <strong>unique password</strong> using the <strong>current domain</strong> and your <strong>master password</strong> so it makes a different but very strong password for each website.</li>
@@ -126,8 +128,8 @@
 
         <p>To make the password unique for each site, we use 2 information: the <strong>protocol</strong> and the <strong>host</strong>.
             The <strong>Protocol</strong> is "http://" or "https://" ; The <strong>host</strong> is the complete domain (including subdomain).</p>
-        <h3>Example for password 'ThisIsAMasterPassword4UniquePasswordBuilder' and URL 'https://login.yourdomain.com/login'</h3>
-        <pre>'-4qYW0P?;j.wBuFV' = scrypt('ThisIsAMasterPassword4UniquePasswordBuilder', 'https://login.yourdomain.com', 8192, 8, 1, 64)</pre>
+        <h3>Example for password 'MyMasterPassword4UPB' and URL 'https://login.yourdomain.com/login'</h3>
+        <pre>'(QZlpar;YomE%qMz' = scrypt('MyMasterPassword4UPB', 'https://login.yourdomain.com', 8192, 8, 1, 64)</pre>
         <p>
             <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
             If that happens, you can always generate the old password using the form above with previous information.
@@ -147,12 +149,14 @@
         <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
         <h3>For argon2</h3>
         <p>We use 10 difficulty by default. You could choose a greater value.</p>
-
+</div>
         <script src="upb-main.min.js"></script>
         <script>
             (function() {
 
                 // Init location
+                var displayInfosLink              = document.getElementById('displayInfos');
+                var infosDiv                      = document.getElementById('infos');
                 var urlInput                      = document.getElementById('url');
                 var usefulUrl                     = document.getElementById('usefulUrl');
                 var passwordInput                 = document.getElementById('password');
@@ -164,6 +168,19 @@
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
                 var optionsLink                   = document.querySelector('a.options');
                 var optionsDiv                    = document.querySelector('div.options');
+
+                var displayInfos = function(e) {
+                    if(e) e.preventDefault();
+                    infosDiv.classList.remove('hidden');
+                    displayInfosLink.classList.add('hidden');
+                }
+
+                if (window.location.hash.indexOf('pwa') !== -1) {
+                    infosDiv.classList.add('hidden');
+                    displayInfosLink.classList.remove('hidden');
+                } else{
+                    displayInfos();
+                }
 
                 if (localStorage.algorithm) algorithmInput.value = localStorage.algorithm;
                 if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
@@ -277,6 +294,7 @@
                 usersaltInput.addEventListener('change', delayedGo, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
+                displayInfosLink.addEventListener('click', displayInfos, false);
                 document.getElementById('copyBookmarkletToClipboard').addEventListener('click', copyBookmarkletToClipboard, false);
                 changeAlgorithm();
 

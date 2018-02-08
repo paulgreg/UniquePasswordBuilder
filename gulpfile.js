@@ -56,7 +56,7 @@ gulp.task('html', function() {
     });
 
 gulp.task('assets', function() {
-    return gulp.src(['assets\\sw.js', 'assets\\icon.png'])
+    return gulp.src('assets\\*')
     .pipe(gulp.dest('dist'))
     ;
 });

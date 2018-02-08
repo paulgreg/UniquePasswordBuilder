@@ -15,9 +15,6 @@ var paths = {
         'node_modules/argon2-browser/lib/argon2.js',
         'src/ui.js',
         'src/bookmarklet.js'
-    ],
-    argon2: [
-        'node_modules/argon2-browser/dist/argon2-asm.min.js'
     ]
 };
 
@@ -43,11 +40,26 @@ gulp.task('index', function() {
 });
 
 gulp.task('argon2', function() {
-    return gulp.src(paths.argon2)
+    return gulp.src('node_modules/argon2-browser/dist/argon2-asm.min.js')
       .pipe(gulp.dest('dist'))
       .pipe(gulp.dest('addon'))
       ;
     });
+
+    gulp.task('font-awesome', ['font-awesome-css', 'font-awesome-fonts']);
+
+    gulp.task('font-awesome-css', function() {
+        return gulp.src('node_modules/font-awesome/css/*')
+            .pipe(gulp.dest('dist/font-awesome/css'))
+            .pipe(gulp.dest('addon/font-awesome/css'));
+        });
+
+    gulp.task('font-awesome-fonts', function() {
+        return gulp.src('node_modules/font-awesome/fonts/*')
+            .pipe(gulp.dest('dist/font-awesome/fonts'))
+            .pipe(gulp.dest('addon/font-awesome/fonts'))
+            ;
+        });
 
 gulp.task('html', function() {
     return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
@@ -60,6 +72,7 @@ gulp.task('assets', function() {
     .pipe(gulp.dest('dist'))
     ;
 });
+
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
     .pipe(gulp.dest('./addon'));
@@ -67,4 +80,6 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('default', ['clean', 'html', 'index', 'assets', 'bookmarklet', 'addon', 'argon2']);
+gulp.task('page', ['clean', 'html', 'index', 'assets']);
+
+gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

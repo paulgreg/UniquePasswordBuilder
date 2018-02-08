@@ -8,7 +8,7 @@
         <title>Unique Password Builder Bookmarklet</title>
         <link rel="icon" type="image/png" href="icon.png" />
         <link rel="manifest" href="manifest.webmanifest">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
         <style>
             body                      { margin: .75em; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; color: #333; font-size: 1em; }
 
@@ -228,6 +228,7 @@
                             passwordIconMemo.classList.add('hidden');
                             setErrorMessage(result.message, result.error);
                         } else {
+                            hideData();
                             var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
                             if(locationSalt !== '') {
                                 usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
@@ -238,7 +239,6 @@
                                 return;
                             }
 
-                            hideData();
 
                             var algorithm = algorithmInput.value;
                             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);

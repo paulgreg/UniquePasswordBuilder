@@ -194,7 +194,7 @@
                 if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
                 if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2;
                 if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
-                if (localStorage.hideSensitiveData) hideSensitiveData.checked = localStorage.hideSensitiveData;
+                hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
 
                 var timeout = null;
                 var delay = function(fn) {

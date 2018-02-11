@@ -123,10 +123,10 @@
 
     upb.displayIcons = function(password, iconContainer) {
         iconContainer.classList.remove('hidden');
-        while (iconContainer.firstChild) {
-            iconContainer.removeChild(iconContainer.firstChild);
-        }
         upb.generate('scrypt', '', 2, password, 'salt', function(generatedPassword, hash) {
+            while (iconContainer.firstChild) {
+                iconContainer.removeChild(iconContainer.firstChild);
+            }
             upb.chooseIcon(iconContainer, hash[0], hash[1], hash[2], hash[3]);
             upb.chooseIcon(iconContainer, hash[4], hash[5], hash[6], hash[7]);
             upb.chooseIcon(iconContainer, hash[8], hash[9], hash[10], hash[11]);

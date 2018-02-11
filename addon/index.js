@@ -166,6 +166,6 @@ const hideData = function() {
         outputTextarea.classList.add('hide');
     } else {
         outputTextarea.classList.remove('hide');
-        UniquePasswordBuilder.displayIcons(passwordInput.value);
+        UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
     }
 }

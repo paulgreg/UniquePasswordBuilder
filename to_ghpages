@@ -1,6 +1,9 @@
 #!/bin/sh
 
-#Usage: gulp && ./to_ghpages
+#Usage: ./to_ghpages
+
+./node_modules/.bin/gulp clean
+./node_modules/.bin/gulp default
 
 BRANCH=$(git symbolic-ref -q HEAD)
 BRANCH=${BRANCH##refs/heads/}

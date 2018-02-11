@@ -80,6 +80,6 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('page', ['clean', 'html', 'index', 'assets']);
+gulp.task('page', ['html', 'index', 'assets']);
 
 gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

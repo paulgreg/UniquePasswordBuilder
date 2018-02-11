@@ -15,9 +15,6 @@ var paths = {
         'node_modules/argon2-browser/lib/argon2.js',
         'src/ui.js',
         'src/bookmarklet.js'
-    ],
-    argon2: [
-        'node_modules/argon2-browser/dist/argon2-asm.min.js'
     ]
 };
 
@@ -28,38 +25,54 @@ gulp.task('clean-dist', function(cb){
 
 gulp.task('clean', ['clean-dist']);
 
-gulp.task('bookmarklet', function() {
+gulp.task('bookmarklet', ['clean'], function() {
   return gulp.src(paths.bookmarklet)
     .pipe(uglify())
     .pipe(concat('upb.min.js'))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('index', function() {
+gulp.task('index', ['clean'], function() {
   return gulp.src(paths.index)
     .pipe(uglify())
     .pipe(concat('upb-main.min.js'))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('argon2', function() {
-    return gulp.src(paths.argon2)
+gulp.task('argon2', ['clean'], function() {
+    return gulp.src('node_modules/argon2-browser/dist/argon2-asm.min.js')
       .pipe(gulp.dest('dist'))
       .pipe(gulp.dest('addon'))
       ;
     });
 
-gulp.task('html', function() {
+    gulp.task('font-awesome', ['font-awesome-css', 'font-awesome-fonts']);
+
+    gulp.task('font-awesome-css', ['clean'], function() {
+        return gulp.src('node_modules/font-awesome/css/*')
+            .pipe(gulp.dest('dist/font-awesome/css'))
+            .pipe(gulp.dest('addon/font-awesome/css'));
+        });
+
+    gulp.task('font-awesome-fonts', ['clean'], function() {
+        return gulp.src('node_modules/font-awesome/fonts/*')
+            .pipe(gulp.dest('dist/font-awesome/fonts'))
+            .pipe(gulp.dest('addon/font-awesome/fonts'))
+            ;
+        });
+
+gulp.task('html', ['clean'], function() {
     return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
     .pipe(gulp.dest('dist'))
     ;
     });
 
-gulp.task('assets', function() {
+gulp.task('assets', ['clean'], function() {
     return gulp.src('assets\\*')
     .pipe(gulp.dest('dist'))
     ;
 });
+
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
     .pipe(gulp.dest('./addon'));
@@ -67,4 +80,6 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('default', ['clean', 'html', 'index', 'assets', 'bookmarklet', 'addon', 'argon2']);
+gulp.task('page', ['html', 'index', 'assets']);
+
+gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

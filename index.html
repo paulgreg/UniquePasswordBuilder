@@ -8,6 +8,7 @@
         <title>Unique Password Builder Bookmarklet</title>
         <link rel="icon" type="image/png" href="icon.png" />
         <link rel="manifest" href="manifest.webmanifest">
+        <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
         <style>
             body                      { margin: .75em; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; color: #333; font-size: 1em; }
 
@@ -22,21 +23,22 @@
             a                         { text-decoration: underline; }
             pre                       { border: 1px solid black; padding: .25em; background-color: #70b1e254; white-space: pre-wrap; }
             fieldset                  { border: 1px solid black; padding: .5em; }
-            label                     { display: flex; color: #333; align-items: center; margin-top: 5px;}
+            label                     { display: flex; color: black; align-items: center; margin-top: 5px;}
             input, select, #output    { margin-left: .25em; flex-grow: 1; }
             #output                   { border: 1px dashed black; padding: .25em .5em; background-color: #70b1e254;}
+            #output.hide              { background-color: black; }
+            #output.error.hide        { background-color: none; }
+            .icons                    { margin: 5px 0 0 5px; }
             a.options                 { text-align: right; display: block; margin: 0 0 .5em 0; }
             .hidden                   { display: none; }
 
             input:focus, select:focus { border-color: #52a8eccc; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
             input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
             input                     { height: 18px;}
+            label.checkbox            { display: block;}
+            input[type="checkbox"]    { vertical-align:middle; }
             button                    { height: 29px; margin-left: 10px; background-color: #70b1e254; border-style: solid; border-color: #54a6e4c0;}
             .small                    { font-size: 11px;}
-
-            @media (max-width:800px) {
-                label, select, input { display: block; width: 98%; }
-            }
         </style>
     </head>
     <body>
@@ -44,7 +46,10 @@
 
         <form>
             <fieldset>
-                <label>Your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" /></label>
+                <label>
+                    Your master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" />
+                    <div id='passwordIconMemo' class="icons hidden"></div>
+                </label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr> (or Key): <input type="text" id="url" placeholder="Paste here the URL of a website (or type a key)" /></label>
                 <label id="usefulUrl" class="small"></label>
                 <a href="" class="options">options</a>
@@ -73,6 +78,7 @@
                         <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
                     <label>User salt : <input type="text" id="usersalt" value="" maxlength="80" /></label>
+                    <label class="checkbox">Hide sensitive data:&nbsp;<input type="checkbox" id="hideSensitiveData" /></label>
                 </div>
                 <label>Generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
             </fieldset>
@@ -160,10 +166,12 @@
                 var urlInput                      = document.getElementById('url');
                 var usefulUrl                     = document.getElementById('usefulUrl');
                 var passwordInput                 = document.getElementById('password');
+                var passwordIconMemo              = document.getElementById('passwordIconMemo');
                 var algorithmInput                = document.getElementById('algorithm');
                 var difficultyScryptInput         = document.getElementById('difficultyScrypt');
                 var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
                 var usersaltInput                 = document.getElementById('usersalt');
+                var hideSensitiveData             = document.getElementById('hideSensitiveData');
                 var outputSpan                    = document.getElementById('output');
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
                 var optionsLink                   = document.querySelector('a.options');
@@ -186,6 +194,7 @@
                 if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
                 if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2;
                 if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
+                hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
 
                 var timeout = null;
                 var delay = function(fn) {
@@ -212,8 +221,10 @@
 
                         var result = UniquePasswordBuilder.verifyPassword(password);
                         if (!result.success) {
+                            passwordIconMemo.classList.add('hidden');
                             setErrorMessage(result.message, result.error);
                         } else {
+                            hideData();
                             var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
                             if(locationSalt !== '') {
                                 usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
@@ -224,6 +235,7 @@
                                 return;
                             }
 
+
                             var algorithm = algorithmInput.value;
                             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
                             var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
@@ -233,6 +245,7 @@
                             localStorage.difficulty = difficultyScryptInput.value;
                             localStorage.difficultyArgon2 = difficultyArgon2Input.value;
                             localStorage.usersalt = usersalt;
+                            localStorage.hideSensitiveData = hideSensitiveData.checked;
 
                             updatePasswordField("Generating password...");
                             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, password, usersalt, function(generatedPassword) {
@@ -242,6 +255,16 @@
                         }
                     } catch(e) {
                         setErrorMessage(e, true);
+                    }
+                }
+
+                var hideData = function() {
+                    if (hideSensitiveData.checked) {
+                        passwordIconMemo.classList.add('hidden');
+                        outputSpan.classList.add('hide');
+                    } else {
+                        outputSpan.classList.remove('hide');
+                        displayIcons();
                     }
                 }
 
@@ -292,11 +315,281 @@
                 difficultyArgon2Input.addEventListener('change', delayedGo, false);
                 usersaltInput.addEventListener('keyup', delayedGo, false);
                 usersaltInput.addEventListener('change', delayedGo, false);
+                hideSensitiveData.addEventListener('change', hideData, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
                 displayInfosLink.addEventListener('click', displayInfos, false);
                 document.getElementById('copyBookmarkletToClipboard').addEventListener('click', copyBookmarkletToClipboard, false);
                 changeAlgorithm();
+
+
+                var displayIcons = function() {
+                    passwordIconMemo.classList.remove('hidden');
+                    UniquePasswordBuilder.generate("scrypt", '', 2, passwordInput.value, 'salt', function(generatedPassword, hash) {
+                        passwordIconMemo.innerHTML = chooseIcon(hash[0], hash[1], hash[2], hash[3])
+                         + chooseIcon(hash[4], hash[5], hash[6], hash[7])
+                         + chooseIcon(hash[8], hash[9], hash[10], hash[11]);
+                            }, true);
+                }
+
+                var chooseIcon = function(index, r, g, b) {
+var icons = ['address-book',
+'address-book-o',
+'address-card','adjust',
+'american-sign-language-interpreting',
+'anchor',
+'archive',
+'area-chart',
+'arrows',
+'arrows-h',
+'arrows-v',
+'assistive-listening-systems',
+'asterisk',
+'at',
+'audio-description',
+'balance-scale',
+'ban',
+'bar-chart',
+'barcode',
+'bars',
+'bath',
+'battery-three-quarters',
+'bed',
+'beer',
+'bell',
+'bicycle',
+'binoculars',
+'birthday-cake',
+'blind',
+'bluetooth',
+'bluetooth-b',
+'bolt',
+'bomb',
+'book',
+'bookmark',
+'braille',
+'briefcase',
+'bug',
+'building',
+'bullhorn',
+'bullseye',
+'bus',
+'calculator',
+'calendar',
+'camera',
+'camera-retro',
+'car',
+'cart-arrow-down',
+'cart-plus',
+'cc',
+'certificate',
+'check',
+'check-circle',
+'check-square',
+'child',
+'circle',
+'circle-thin',
+'clone',
+'cloud',
+'cloud-download',
+'cloud-upload',
+'code',
+'code-fork',
+'coffee',
+'cog',
+'cogs',
+'comment',
+'commenting',
+'comments',
+'compass',
+'copyright',
+'creative-commons',
+'credit-card',
+'crop',
+'crosshairs',
+'cube',
+'cubes',
+'cutlery',
+'database',
+'deaf',
+'desktop',
+'diamond',
+'download',
+'ellipsis-h',
+'ellipsis-v',
+'envelope',
+'envelope-square',
+'eraser',
+'exchange',
+'exclamation',
+'external-link',
+'external-link-square',
+'eye',
+'eye-slash',
+'eyedropper',
+'fax',
+'female',
+'fighter-jet',
+'film',
+'filter',
+'fire',
+'fire-extinguisher',
+'flag',
+'flag-checkered',
+'flask',
+'folder',
+'gamepad',
+'gavel',
+'gift',
+'glass',
+'globe',
+'graduation-cap',
+'hashtag',
+'headphones',
+'heart',
+'heartbeat',
+'history',
+'home',
+'hourglass',
+'hourglass-end',
+'hourglass-half',
+'hourglass-start',
+'i-cursor',
+'id-badge',
+'id-card',
+'inbox',
+'industry',
+'info',
+'info-circle',
+'key',
+'language',
+'laptop',
+'leaf',
+'level-down',
+'level-up',
+'life-ring',
+'line-chart',
+'location-arrow',
+'lock',
+'low-vision',
+'magic',
+'magnet',
+'male',
+'map',
+'map-marker',
+'map-pin',
+'map-signs',
+'microchip',
+'microphone',
+'microphone-slash',
+'minus',
+'minus-circle',
+'minus-square',
+'mobile',
+'money',
+'motorcycle',
+'mouse-pointer',
+'music',
+'object-group',
+'object-ungroup',
+'paint-brush',
+'paper-plane',
+'paw',
+'pencil',
+'pencil-square',
+'percent',
+'phone',
+'phone-square',
+'pie-chart',
+'plane',
+'plug',
+'plus',
+'plus-circle',
+'plus-square',
+'podcast',
+'print',
+'puzzle-piece',
+'qrcode',
+'question',
+'question-circle',
+'quote-left',
+'quote-right',
+'random',
+'recycle',
+'refresh',
+'registered',
+'reply',
+'reply-all',
+'retweet',
+'road',
+'rocket',
+'rss',
+'rss-square',
+'search',
+'search-minus',
+'search-plus',
+'server',
+'share',
+'share-square',
+'shield',
+'ship',
+'shopping-bag',
+'shopping-basket',
+'shopping-cart',
+'shower',
+'sign-in',
+'sign-language',
+'signal',
+'sitemap',
+'sliders',
+'sort',
+'space-shuttle',
+'spinner',
+'spoon',
+'square',
+'star',
+'star-half',
+'sticky-note',
+'street-view',
+'suitcase',
+'tablet',
+'tachometer',
+'tag',
+'tags',
+'tasks',
+'taxi',
+'television',
+'terminal',
+'thermometer-three-quarters',
+'thumb-tack',
+'thumbs-down',
+'thumbs-up',
+'ticket',
+'times',
+'times-circle',
+'tint',
+'trademark',
+'trash',
+'tree',
+'trophy',
+'truck',
+'tty',
+'umbrella',
+'universal-access',
+'university',
+'unlock',
+'upload',
+'user',
+'users',
+'video-camera',
+'volume-control-phone',
+'volume-down',
+'volume-up',
+'wheelchair',
+'wifi',
+'wrench'];
+    return'<i class="fa fa-' + icons[index % icons.length] + '" style="font-size: 1.3em; color: rgb('+ r +', '+ g +', '+ b +');" aria-hidden="true"></i> &nbsp;';
+                }
 
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('./sw.js').then(function() {
@@ -306,6 +599,9 @@
                     });
                 }
             })();
+
+
+
         </script>
     </body>
 </html>

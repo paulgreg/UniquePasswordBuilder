@@ -2,9 +2,18 @@
 
 #Usage: gulp && ./to_ghpages
 
+BRANCH=$(git symbolic-ref -q HEAD)
+BRANCH=${BRANCH##refs/heads/}
+echo "Actual branch: $BRANCH"
+
+echo "Saving modified files..."
 git commit -am "Save uncommited changes (WIP)"
+
+echo "Building GitHub Page branch..."
 git branch --delete --force gh-pages
 git checkout --orphan gh-pages
 git add -f dist
 git commit -m "Rebuild GitHub pages"
-git filter-branch -f --prune-empty --subdirectory-filter dist && git push -f origin gh-pages && git checkout -
+
+echo "Pushing GitHub Page branch..."
+git filter-branch -f --prune-empty --subdirectory-filter dist && git push -f origin gh-pages && git checkout -f $BRANCH

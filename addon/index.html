@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
         <style>
             body                     { overflow-x: hidden; overflow-y: hidden; font-family: sans-serif; background-color: transparent; color: black; }
             a                        { color: #12A; font-size: 1em; display: inline-block; text-align: right; width: 100%; }
@@ -14,6 +15,7 @@
             #output                  { border: 1px dashed black; padding: .5em .1em 0 .1em; text-align: center; background: white; color: black; font-weight: bold; font-size: 1.2em; }
             #output.hide             { background-color: black; }
             #output.error.hide       { background-color: none; }
+            .icons                   { margin: 5px 0 0 5px; }
             #details                 { position: relative; text-align: right; }
             .hidden                  { display: none; }
         </style>
@@ -22,7 +24,10 @@
         <h1>Unique Password Builder</h1>
         <form>
             <fieldset>
-                <label>Password:&nbsp;<input type="password" id="password" /></label>
+                <label>
+                    Password:&nbsp;<input type="password" id="password" />
+                    <div id='passwordIconMemo' class="icons hidden"></div>
+                </label>
                 <label><abbr title="Uniform Resource Locator">URL</abbr>:&nbsp;<input type="url" id="url" /></label>
                 <a href="" class="options">options</a>
                 <div class="options hidden">
@@ -50,7 +55,7 @@
                         <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
                     </label>
                     <label>User salt:&nbsp;<input type="text" id="usersalt" value="" /></label>
-                    <label>Set black background to hide password:&nbsp;<input type="checkbox" id="revealpassword" /></label>
+                    <label>Hide sensitive data:&nbsp;<input type="checkbox" id="hideSensitiveData" /></label>
                 </div>
                 <label><textarea id="output" rows="1" disabled></textarea><img class="copy hidden" src="imgs/copy.png" title="copy and close" width="32" height="32" /></label>
             </fieldset>

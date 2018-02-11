@@ -1,5 +1,6 @@
 (function(upb) {
 
+    var passwordLength = 16;
     upb.makeHashHumanReadable = function(array) {
         var availableChars = [
             '!','$','+','-','=','_','.',':',';',',','?','#','%','&','(',')','[',']',
@@ -16,33 +17,104 @@
         return password;
     };
 
-    upb.generate = function(location, difficulty, masterPassword, userSalt, callback, nolog) {
+    upb.getSaltOnLocation = function(input) {
+        if (!input) {
+            return '';
+        }
+        if (input.indexOf('//') === -1) {
+            return input;
+        }
+
+        var parts = input.split('/'); // Extract protocol and host from input value
+        return (parts[0]|| '') + '//' + ( parts[2]  || '') ;
+    };
+
+    upb.verifyPassword = function(password) {
+        if (password.length === 0) {
+            return { success: false, message: 'Please type a strong password', error: false};
+        }
+        if (!/[a-z]/.test(password)) {
+            return { success: false, message: 'Password needs lower-case characters', error: true};
+        }
+        if (!/[A-Z]/.test(password)) {
+            return { success: false, message: 'Password needs upper-case characters', error: true};
+        }
+        if (!/[\d]/.test(password)) {
+            return { success: false, message: 'Password needs numerical characters', error: true};
+        }
+        if (password.length < 8) {
+            return { success: false, message: 'Password should be at least 8 characters', error: true};
+        }
+        return { success: true, message: 'Generating password...', error: false};
+    }
+
+    upb.generate = function(algorithm, locationSalt, difficulty, masterPassword, userSalt, callback, nolog, params) {
         if (!masterPassword) {
             throw new Error('master password should not be empty');
         }
-
-        var difficulty = difficulty || 8192;
-        if (!upb.isPowerOfTwo(difficulty)) {
-            throw new Error('difficulty should be a power of two, got ' + difficulty);
-        }
-
+        var hashLength = 2 * passwordLength;
         var t = +new Date();
-        var logN = Math.log2(difficulty);
-        var host = location.protocol + '//' + location.host;
-
-        var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
-        var salt = host + userSalt;
-
-        scrypt(masterPassword, salt, logN, 8, 32, function(hashedPassword) {
-            var outputPassword = upb.makeHashHumanReadable(hashedPassword);
-
-            if (!nolog && console && console.log) {
-                var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
-                var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' difficulty)' : '';
-                console.log('UniquePasswordBuilder - Generated password: ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + difficultyMessage);
+        if(algorithm === 'scrypt') {
+            var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
+            var salt = locationSalt + userSalt;
+            var difficulty = difficulty || 8192;
+            if (!upb.isPowerOfTwo(difficulty)) {
+                throw new Error('difficulty should be a power of two, got ' + difficulty);
             }
-            callback(outputPassword);
-        });
+            var logN = Math.log2(difficulty);
+
+            scrypt(masterPassword, salt, logN, 8, hashLength, function(hashedPassword) {
+                var outputPassword = upb.makeHashHumanReadable(hashedPassword);
+
+                if (!nolog && console && console.log) {
+                    var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
+                    var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' difficulty)' : '';
+                    console.log('UniquePasswordBuilder - Generated password (scrypt): ' + outputPassword + ' for salt (domain + key index): ' + salt + timeMessage + difficultyMessage);
+                }
+                callback(outputPassword);
+            });
+        } else {
+            var difficulty = difficulty || 10;
+            //Good long salt generated with http://passwordsgenerator.net/
+            var salt = locationSalt + '|' + (userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP';
+            // https://github.com/antelle/argon2-browser
+            // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
+            // so on change will generate different results...
+            var slatLimit = 328;
+            if(salt.length > slatLimit) {
+                callback("Salt is too long :( Should be " + (salt.length - slatLimit) + " chars shorter...");
+                return;
+            }
+            var applyArgon2 = function(password, type, argonCallback) {
+                return argon2.hash({
+                    pass: password,
+                    salt: salt, //fail when salt length is >328
+                    // optional
+                    time: difficulty, // the number of iterations
+                    // mem: 1024, // used memory, in KiB
+                    hashLen: hashLength, // desired hash length
+                    // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
+                    type: type, // argon2.ArgonType.Argon2i or argon2.ArgonType.Argon2d
+                    distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
+                }).then(argonCallback);
+            };
+
+            applyArgon2(masterPassword, argon2.ArgonType.Argon2i, function (hashArgon2i) {
+                //  console.log("======>hash", Argon2i.hashHex, Argon2i.encoded);
+                applyArgon2(hashArgon2i.hashHex, argon2.ArgonType.Argon2d, function (hashArgon2d) {
+                    var outputPassword = upb.makeHashHumanReadable(hashArgon2d.hash);
+
+                    if (!nolog && console && console.log) {
+                        var timeMessage = ' in ' + ((+new Date()) - t) / 1000 + ' seconds';
+                        var difficultyMessage = (difficulty > 1) ? ' (in ' + difficulty + ' iterations Argon2i then ' + difficulty + ' iterations Argon2d)' : '';
+                        console.log('Argon2 results', hashArgon2d.hash, hashArgon2d.hashHex, hashArgon2d.encoded, outputPassword)
+                        console.log('UniquePasswordBuilder - Generated password (argon2): ' + outputPassword + ' for salt (domain + user salt): ' + salt + timeMessage + difficultyMessage);
+                    }
+                    callback(outputPassword);
+            });
+        })
+        .catch(function (err) { console.error(err.message, err.code)});
+        }
     };
 
     upb.isPowerOfTwo = function(x) {

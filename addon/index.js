@@ -1,18 +1,25 @@
-var urlInput            = document.getElementById('url');
-var passwordInput       = document.getElementById('password');
-var difficultyInput         = document.getElementById('difficulty');
-var usersaltInput       = document.getElementById('usersalt');
-var outputTextarea      = document.getElementById('output');
-var detailsLink         = document.getElementById('details');
-var revealpasswordInput = document.getElementById('revealpassword');
-var optionsLink         = document.querySelector('a.options');
-var optionsDiv          = document.querySelector('div.options');
-var copyImg             = document.querySelector('img.copy');
+const urlInput            = document.getElementById('url');
+const passwordInput       = document.getElementById('password');
+const algorithmInput      = document.getElementById('algorithm');
+const difficultyScryptInput = document.getElementById('difficultyScrypt');
+const difficultyArgon2Input = document.getElementById('difficultyArgon2');
+const usersaltInput       = document.getElementById('usersalt');
+const outputTextarea      = document.getElementById('output');
+const detailsLink         = document.getElementById('details');
+const revealpasswordInput = document.getElementById('revealpassword');
+const optionsLink         = document.querySelector('a.options');
+const optionsDiv          = document.querySelector('div.options');
+const copyImg             = document.querySelector('img.copy');
+
+const SCRYPT = 'scrypt'
+const ARGON2 = 'argon2'
 
 function save () {
     chrome.storage.local.set({
         'prefs': {
-            'difficulty': difficultyInput.value,
+            'algorithm': algorithmInput.value,
+            'difficulty': difficultyScryptInput.value,
+            'difficultyArgon2': difficultyArgon2Input.value,
             'usersalt': usersaltInput.value,
             'revealpassword': revealpasswordInput.checked,
             'options': !optionsDiv.classList.contains('hidden')
@@ -22,12 +29,16 @@ function save () {
 
 function load (data) {
     if (data && data.prefs) {
-        difficultyInput.value = data.prefs.difficulty || "8192";
+        algorithmInput.value = data.prefs.algorithm || SCRYPT;
+        changeAlgorithm();
+        difficultyScryptInput.value = data.prefs.difficulty || "8192";
+        difficultyArgon2Input.value = data.prefs.difficultyArgon2 || 10;
         usersaltInput.value = data.prefs.usersalt || '';
         revealpasswordInput.checked = data.prefs.revealpassword;
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
-        difficultyInput.value = 8192;
+        algorithmInput.value = SCRYPT;
+        difficultyScryptInput.value = 8192;
     }
 }
 
@@ -36,7 +47,13 @@ function setErrorMessage (message, error) {
         outputTextarea.classList.add('error');
     }
     copyImg.classList.add('hidden');
-    outputTextarea.value = message;
+    updatePasswordField(message);
+}
+
+function updatePasswordField (text) {
+    setTimeout(function () {
+        outputTextarea.value = text;
+    }, 0);
 }
 
 function compute (evt) {
@@ -44,20 +61,15 @@ function compute (evt) {
         outputTextarea.classList.remove('error');
         outputTextarea.classList.remove('hide');
 
-        var password = passwordInput.value;
-        if (password.length === 0) {
-            setErrorMessage('Please type a strong password');
-        } else if (!/[a-z]/.test(password)) {
-            setErrorMessage('Password needs lower-case characters', true);
-        } else if (!/[A-Z]/.test(password)) {
-            setErrorMessage('Password needs upper-case characters', true);
-        } else if (!/[\d]/.test(password)) {
-            setErrorMessage('Password needs numerical characters', true);
-        } else if (password.length < 8) {
-            setErrorMessage('Password should be at least 8 characters', true);
+        const password = passwordInput.value;
+        const result = UniquePasswordBuilder.verifyPassword(password);
+        if (!result.success) {
+            setErrorMessage(result.message, result.error);
         } else {
-            var difficulty = (parseInt(difficultyInput.value, 10) > 0) ? parseInt(difficultyInput.value, 10) : 1;
-            var usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
+            const algorithm = algorithmInput.value;
+            const difficultyValue = parseInt(algorithmInput.value === SCRYPT ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
+            const difficulty = (difficultyValue > 0) ? difficultyValue : 1;
+            const usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
             copyImg.classList.remove('hidden');
             if (revealpasswordInput.checked === true) {
                 outputTextarea.classList.add('hide');
@@ -70,9 +82,13 @@ function compute (evt) {
                 outputTextarea.disabled = true;
                 window.close();
             } else {
-                var url = new URL(urlInput.value);
-                UniquePasswordBuilder.generate(url, difficulty, passwordInput.value, usersalt, function(password) {
-                    outputTextarea.value = password;
+                const locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+                if(locationSalt === '') {
+                    setErrorMessage('Please enter an url / key', true);
+                    return;
+                }
+                UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
+                    updatePasswordField(password);
                 }, true);
             }
         }
@@ -81,9 +97,17 @@ function compute (evt) {
     }
 }
 
+const changeAlgorithm = function() {
+    difficultyScryptInput.className = algorithmInput.value == SCRYPT ? '' : 'hidden';
+    difficultyArgon2Input.className = algorithmInput.value == ARGON2 ? '' : 'hidden';
+    compute();
+}
+
+algorithmInput.addEventListener('change', changeAlgorithm, false);
 urlInput.addEventListener('keyup', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
-difficultyInput.addEventListener('change', compute, false);
+difficultyScryptInput.addEventListener('change', compute, false);
+difficultyArgon2Input.addEventListener('change', compute, false);
 usersaltInput.addEventListener('keyup', compute, false);
 usersaltInput.addEventListener('change', compute, false);
 passwordInput.addEventListener('keyup', compute, false);
@@ -114,7 +138,9 @@ revealpasswordInput.addEventListener('click', function(e) {
     compute();
 }, false);
 
-difficultyInput.addEventListener('change', save, false);
+algorithmInput.addEventListener('change', save, false);
+difficultyScryptInput.addEventListener('change', save, false);
+difficultyArgon2Input.addEventListener('change', save, false);
 usersaltInput.addEventListener('keyup', save, false);
 usersaltInput.addEventListener('change', save, false);
 

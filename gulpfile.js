@@ -6,13 +6,18 @@ var rimraf = require('rimraf');
 var paths = {
     index: [
         'node_modules/scrypt-async/scrypt-async.js',
-        'src/passwordgeneration.js'
+        'src/passwordgeneration.js',
+        'node_modules/argon2-browser/lib/argon2.js'
     ],
     bookmarklet: [
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
+        'node_modules/argon2-browser/lib/argon2.js',
         'src/ui.js',
         'src/bookmarklet.js'
+    ],
+    argon2: [
+        'node_modules/argon2-browser/dist/argon2-asm.min.js'
     ]
 };
 
@@ -37,7 +42,24 @@ gulp.task('index', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('argon2', function() {
+    return gulp.src(paths.argon2)
+      .pipe(gulp.dest('dist'))
+      .pipe(gulp.dest('addon'))
+      ;
+    });
 
+gulp.task('html', function() {
+    return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
+    .pipe(gulp.dest('dist'))
+    ;
+    });
+
+gulp.task('assets', function() {
+    return gulp.src('assets\\*')
+    .pipe(gulp.dest('dist'))
+    ;
+});
 gulp.task('addon-copy-js', ['index'], function() {
     gulp.src(paths.index)
     .pipe(gulp.dest('./addon'));
@@ -45,4 +67,4 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-copy-js']);
 
-gulp.task('default', ['clean', 'index', 'bookmarklet', 'addon']);
+gulp.task('default', ['clean', 'html', 'index', 'assets', 'bookmarklet', 'addon', 'argon2']);

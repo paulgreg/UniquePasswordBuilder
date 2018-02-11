@@ -3,7 +3,9 @@
   "version": "0.3.0",
   "description": "A tool to generate strong password unique per site",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "ghpages": "gulp && bash ./to_ghpages"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/paulgreg/UniquePasswordBuilder.git"
@@ -23,6 +25,7 @@
     "rimraf": "^2.4.2"
   },
   "dependencies": {
+    "argon2-browser": "^1.1.0",
     "scrypt-async": "^1.1.0"
   }
 }

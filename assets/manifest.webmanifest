@@ -2,7 +2,7 @@
     "name": "Unique Password Builder",
     "short_name": "Password Builder",
     "description": "A password builder to generate a strong and different password for each website",
-    "start_url": "index.html#pwa",
+    "start_url": "./#pwa",
     "lang": "en-EN",
     "display": "standalone",
     "theme_color": "#70b1e254",

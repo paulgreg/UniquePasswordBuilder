@@ -5,7 +5,8 @@
         <meta name="robots" content="index, follow"/>
         <meta name="author" content="Gr&eacute;gory Paul"/>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no" />
-        <title>Unique Password Builder Bookmarklet</title>
+        <meta name="theme-color" content="#D0E5F6"/>
+        <title>Unique Password Builder</title>
         <link rel="icon" type="image/png" href="icon.png" />
         <link rel="manifest" href="manifest.webmanifest">
         <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
@@ -21,23 +22,23 @@
             h2.important              { color: #F22; }
             .error                    { border: 2px solid #F22; color: #F22; font-weight: bold; }
             a                         { text-decoration: underline; }
-            pre                       { border: 1px solid black; padding: .25em; background-color: #70b1e254; white-space: pre-wrap; }
+            pre                       { border: 1px solid black; padding: .25em; background-color: #D0E5F6; white-space: pre-wrap; }
             fieldset                  { border: 1px solid black; padding: .5em; }
             label                     { display: flex; color: black; align-items: center; margin-top: 5px;}
             input, select, #output    { margin-left: .25em; flex-grow: 1; }
-            #output                   { border: 1px dashed black; padding: .25em .5em; background-color: #70b1e254;}
+            #output                   { border: 1px dashed black; padding: .25em .5em; background-color: #D0E5F6;}
             #output.hide              { background-color: black; }
             #output.error.hide        { background-color: none; }
             .icons                    { margin: 5px 0 0 5px; }
             a.options                 { text-align: right; display: block; margin: 0 0 .5em 0; }
             .hidden                   { display: none; }
 
-            input:focus, select:focus { border-color: #52a8eccc; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
+            input:focus, select:focus { border-color: #72B5E8; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
             input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
             input                     { height: 18px;}
             label.checkbox            { display: block;}
             input[type="checkbox"]    { vertical-align:middle; }
-            button                    { height: 29px; margin-left: 10px; background-color: #70b1e254; border-style: solid; border-color: #54a6e4c0;}
+            button                    { height: 29px; margin-left: 10px; background-color: #70b1e254; border-style: solid; border-color: #72B5E8;}
             .small                    { font-size: 11px;}
         </style>
     </head>

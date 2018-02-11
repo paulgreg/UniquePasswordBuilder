@@ -16,7 +16,6 @@ QUnit.test("check argon2 generation against https://github.com/P-H-C/phc-winner-
     }).then(function (argon2Result) {
         // Then
         console.log('[Test] Argon2 results', argon2Result.hash, argon2Result.hashHex, argon2Result.encoded);
-        var toto = argon2Result.hash;
         equal(argon2Result.hashHex, '45d7ac72e76f242b20b77b9bf9bf9d5915894e669a24e6c6');
         equal(argon2Result.encoded,'$argon2i$v=19$m=65536,t=2,p=4$c29tZXNhbHQ$RdescudvJCsgt3ub+b+dWRWJTmaaJObG');
         var hashArray = Array.from(argon2Result.hash.entries()).map(e => e[1])

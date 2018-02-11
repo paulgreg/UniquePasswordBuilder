@@ -29,7 +29,7 @@
             #output                   { border: 1px dashed black; padding: .25em .5em; background-color: #D0E5F6;}
             #output.hide              { background-color: black; }
             #output.error.hide        { background-color: none; }
-            .icons                    { margin: 5px 0 0 5px; }
+            .icons                    { margin: 0 0 0 5px; min-width: 93px; display: flex; justify-content: space-between;}
             a.options                 { text-align: right; display: block; margin: 0 0 .5em 0; }
             .hidden                   { display: none; }
 
@@ -235,7 +235,6 @@
                                 setErrorMessage('Please enter an url / key', true);
                                 return;
                             }
-
 
                             var algorithm = algorithmInput.value;
                             var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);

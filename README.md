@@ -15,11 +15,13 @@ UniquePasswordBuilder is available via 3 tools :
 ## Build the webpage and the bookmarklet
 
 `npm install && gulp` to build output files in `dist` directory.
+You can run `gulp clean` to remove the `dist` folder.
 
 ## Build the Addon
 
 Gulp generates some files into the addon directory.
 So be sure to launch `gulp` the first time and each time you change JS source files.
+When ready, use `addon/build.sh` to generate the zip.
 
 ## Publish the web page
 

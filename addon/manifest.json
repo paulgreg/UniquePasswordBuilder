@@ -30,7 +30,7 @@
         "clipboardWrite"
     ],
     "browser_action": {
-        "default_icon": "imgs/lock.png",
+        "default_icon": "imgs/icon-96.png",
         "default_title": "UniquePaswordBuilder",
         "default_popup": "index.html"
     }

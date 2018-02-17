@@ -164,6 +164,7 @@
                 // Init location
                 var displayInfosLink              = document.getElementById('displayInfos');
                 var infosDiv                      = document.getElementById('infos');
+
                 var urlInput                      = document.getElementById('url');
                 var usefulUrl                     = document.getElementById('usefulUrl');
                 var passwordInput                 = document.getElementById('password');
@@ -173,7 +174,7 @@
                 var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
                 var usersaltInput                 = document.getElementById('usersalt');
                 var hideSensitiveData             = document.getElementById('hideSensitiveData');
-                var outputSpan                    = document.getElementById('output');
+                var outputField                   = document.getElementById('output');
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
                 var optionsLink                   = document.querySelector('a.options');
                 var optionsDiv                    = document.querySelector('div.options');
@@ -204,20 +205,20 @@
                 }
 
                 var setErrorMessage = function(message, error) {
-                    outputSpan.className = error ? 'error' : '';
+                    outputField.className = error ? 'error' : '';
                     updatePasswordField(message);
                     copyToClipboardBtn.className = 'hidden';
                 }
 
                 var updatePasswordField = function(text) {
                     setTimeout(function () {
-                        outputSpan.innerHTML = text;
+                        outputField.innerHTML = text;
                     }, 0);
                 }
 
                 var go = function() {
                     try {
-                        outputSpan.className = '';
+                        outputField.className = '';
                         var password = passwordInput.value;
 
                         var result = UniquePasswordBuilder.verifyPassword(password);
@@ -261,9 +262,9 @@
                 var hideData = function() {
                     if (hideSensitiveData.checked) {
                         passwordIconMemo.classList.add('hidden');
-                        outputSpan.classList.add('hide');
+                        outputField.classList.add('hide');
                     } else {
-                        outputSpan.classList.remove('hide');
+                        outputField.classList.remove('hide');
                         UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
                     }
                 }
@@ -288,7 +289,7 @@
                 }
 
                 var copyToClipboard = function() {
-                    var password = outputSpan.textContent;
+                    var password = outputField.textContent;
                     copyTextToClipboard(password);
                 }
 

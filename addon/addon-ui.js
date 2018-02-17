@@ -5,11 +5,12 @@ const algorithmInput      = document.getElementById('algorithm');
 const difficultyScryptInput = document.getElementById('difficultyScrypt');
 const difficultyArgon2Input = document.getElementById('difficultyArgon2');
 const usersaltInput       = document.getElementById('usersalt');
-const outputTextarea      = document.getElementById('output');
-const detailsLink         = document.getElementById('details');
 const hideSensitiveData   = document.getElementById('hideSensitiveData');
+const outputField         = document.getElementById('output');
 const optionsLink         = document.querySelector('a.options');
 const optionsDiv          = document.querySelector('div.options');
+
+const detailsLink         = document.getElementById('details');
 const copyImg             = document.querySelector('img.copy');
 
 const SCRYPT = 'scrypt'
@@ -45,7 +46,7 @@ function load (data) {
 
 function setErrorMessage (message, error) {
     if (error) {
-        outputTextarea.classList.add('error');
+        outputField.classList.add('error');
     }
     copyImg.classList.add('hidden');
     updatePasswordField(message);
@@ -53,14 +54,14 @@ function setErrorMessage (message, error) {
 
 function updatePasswordField (text) {
     setTimeout(function () {
-        outputTextarea.value = text;
+        outputField.value = text;
     }, 0);
 }
 
 function compute (evt) {
     try {
-        outputTextarea.classList.remove('error');
-        outputTextarea.classList.remove('hide');
+        outputField.classList.remove('error');
+        outputField.classList.remove('hide');
 
         const password = passwordInput.value;
         const result = UniquePasswordBuilder.verifyPassword(password);
@@ -75,11 +76,11 @@ function compute (evt) {
             copyImg.classList.remove('hidden');
 
             if (evt && evt.keyCode === 13) {
-                outputTextarea.disabled = false;
-                outputTextarea.select();
+                outputField.disabled = false;
+                outputField.select();
                 document.execCommand("copy");
                 passwordInput.value = "";
-                outputTextarea.disabled = true;
+                outputField.disabled = true;
                 window.close();
             } else {
                 hideData();
@@ -127,10 +128,10 @@ detailsLink.addEventListener('click', function(e) {
 }, false);
 
 copyImg.addEventListener('click', () => {
-    outputTextarea.disabled = false;
-    outputTextarea.select();
+    outputField.disabled = false;
+    outputField.select();
     document.execCommand("copy");
-    outputTextarea.disabled = true;
+    outputField.disabled = true;
     passwordInput.value = "";
     window.close();
 }, false);
@@ -164,9 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 const hideData = function() {
     if (hideSensitiveData.checked) {
         passwordIconMemo.classList.add('hidden');
-        outputTextarea.classList.add('hide');
+        outputField.classList.add('hide');
     } else {
-        outputTextarea.classList.remove('hide');
+        outputField.classList.remove('hide');
         UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
     }
 }

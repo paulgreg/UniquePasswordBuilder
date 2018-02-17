@@ -1,5 +1,6 @@
 const urlInput            = document.getElementById('url');
 const passwordInput       = document.getElementById('password');
+const passwordIconMemo    = document.getElementById('passwordIconMemo');
 const algorithmInput      = document.getElementById('algorithm');
 const difficultyScryptInput = document.getElementById('difficultyScrypt');
 const difficultyArgon2Input = document.getElementById('difficultyArgon2');

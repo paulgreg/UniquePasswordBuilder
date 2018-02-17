@@ -19,6 +19,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
+    "gulp-replace": "^0.6.1",
     "gulp-uglify": "^3.0.0",
     "http-server": "^0.8.5",
     "qunitjs": "^1.19.0",
@@ -26,7 +27,7 @@
   },
   "dependencies": {
     "argon2-browser": "^1.1.0",
-    "scrypt-async": "^1.1.0",
-    "font-awesome": "^4.7.0"
+    "font-awesome": "^4.7.0",
+    "scrypt-async": "^1.1.0"
   }
 }

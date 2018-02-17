@@ -2,6 +2,8 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rimraf = require('rimraf');
+var replace = require('gulp-replace');
+var fs = require("fs");
 
 var paths = {
     index: [
@@ -58,9 +60,18 @@ gulp.task('font-awesome-fonts', function() {
         .pipe(gulp.dest('addon/font-awesome/fonts'));
 });
 
-gulp.task('html', function() {
-    return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
-    .pipe(gulp.dest('dist'));
+gulp.task('page-html', function() {
+      var formTemplateContent = fs.readFileSync("form_template.html", "utf8");
+      return gulp.src('src/page/*.html')
+      .pipe(replace('{TEMPLATE}', formTemplateContent))
+      .pipe(gulp.dest('dist'));
+});
+
+gulp.task('addon-html', function() {
+    var formTemplateContent = fs.readFileSync("form_template.html", "utf8");
+    return gulp.src('src/addon/*.html')
+    .pipe(replace('{TEMPLATE}', formTemplateContent))
+    .pipe(gulp.dest('addon'));
 });
 
 gulp.task('assets', function() {
@@ -73,8 +84,8 @@ gulp.task('addon-copy-js', ['index'], function() {
     .pipe(gulp.dest('./addon'));
 });
 
-gulp.task('addon', ['addon-copy-js']);
+gulp.task('addon', ['addon-html', 'addon-copy-js']);
 
-gulp.task('page', ['html', 'index', 'assets']);
+gulp.task('page', ['page-html', 'index', 'assets']);
 
 gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

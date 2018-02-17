@@ -13,7 +13,7 @@ var paths = {
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
         'node_modules/argon2-browser/lib/argon2.js',
-        'src/ui.js',
+        'src/bookmarklet-ui.js',
         'src/bookmarklet.js'
     ]
 };

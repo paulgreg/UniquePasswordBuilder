@@ -14,3 +14,4 @@ input[type="checkbox"]    { vertical-align:middle; margin-left: auto;}
 #output.hide              { background-color: black; }
 #output.error.hide        { background-color: none; }
 a.options                 { text-align: right; color: #5b93be; display: block; margin: 0 0 .5em 0; }
+i#copyToClipboardBtn      { color: #5b93be; font-size: 32px; margin: 0 0 0 5px;}

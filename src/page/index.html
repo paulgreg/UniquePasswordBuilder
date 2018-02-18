@@ -21,7 +21,6 @@
             p                         { margin: 0px 0px 9px; line-height: 1.25em; }
             a                         { text-decoration: underline; }
             pre                       { border: 1px solid black; padding: .25em; background-color: #D0E5F6; white-space: pre-wrap; }
-
             button                    { min-height: 30px; margin-left: 5px; background-color: #70b1e254; border-style: solid; border-color: #72B5E8; }
 {TEMPLATE_CSS}
         </style>
@@ -29,12 +28,7 @@
     <body>
         <h1>Unique Password Builder</h1>
 
-        <form>
-            <fieldset>
-{TEMPLATE_HTML}
-                <label>Generated password: <span id="output"></span><button type="button" id="copyToClipboardBtn" class="hidden">Copy to clipboard</button></label>
-            </fieldset>
-        </form>
+        {TEMPLATE_HTML}
 
 <a href="" id="displayInfos" class="hidden">More informations</a>
 <div id="infos">

@@ -1,34 +1,51 @@
-<label>
-    Master password: <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" />
-    <div id='passwordIconMemo' class="icons hidden"></div>
-</label>
-<label><abbr title="Uniform Resource Locator">URL</abbr> (or Key): <input type="text" id="url" placeholder="Paste here the URL of a website (or type a key)" /></label>
-<label id="usefulUrl" class="small"></label>
-<a href="" class="options">options</a>
-<div class="options hidden">
-    <label>Algorithm:
-        <select id="algorithm">
-            <option value="scrypt" selected="selected">Scrypt</option>
-            <option value="argon2">Argon2 (newer and more secure)</option>
-        </select>
-    </label>
-    <label>Difficulty:
-        <select id="difficultyScrypt">
-            <option value="256">256 (2^8)</option>
-            <option value="512">512 (2^9)</option>
-            <option value="1024">1024 (2^10)</option>
-            <option value="2048">2048 (2^11)</option>
-            <option value="4096">4096 (2^12)</option>
-            <option value="8192">8192 (2^13)</option>
-            <option value="16384">16384 (2^14)</option>
-            <option value="32768">32768 (2^15)</option>
-            <option value="65536">65536 (2^16)</option>
-            <option value="131072">131072 (2^17)</option>
-            <option value="262144">262144 (2^18)</option>
-            <option value="524288">524288 (2^19)</option>
-        </select>
-        <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
-    </label>
-    <label>User salt: <input type="text" id="usersalt" value="" maxlength="80" /></label>
-    <label class="checkbox">Hide sensitive data:&nbsp;<input type="checkbox" id="hideSensitiveData" /></label>
-</div>
+<form>
+    <fieldset>
+        <label>
+            Master password:
+            <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" />
+            <div id='passwordIconMemo' class="icons hidden"></div>
+        </label>
+        <label>
+            <abbr title="Uniform Resource Locator">URL</abbr> (or Key):
+            <input type="text" id="url" placeholder="Paste here the URL of a website (or type a key)"
+            />
+        </label>
+        <label id="usefulUrl" class="small"></label>
+        <a href="" class="options">options</a>
+        <div class="options hidden">
+            <label>Algorithm:
+                <select id="algorithm">
+                    <option value="scrypt" selected="selected">Scrypt</option>
+                    <option value="argon2">Argon2 (newer and more secure)</option>
+                </select>
+            </label>
+            <label>Difficulty:
+                <select id="difficultyScrypt">
+                    <option value="256">256 (2^8)</option>
+                    <option value="512">512 (2^9)</option>
+                    <option value="1024">1024 (2^10)</option>
+                    <option value="2048">2048 (2^11)</option>
+                    <option value="4096">4096 (2^12)</option>
+                    <option value="8192">8192 (2^13)</option>
+                    <option value="16384">16384 (2^14)</option>
+                    <option value="32768">32768 (2^15)</option>
+                    <option value="65536">65536 (2^16)</option>
+                    <option value="131072">131072 (2^17)</option>
+                    <option value="262144">262144 (2^18)</option>
+                    <option value="524288">524288 (2^19)</option>
+                </select>
+                <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
+            </label>
+            <label>User salt:
+                <input type="text" id="usersalt" value="" maxlength="80" />
+            </label>
+            <label class="checkbox">Hide sensitive data:&nbsp;
+                <input type="checkbox" id="hideSensitiveData" />
+            </label>
+        </div>
+        <label>
+            <span id="output"></span>
+            <i class="fa fa-clipboard" aria-hidden="true" id="copyToClipboardBtn" class="hidden" title="Copy to clipboard"></i>
+        </label>
+    </fieldset>
+</form>

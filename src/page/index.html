@@ -132,8 +132,6 @@
                 var displayInfosLink              = document.getElementById('displayInfos');
                 var infosDiv                      = document.getElementById('infos');
 
-                var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
-
                 var displayInfos = function(e) {
                     if(e) e.preventDefault();
                     infosDiv.classList.remove('hidden');
@@ -147,35 +145,23 @@
                     displayInfos();
                 }
 
-                if (localStorage.algorithm) algorithmInput.value = localStorage.algorithm;
-                if (localStorage.difficulty) difficultyScryptInput.value = localStorage.difficulty;
-                if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2;
-                if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
-                hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
-
-                var timeout = null;
-                var delay = function(fn) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(fn, 250);
+                var load = function() {
+                    algorithmInput.value = localStorage.algorithm || UniquePasswordBuilder.SCRYPT;
+                    difficultyScryptInput.value = localStorage.difficulty || 8192;
+                    if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2 | 10;
+                    if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
+                    hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
+                    localStorage.options && optionsDiv.classList.remove('hidden');
+                    changeAlgorithm();
                 }
 
-                var go = function() {
-                    verifyAndComputePassword(save);
-                }
-
-                var save = function() {
-                    localStorage.algorithm = algorithm;
+                save = function() {
+                    localStorage.algorithm = algorithmInput.value;
                     localStorage.difficulty = difficultyScryptInput.value;
                     localStorage.difficultyArgon2 = difficultyArgon2Input.value;
-                    localStorage.usersalt = usersalt;
+                    localStorage.usersalt = usersaltInput.value;
                     localStorage.hideSensitiveData = hideSensitiveData.checked;
-                }
-
-                var delayedGo = delay.bind(this, go);
-
-                var toggleOptions = function(e) {
-                    e.preventDefault();
-                    optionsDiv.classList.toggle('hidden');
+                    localStorage.options = !optionsDiv.classList.contains('hidden');
                 }
 
                 var copyBookmarkletToClipboard = function() {
@@ -190,40 +176,10 @@
                     copyTextToClipboard(bookmarklet);
                 }
 
-                var copyToClipboard = function() {
-                    var password = outputField.textContent;
-                    copyTextToClipboard(password);
-                }
-
-                var copyTextToClipboard = function(value) {
-                    var hiddenInputToCopy = document.createElement("input");
-                    document.body.appendChild(hiddenInputToCopy);
-                    hiddenInputToCopy.value = value;
-                    hiddenInputToCopy.select();
-                    document.execCommand("copy");
-                    hiddenInputToCopy.remove();
-                    return false;
-                }
-
-                var changeAlgorithm = function() {
-                    difficultyScryptInput.className = algorithmInput.value == UniquePasswordBuilder.SCRYPT ? '' : 'hidden';
-                    difficultyArgon2Input.className = algorithmInput.value == UniquePasswordBuilder.ARGON2 ? '' : 'hidden';
-                    delayedGo();
-                }
-
-                algorithmInput.addEventListener('change', changeAlgorithm, false);
-                passwordInput.addEventListener('keyup', delayedGo, false);
-                urlInput.addEventListener('keyup', delayedGo, false);
-                difficultyScryptInput.addEventListener('change', delayedGo, false);
-                difficultyArgon2Input.addEventListener('change', delayedGo, false);
-                usersaltInput.addEventListener('keyup', delayedGo, false);
-                usersaltInput.addEventListener('change', delayedGo, false);
-                hideSensitiveData.addEventListener('change', UniquePasswordBuilder.hideData, false);
-                optionsLink.addEventListener('click', toggleOptions, false);
-                copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
                 displayInfosLink.addEventListener('click', displayInfos, false);
                 document.getElementById('copyBookmarkletToClipboard').addEventListener('click', copyBookmarkletToClipboard, false);
-                changeAlgorithm();
+
+                load();
 
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('./sw.js').then(function() {

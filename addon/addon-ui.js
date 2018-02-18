@@ -1,7 +1,6 @@
 const detailsLink         = document.getElementById('details');
-const copyToClipboardBtn  = document.querySelector('img.copy');
 
-function save () {
+save = function() {
     chrome.storage.local.set({
         'prefs': {
             'algorithm': algorithmInput.value,
@@ -12,7 +11,7 @@ function save () {
             'options': !optionsDiv.classList.contains('hidden')
         }
     });
-}
+};
 
 function load (data) {
     if (data && data.prefs) {
@@ -41,30 +40,10 @@ function load (data) {
 //     window.close();
 // } else {
 
-const compute = function() {
-    verifyAndComputePassword(save);
-}
+// TODO:
+// + Mutualize Copy to clipboard (window.close();)
+// + fix output text font
 
-const changeAlgorithm = function() {
-    difficultyScryptInput.className = algorithmInput.value == UniquePasswordBuilder.SCRYPT ? '' : 'hidden';
-    difficultyArgon2Input.className = algorithmInput.value == UniquePasswordBuilder.ARGON2 ? '' : 'hidden';
-    compute();
-}
-
-algorithmInput.addEventListener('change', changeAlgorithm, false);
-urlInput.addEventListener('keyup', compute, false);
-passwordInput.addEventListener('keyup', compute, false);
-difficultyScryptInput.addEventListener('change', compute, false);
-difficultyArgon2Input.addEventListener('change', compute, false);
-usersaltInput.addEventListener('keyup', compute, false);
-usersaltInput.addEventListener('change', compute, false);
-passwordInput.addEventListener('keyup', compute, false);
-
-optionsLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    optionsDiv.classList.toggle('hidden');
-    save();
-}, false);
 
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
@@ -73,17 +52,8 @@ detailsLink.addEventListener('click', function(e) {
 }, false);
 
 copyToClipboardBtn.addEventListener('click', () => {
-    outputField.disabled = false;
-    outputField.select();
-    document.execCommand("copy");
-    outputField.disabled = true;
     passwordInput.value = "";
     window.close();
-}, false);
-
-hideSensitiveData.addEventListener('click', function(e) {
-    save();
-    compute();
 }, false);
 
 algorithmInput.addEventListener('change', save, false);

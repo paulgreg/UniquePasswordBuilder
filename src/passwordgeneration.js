@@ -159,6 +159,7 @@ var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
 var usersaltInput                 = document.getElementById('usersalt');
 var hideSensitiveData             = document.getElementById('hideSensitiveData');
 var outputField                   = document.getElementById('output');
+var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
 var optionsLink                   = document.querySelector('a.options');
 var optionsDiv                    = document.querySelector('div.options');
 
@@ -216,14 +217,66 @@ var verifyAndComputePassword = function(saveInputs) {
                 usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
             }
 
-            saveInputs();
-
             updatePasswordField("Generating password...");
             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
                 updatePasswordField(password);
+                saveInputs();
             }, true);
         }
     } catch(e) {
         setErrorMessage(e, true);
     }
 };
+
+//save is set by UI scripts...
+var save;
+
+var go = function() {
+    verifyAndComputePassword(save);
+};
+
+var timeout = null;
+var delay = function(fn) {
+    clearTimeout(timeout);
+    timeout = setTimeout(fn, 250);
+};
+
+var compute = delay.bind(this, go);
+
+var changeAlgorithm = function() {
+    difficultyScryptInput.className = algorithmInput.value === UniquePasswordBuilder.SCRYPT ? '' : 'hidden';
+    difficultyArgon2Input.className = algorithmInput.value === UniquePasswordBuilder.ARGON2 ? '' : 'hidden';
+    compute();
+};
+
+var toggleOptions = function(e) {
+    e.preventDefault();
+    optionsDiv.classList.toggle('hidden');
+};
+
+var copyToClipboard = function() {
+    var password = outputField.textContent;
+    copyTextToClipboard(password);
+};
+
+var copyTextToClipboard = function(value) {
+    var hiddenInputToCopy = document.createElement("input");
+    document.body.appendChild(hiddenInputToCopy);
+    hiddenInputToCopy.value = value;
+    hiddenInputToCopy.select();
+    document.execCommand("copy");
+    hiddenInputToCopy.remove();
+    return false;
+};
+
+algorithmInput.addEventListener('change', changeAlgorithm, false);
+urlInput.addEventListener('keyup', compute, false);
+passwordInput.addEventListener('keyup', compute, false);
+difficultyScryptInput.addEventListener('change', compute, false);
+difficultyArgon2Input.addEventListener('change', compute, false);
+usersaltInput.addEventListener('keyup', compute, false);
+usersaltInput.addEventListener('change', compute, false);
+hideSensitiveData.addEventListener('change', hideData, false);
+optionsLink.addEventListener('click', toggleOptions, false);
+copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
+

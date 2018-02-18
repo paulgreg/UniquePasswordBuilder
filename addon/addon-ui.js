@@ -28,21 +28,20 @@ function load (data) {
     }
 }
 
-onEnter =  function() {
+var cleanAndClose = function() {
     passwordInput.value = "";
     window.close();
 };
 
+onEnter = cleanAndClose;
+
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
     chrome.tabs.create({ url: "https://paulgreg.me/UniquePasswordBuilder/" });
-    window.close();
+    cleanAndClose();
 }, false);
 
-copyToClipboardBtn.addEventListener('click', () => {
-    passwordInput.value = "";
-    window.close();
-}, false);
+copyToClipboardBtn.addEventListener('click', cleanAndClose, false);
 
 algorithmInput.addEventListener('change', save, false);
 difficultyScryptInput.addEventListener('change', save, false);

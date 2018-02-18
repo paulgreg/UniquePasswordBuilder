@@ -28,21 +28,13 @@ function load (data) {
     }
 }
 
-
-//TODO: Manage "Enter" key
-
-// if (evt && evt.keyCode === 13) {
-//     outputField.disabled = false;
-//     outputField.select();
-//     document.execCommand("copy");
-//     passwordInput.value = "";
-//     outputField.disabled = true;
-//     window.close();
-// } else {
+onEnter =  function() {
+    passwordInput.value = "";
+    window.close();
+};
 
 // TODO:
-// + Mutualize Copy to clipboard (window.close();)
-// + fix output text font
+// + mutualize css
 
 
 detailsLink.addEventListener('click', function(e) {

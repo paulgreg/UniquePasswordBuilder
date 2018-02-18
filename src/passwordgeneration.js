@@ -189,7 +189,7 @@ var hideData = function() {
     }
 };
 
-var verifyAndComputePassword = function(saveInputs) {
+var verifyAndComputePassword = function(saveInputs, evt) {
     try {
         outputField.classList.remove('error');
         outputField.classList.remove('hide');
@@ -217,6 +217,14 @@ var verifyAndComputePassword = function(saveInputs) {
                 usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
             }
 
+            if (evt && evt.keyCode === 13) {
+                copyToClipboard();
+                if(onEnter) {
+                    onEnter();
+                }
+                return;
+            }
+
             updatePasswordField("Generating password...");
             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
                 updatePasswordField(password);
@@ -230,9 +238,10 @@ var verifyAndComputePassword = function(saveInputs) {
 
 //save is set by UI scripts...
 var save;
+var onEnter;
 
-var go = function() {
-    verifyAndComputePassword(save);
+var go = function(evt) {
+    verifyAndComputePassword(save, evt);
 };
 
 var timeout = null;
@@ -241,7 +250,9 @@ var delay = function(fn) {
     timeout = setTimeout(fn, 250);
 };
 
-var compute = delay.bind(this, go);
+var compute = function(evt) {
+    return delay.bind(this, go(evt));
+};
 
 var changeAlgorithm = function() {
     difficultyScryptInput.className = algorithmInput.value === UniquePasswordBuilder.SCRYPT ? '' : 'hidden';

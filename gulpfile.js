@@ -12,6 +12,7 @@ var paths = {
     index: [
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
+        'src/common-ui.js',
         'node_modules/argon2-browser/lib/argon2.js'
     ],
     bookmarklet: [

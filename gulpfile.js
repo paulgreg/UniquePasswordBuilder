@@ -5,6 +5,9 @@ var rimraf = require('rimraf');
 var replace = require('gulp-replace');
 var fs = require("fs");
 
+var formTemplateContent = fs.readFileSync("src/templates/form.html", "utf8");
+var cssTemplateContent = fs.readFileSync("src/templates/styles.css", "utf8");
+
 var paths = {
     index: [
         'node_modules/scrypt-async/scrypt-async.js',
@@ -61,16 +64,16 @@ gulp.task('font-awesome-fonts', function() {
 });
 
 gulp.task('page-html', function() {
-      var formTemplateContent = fs.readFileSync("form_template.html", "utf8");
-      return gulp.src('src/page/*.html')
-      .pipe(replace('{TEMPLATE}', formTemplateContent))
+    return gulp.src('src/page/*.html')
+      .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
+      .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
       .pipe(gulp.dest('dist'));
 });
 
 gulp.task('addon-html', function() {
-    var formTemplateContent = fs.readFileSync("form_template.html", "utf8");
     return gulp.src('src/addon/*.html')
-    .pipe(replace('{TEMPLATE}', formTemplateContent))
+    .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
+    .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
     .pipe(gulp.dest('addon'));
 });
 

@@ -33,10 +33,6 @@ onEnter =  function() {
     window.close();
 };
 
-// TODO:
-// + mutualize css
-
-
 detailsLink.addEventListener('click', function(e) {
     e.preventDefault();
     chrome.tabs.create({ url: "https://paulgreg.me/UniquePasswordBuilder/" });

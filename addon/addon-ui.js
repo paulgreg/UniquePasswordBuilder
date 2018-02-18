@@ -1,20 +1,5 @@
-const urlInput            = document.getElementById('url');
-const passwordInput       = document.getElementById('password');
-const passwordIconMemo    = document.getElementById('passwordIconMemo');
-const algorithmInput      = document.getElementById('algorithm');
-const difficultyScryptInput = document.getElementById('difficultyScrypt');
-const difficultyArgon2Input = document.getElementById('difficultyArgon2');
-const usersaltInput       = document.getElementById('usersalt');
-const hideSensitiveData   = document.getElementById('hideSensitiveData');
-const outputField         = document.getElementById('output');
-const optionsLink         = document.querySelector('a.options');
-const optionsDiv          = document.querySelector('div.options');
-
 const detailsLink         = document.getElementById('details');
-const copyImg             = document.querySelector('img.copy');
-
-const SCRYPT = 'scrypt'
-const ARGON2 = 'argon2'
+const copyToClipboardBtn  = document.querySelector('img.copy');
 
 function save () {
     chrome.storage.local.set({
@@ -31,7 +16,7 @@ function save () {
 
 function load (data) {
     if (data && data.prefs) {
-        algorithmInput.value = data.prefs.algorithm || SCRYPT;
+        algorithmInput.value = data.prefs.algorithm || UniquePasswordBuilder.SCRYPT;
         changeAlgorithm();
         difficultyScryptInput.value = data.prefs.difficulty || "8192";
         difficultyArgon2Input.value = data.prefs.difficultyArgon2 || 10;
@@ -39,70 +24,30 @@ function load (data) {
         hideSensitiveData.checked = data.prefs.hideSensitiveData;
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
-        algorithmInput.value = SCRYPT;
+        algorithmInput.value = UniquePasswordBuilder.SCRYPT;
         difficultyScryptInput.value = 8192;
     }
 }
 
-function setErrorMessage (message, error) {
-    if (error) {
-        outputField.classList.add('error');
-    }
-    copyImg.classList.add('hidden');
-    updatePasswordField(message);
-}
 
-function updatePasswordField (text) {
-    setTimeout(function () {
-        outputField.value = text;
-    }, 0);
-}
+//TODO: Manage "Enter" key
 
-function compute (evt) {
-    try {
-        outputField.classList.remove('error');
-        outputField.classList.remove('hide');
+// if (evt && evt.keyCode === 13) {
+//     outputField.disabled = false;
+//     outputField.select();
+//     document.execCommand("copy");
+//     passwordInput.value = "";
+//     outputField.disabled = true;
+//     window.close();
+// } else {
 
-        const password = passwordInput.value;
-        const result = UniquePasswordBuilder.verifyPassword(password);
-        if (!result.success) {
-            passwordIconMemo.classList.add('hidden');
-            setErrorMessage(result.message, result.error);
-        } else {
-            const algorithm = algorithmInput.value;
-            const difficultyValue = parseInt(algorithmInput.value === SCRYPT ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
-            const difficulty = (difficultyValue > 0) ? difficultyValue : 1;
-            const usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
-            copyImg.classList.remove('hidden');
-
-            if (evt && evt.keyCode === 13) {
-                outputField.disabled = false;
-                outputField.select();
-                document.execCommand("copy");
-                passwordInput.value = "";
-                outputField.disabled = true;
-                window.close();
-            } else {
-                hideData();
-
-                const locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
-                if(locationSalt === '') {
-                    setErrorMessage('Please enter an url / key', true);
-                    return;
-                }
-                UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
-                    updatePasswordField(password);
-                }, true);
-            }
-        }
-    } catch(e) {
-        setErrorMessage(e, true);
-    }
+const compute = function() {
+    verifyAndComputePassword(save);
 }
 
 const changeAlgorithm = function() {
-    difficultyScryptInput.className = algorithmInput.value == SCRYPT ? '' : 'hidden';
-    difficultyArgon2Input.className = algorithmInput.value == ARGON2 ? '' : 'hidden';
+    difficultyScryptInput.className = algorithmInput.value == UniquePasswordBuilder.SCRYPT ? '' : 'hidden';
+    difficultyArgon2Input.className = algorithmInput.value == UniquePasswordBuilder.ARGON2 ? '' : 'hidden';
     compute();
 }
 
@@ -127,7 +72,7 @@ detailsLink.addEventListener('click', function(e) {
     window.close();
 }, false);
 
-copyImg.addEventListener('click', () => {
+copyToClipboardBtn.addEventListener('click', () => {
     outputField.disabled = false;
     outputField.select();
     document.execCommand("copy");
@@ -162,12 +107,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const hideData = function() {
-    if (hideSensitiveData.checked) {
-        passwordIconMemo.classList.add('hidden');
-        outputField.classList.add('hide');
-    } else {
-        outputField.classList.remove('hide');
-        UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
-    }
-}
+

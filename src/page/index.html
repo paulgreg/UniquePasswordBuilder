@@ -132,19 +132,7 @@
                 var displayInfosLink              = document.getElementById('displayInfos');
                 var infosDiv                      = document.getElementById('infos');
 
-                var urlInput                      = document.getElementById('url');
-                var usefulUrl                     = document.getElementById('usefulUrl');
-                var passwordInput                 = document.getElementById('password');
-                var passwordIconMemo              = document.getElementById('passwordIconMemo');
-                var algorithmInput                = document.getElementById('algorithm');
-                var difficultyScryptInput         = document.getElementById('difficultyScrypt');
-                var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
-                var usersaltInput                 = document.getElementById('usersalt');
-                var hideSensitiveData             = document.getElementById('hideSensitiveData');
-                var outputField                   = document.getElementById('output');
                 var copyToClipboardBtn            = document.getElementById('copyToClipboardBtn');
-                var optionsLink                   = document.querySelector('a.options');
-                var optionsDiv                    = document.querySelector('div.options');
 
                 var displayInfos = function(e) {
                     if(e) e.preventDefault();
@@ -171,69 +159,16 @@
                     timeout = setTimeout(fn, 250);
                 }
 
-                var setErrorMessage = function(message, error) {
-                    outputField.className = error ? 'error' : '';
-                    updatePasswordField(message);
-                    copyToClipboardBtn.className = 'hidden';
-                }
-
-                var updatePasswordField = function(text) {
-                    setTimeout(function () {
-                        outputField.innerHTML = text;
-                    }, 0);
-                }
-
                 var go = function() {
-                    try {
-                        outputField.className = '';
-                        var password = passwordInput.value;
-
-                        var result = UniquePasswordBuilder.verifyPassword(password);
-                        if (!result.success) {
-                            passwordIconMemo.classList.add('hidden');
-                            setErrorMessage(result.message, result.error);
-                        } else {
-                            hideData();
-                            var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
-                            if(locationSalt !== '') {
-                                usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
-                            }
-                            else {
-                                usefulUrl.textContent = '';
-                                setErrorMessage('Please enter an url / key', true);
-                                return;
-                            }
-
-                            var algorithm = algorithmInput.value;
-                            var difficultyValue = parseInt(algorithmInput.value === 'scrypt' ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
-                            var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
-                            var usersalt = usersaltInput.value;
-
-                            localStorage.algorithm = algorithm;
-                            localStorage.difficulty = difficultyScryptInput.value;
-                            localStorage.difficultyArgon2 = difficultyArgon2Input.value;
-                            localStorage.usersalt = usersalt;
-                            localStorage.hideSensitiveData = hideSensitiveData.checked;
-
-                            updatePasswordField("Generating password...");
-                            UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, password, usersalt, function(generatedPassword) {
-                                updatePasswordField(generatedPassword);
-                                copyToClipboardBtn.className = '';
-                            });
-                        }
-                    } catch(e) {
-                        setErrorMessage(e, true);
-                    }
+                    verifyAndComputePassword(save);
                 }
 
-                var hideData = function() {
-                    if (hideSensitiveData.checked) {
-                        passwordIconMemo.classList.add('hidden');
-                        outputField.classList.add('hide');
-                    } else {
-                        outputField.classList.remove('hide');
-                        UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
-                    }
+                var save = function() {
+                    localStorage.algorithm = algorithm;
+                    localStorage.difficulty = difficultyScryptInput.value;
+                    localStorage.difficultyArgon2 = difficultyArgon2Input.value;
+                    localStorage.usersalt = usersalt;
+                    localStorage.hideSensitiveData = hideSensitiveData.checked;
                 }
 
                 var delayedGo = delay.bind(this, go);
@@ -271,8 +206,8 @@
                 }
 
                 var changeAlgorithm = function() {
-                    difficultyScryptInput.className = algorithmInput.value == 'scrypt' ? '' : 'hidden';
-                    difficultyArgon2Input.className = algorithmInput.value == 'argon2' ? '' : 'hidden';
+                    difficultyScryptInput.className = algorithmInput.value == UniquePasswordBuilder.SCRYPT ? '' : 'hidden';
+                    difficultyArgon2Input.className = algorithmInput.value == UniquePasswordBuilder.ARGON2 ? '' : 'hidden';
                     delayedGo();
                 }
 
@@ -283,7 +218,7 @@
                 difficultyArgon2Input.addEventListener('change', delayedGo, false);
                 usersaltInput.addEventListener('keyup', delayedGo, false);
                 usersaltInput.addEventListener('change', delayedGo, false);
-                hideSensitiveData.addEventListener('change', hideData, false);
+                hideSensitiveData.addEventListener('change', UniquePasswordBuilder.hideData, false);
                 optionsLink.addEventListener('click', toggleOptions, false);
                 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
                 displayInfosLink.addEventListener('click', displayInfos, false);

@@ -1,6 +1,9 @@
 (function(upb) {
 
     var passwordLength = 16;
+    upb.SCRYPT = 'scrypt';
+    upb.ARGON2 = 'argon2';
+
     upb.makeHashHumanReadable = function(array) {
         var availableChars = [
             '!','$','+','-','=','_','.',':',';',',','?','#','%','&','(',')','[',']',
@@ -143,3 +146,84 @@
     };
 
 })(window.UniquePasswordBuilder = window.UniquePasswordBuilder || {});
+
+//Manage UI
+
+var urlInput                      = document.getElementById('url');
+var usefulUrl                     = document.getElementById('usefulUrl');
+var passwordInput                 = document.getElementById('password');
+var passwordIconMemo              = document.getElementById('passwordIconMemo');
+var algorithmInput                = document.getElementById('algorithm');
+var difficultyScryptInput         = document.getElementById('difficultyScrypt');
+var difficultyArgon2Input         = document.getElementById('difficultyArgon2');
+var usersaltInput                 = document.getElementById('usersalt');
+var hideSensitiveData             = document.getElementById('hideSensitiveData');
+var outputField                   = document.getElementById('output');
+var optionsLink                   = document.querySelector('a.options');
+var optionsDiv                    = document.querySelector('div.options');
+
+var updatePasswordField = function(text) {
+    setTimeout(function () {
+        outputField.textContent = text;
+    }, 0);
+};
+
+var setErrorMessage = function(message, error) {
+    if (error) {
+        outputField.classList.add('error');
+    } else {
+        outputField.classList.remove('error');
+    }
+    copyToClipboardBtn.classList.add('hidden');
+    updatePasswordField(message);
+};
+
+var hideData = function() {
+    if (hideSensitiveData.checked) {
+        passwordIconMemo.classList.add('hidden');
+        outputField.classList.add('hide');
+    } else {
+        outputField.classList.remove('hide');
+        UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
+    }
+};
+
+var verifyAndComputePassword = function(saveInputs) {
+    try {
+        outputField.classList.remove('error');
+        outputField.classList.remove('hide');
+
+        var password = passwordInput.value;
+        var result = UniquePasswordBuilder.verifyPassword(password);
+        if (!result.success) {
+            passwordIconMemo.classList.add('hidden');
+            setErrorMessage(result.message, result.error);
+        } else {
+            var algorithm = algorithmInput.value;
+            var difficultyValue = parseInt(algorithmInput.value === UniquePasswordBuilder.SCRYPT ? difficultyScryptInput.value : difficultyArgon2Input.value, 10);
+            var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
+            var usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
+            copyToClipboardBtn.classList.remove('hidden');
+
+            hideData();
+
+            var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
+            if(locationSalt === '') {
+                usefulUrl.textContent = '';
+                setErrorMessage('Please enter an url / key', true);
+                return;
+            } else {
+                usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
+            }
+
+            saveInputs();
+
+            updatePasswordField("Generating password...");
+            UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
+                updatePasswordField(password);
+            }, true);
+        }
+    } catch(e) {
+        setErrorMessage(e, true);
+    }
+};

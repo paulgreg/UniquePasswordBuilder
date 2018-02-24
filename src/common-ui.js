@@ -101,7 +101,7 @@ var delay = function(fn) {
 };
 
 var compute = function(evt) {
-    return delay.bind(this, go(evt));
+    return delay(go.bind(this, evt));
 };
 
 var changeAlgorithm = function() {

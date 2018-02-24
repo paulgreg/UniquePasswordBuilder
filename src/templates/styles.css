@@ -1,5 +1,5 @@
-fieldset                  { max-width: 800px; border: 1px solid black; background-color: #70b1e254; padding: .5em; }
-label                     { display: flex; white-space: nowrap; margin: .25em; align-items: center; }
+fieldset                  { border: 1px solid black; background-color: #70b1e254; padding: .5em; }
+label                     { display: flex; margin: .25em; align-items: center; }
 label.checkbox            { display: block; }
 input, select, #output    { margin-left: .25em; flex-grow: 1; }
 input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }

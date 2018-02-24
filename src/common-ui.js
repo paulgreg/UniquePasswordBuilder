@@ -81,7 +81,7 @@ var verifyAndComputePassword = function(saveInputs, evt) {
                         onEnter();
                     }
                 }
-            }, true);
+            }, hideSensitiveData.checked);
         }
     } catch(e) {
         setErrorMessage(e, true);

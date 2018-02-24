@@ -1,6 +1,9 @@
 (function(upb) {
 
     var passwordLength = 16;
+    upb.SCRYPT = 'scrypt';
+    upb.ARGON2 = 'argon2';
+
     upb.makeHashHumanReadable = function(array) {
         var availableChars = [
             '!','$','+','-','=','_','.',':',';',',','?','#','%','&','(',')','[',']',

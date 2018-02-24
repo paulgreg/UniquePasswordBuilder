@@ -2,22 +2,27 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rimraf = require('rimraf');
+var replace = require('gulp-replace');
+var fs = require("fs");
+
+var formTemplateContent = fs.readFileSync("src/templates/form.html", "utf8");
+var cssTemplateContent = fs.readFileSync("src/templates/styles.css", "utf8");
 
 var paths = {
     index: [
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
+        'src/common-ui.js',
         'node_modules/argon2-browser/lib/argon2.js'
     ],
     bookmarklet: [
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
         'node_modules/argon2-browser/lib/argon2.js',
-        'src/ui.js',
+        'src/bookmarklet-ui.js',
         'src/bookmarklet.js'
     ]
 };
-
 
 gulp.task('clean-dist', function(cb){
   rimraf('dist/', cb);
@@ -42,35 +47,40 @@ gulp.task('index', function() {
 gulp.task('argon2', function() {
     return gulp.src('node_modules/argon2-browser/dist/argon2-asm.min.js')
       .pipe(gulp.dest('dist'))
-      .pipe(gulp.dest('addon'))
-      ;
-    });
+      .pipe(gulp.dest('addon'));
+});
 
-    gulp.task('font-awesome', ['font-awesome-css', 'font-awesome-fonts']);
+gulp.task('font-awesome', ['font-awesome-css', 'font-awesome-fonts']);
 
-    gulp.task('font-awesome-css', function() {
-        return gulp.src('node_modules/font-awesome/css/*')
-            .pipe(gulp.dest('dist/font-awesome/css'))
-            .pipe(gulp.dest('addon/font-awesome/css'));
-        });
+gulp.task('font-awesome-css', function() {
+    return gulp.src('node_modules/font-awesome/css/*')
+        .pipe(gulp.dest('dist/font-awesome/css'))
+        .pipe(gulp.dest('addon/font-awesome/css'));
+});
 
-    gulp.task('font-awesome-fonts', function() {
-        return gulp.src('node_modules/font-awesome/fonts/*')
-            .pipe(gulp.dest('dist/font-awesome/fonts'))
-            .pipe(gulp.dest('addon/font-awesome/fonts'))
-            ;
-        });
+gulp.task('font-awesome-fonts', function() {
+    return gulp.src('node_modules/font-awesome/fonts/*')
+        .pipe(gulp.dest('dist/font-awesome/fonts'))
+        .pipe(gulp.dest('addon/font-awesome/fonts'));
+});
 
-gulp.task('html', function() {
-    return gulp.src(['index.html', 'bookmark_scrypt_test.html', 'bookmark_argon2_test.html'])
-    .pipe(gulp.dest('dist'))
-    ;
-    });
+gulp.task('page-html', function() {
+    return gulp.src('src/page/*.html')
+      .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
+      .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
+      .pipe(gulp.dest('dist'));
+});
+
+gulp.task('addon-html', function() {
+    return gulp.src('src/addon/*.html')
+    .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
+    .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
+    .pipe(gulp.dest('addon'));
+});
 
 gulp.task('assets', function() {
     return gulp.src('assets/*')
-    .pipe(gulp.dest('dist'))
-    ;
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('addon-copy-js', ['index'], function() {
@@ -78,8 +88,8 @@ gulp.task('addon-copy-js', ['index'], function() {
     .pipe(gulp.dest('./addon'));
 });
 
-gulp.task('addon', ['addon-copy-js']);
+gulp.task('addon', ['addon-html', 'addon-copy-js']);
 
-gulp.task('page', ['html', 'index', 'assets']);
+gulp.task('page', ['page-html', 'index', 'assets']);
 
 gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

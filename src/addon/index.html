@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
+        <style>
+            body                     { overflow-x: hidden; overflow-y: hidden; font-family: sans-serif; background-color: transparent; color: black; }
+            a                        { color: #5b93be; font-size: 1em; display: inline-block; text-align: right; width: 100%; }
+            h1                       { font-family: sans-serif; font-size: 1.25em; color: #333; }
+            fieldset                 { width: 530px; }
+            #details                 { position: relative; text-align: right; }
+{TEMPLATE_CSS}
+        </style>
+    </head>
+    <body>
+        <h1>Unique Password Builder</h1>
+        {TEMPLATE_HTML}
+        <a href="#" id="details">More information</a>
+        <script src="scrypt-async.js"></script>
+        <script src="argon2.js"></script>
+        <script src="passwordgeneration.js"></script>
+        <script src="common-ui.js"></script>
+        <script src="addon-ui.js"></script>
+    </body>
+</html>

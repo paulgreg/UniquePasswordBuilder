@@ -55,7 +55,6 @@ var verifyAndComputePassword = function(saveInputs, evt) {
             var difficulty = (difficultyValue > 0) ? difficultyValue : 1;
             var usersalt = usersaltInput.value && usersaltInput.value != '0' ? usersaltInput.value : '';
             copyToClipboardBtn.classList.remove('hidden');
-
             hideData();
 
             var locationSalt = UniquePasswordBuilder.getSaltOnLocation(urlInput.value);
@@ -67,18 +66,16 @@ var verifyAndComputePassword = function(saveInputs, evt) {
                 usefulUrl.textContent = 'Key used to generate password: ' + locationSalt;
             }
 
-            if (evt && evt.keyCode === 13) {
-                copyToClipboard();
-                if(onEnter) {
-                    onEnter();
-                }
-                return;
-            }
-
             updatePasswordField("Generating password...");
             UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
                 updatePasswordField(password);
                 saveInputs();
+                if (evt && evt.keyCode === 13) {
+                    copyToClipboard(null, password);
+                    if(onEnter) {
+                        onEnter();
+                    }
+                }
             }, true);
         }
     } catch(e) {
@@ -92,13 +89,9 @@ var onEnter;
 
 var timeout = null;
 
-var delay = function(fn) {
-    clearTimeout(timeout);
-    timeout = setTimeout(fn, 250);
-};
-
 var compute = function(evt) {
-    return delay(verifyAndComputePassword.bind(this, save, evt));
+    clearTimeout(timeout);
+    timeout = setTimeout(verifyAndComputePassword.bind(this, save, evt), evt && evt.keyCode === 13 ? 0 : 250);
 };
 
 var changeAlgorithm = function() {
@@ -112,9 +105,8 @@ var toggleOptions = function(e) {
     optionsDiv.classList.toggle('hidden');
 };
 
-var copyToClipboard = function() {
-    var password = outputField.textContent;
-    copyTextToClipboard(password);
+var copyToClipboard = function(evt, password) {
+    copyTextToClipboard(password || outputField.textContent);
 };
 
 var copyTextToClipboard = function(value) {

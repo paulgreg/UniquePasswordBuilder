@@ -90,18 +90,15 @@ var verifyAndComputePassword = function(saveInputs, evt) {
 var save;
 var onEnter;
 
-var go = function(evt) {
-    verifyAndComputePassword(save, evt);
-};
-
 var timeout = null;
+
 var delay = function(fn) {
     clearTimeout(timeout);
     timeout = setTimeout(fn, 250);
 };
 
 var compute = function(evt) {
-    return delay(go.bind(this, evt));
+    return delay(verifyAndComputePassword.bind(this, save, evt));
 };
 
 var changeAlgorithm = function() {

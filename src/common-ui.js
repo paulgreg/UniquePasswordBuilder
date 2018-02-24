@@ -71,7 +71,8 @@ var verifyAndComputePassword = function(saveInputs, evt) {
             }
 
             updatePasswordField("Generating password...");
-            UniquePasswordBuilder.generate(algorithm, locationSalt, difficulty, passwordInput.value, usersalt, function(password) {
+            var algoParams = { algorithm: algorithm, locationSalt: locationSalt, difficulty: difficulty, masterPassword: passwordInput.value, userSalt: usersalt };
+            UniquePasswordBuilder.generate(algoParams, function(password) {
                 updatePasswordField(password);
                 saveInputs();
                 if (evt && evt.keyCode === 13) {

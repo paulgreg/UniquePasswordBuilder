@@ -36,14 +36,19 @@
         var argon2AsmPath = window.argon2AsmPath;
         var noLog = window.noLog !== false;
         var locationSalt = upb.getSaltOnLocation(window.location.href);
-        upb.generate(algorithm, locationSalt, window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds, passwordInput.value, saltInput.value, function(generatedPassword) {
+
+        var algoParams = {
+            algorithm: algorithm,
+            locationSalt: locationSalt,
+            difficulty: window.uniquePasswordBuilderDifficulty || window.uniquePasswordBuilderRounds,
+            masterPassword: passwordInput.value,
+            userSalt: saltInput.value,
+            argon2AsmPath: argon2AsmPath
+        };
+        upb.generate(algoParams, function(generatedPassword) {
             upb.insertGenerateActions(generatedPassword);
-            passwordInput.remove();
-            passwordLabel.remove();
-            saltInput.remove();
-            saltLabel.remove();
             form.remove();
-        }, noLog, {argon2AsmPath: argon2AsmPath});
+        }, noLog);
     }
 
     //Managing press on 'Enter' because the form is no more submited

@@ -45,22 +45,22 @@
         return { success: true, message: 'Generating password...', error: false};
     }
 
-    upb.generate = function(algorithm, locationSalt, difficulty, masterPassword, userSalt, callback, nolog, params) {
-        if (!masterPassword) {
+    upb.generate = function(algoParams, callback, nolog) {
+        if (!algoParams.masterPassword) {
             throw new Error('master password should not be empty');
         }
         var hashLength = 2 * passwordLength;
         var t = +new Date();
-        if(algorithm === 'scrypt') {
-            var userSalt = userSalt && userSalt != 0 ? "-keyidx:" + userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
-            var salt = locationSalt + userSalt;
-            var difficulty = difficulty || 8192;
+        if(algoParams.algorithm === 'scrypt') {
+            var userSalt = algoParams.userSalt && algoParams.userSalt != 0 ? "-keyidx:" + algoParams.userSalt : ""; // keyidx is here for legacy reason, to avoid changing password
+            var salt = algoParams.locationSalt + userSalt;
+            var difficulty = algoParams.difficulty || 8192;
             if (!upb.isPowerOfTwo(difficulty)) {
                 throw new Error('difficulty should be a power of two, got ' + difficulty);
             }
             var logN = Math.log2(difficulty);
 
-            scrypt(masterPassword, salt, logN, 8, hashLength, function(hashedPassword) {
+            scrypt(algoParams.masterPassword, salt, logN, 8, hashLength, function(hashedPassword) {
                 var outputPassword = upb.makeHashHumanReadable(hashedPassword);
 
                 if (!nolog && console && console.log) {
@@ -71,15 +71,15 @@
                 callback(outputPassword, hashedPassword);
             });
         } else {
-            var difficulty = difficulty || 10;
+            var difficulty = algoParams.difficulty || 10;
             //Good long salt generated with http://passwordsgenerator.net/
-            var salt = locationSalt + '|' + (userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP';
+            var salt = algoParams.locationSalt + '|' + (algoParams.userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP';
             // https://github.com/antelle/argon2-browser
             // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
-            // so on change will generate different results...
-            var slatLimit = 328;
-            if(salt.length > slatLimit) {
-                callback("Salt is too long :( Should be " + (salt.length - slatLimit) + " chars shorter...");
+            // so one change will generate a different result...
+            var saltLimit = 328;
+            if(salt.length > saltLimit) {
+                callback("Salt is too long :( Should be " + (salt.length - saltLimit) + " chars shorter...");
                 return;
             }
             var applyArgon2 = function(password, type, argonCallback) {
@@ -92,11 +92,11 @@
                     hashLen: hashLength, // desired hash length
                     // parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
                     type: type, // argon2.ArgonType.Argon2i or argon2.ArgonType.Argon2d
-                    distPath: params === undefined ? '.' : params.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
+                    distPath: algoParams.argon2AsmPath === undefined ? '.' : algoParams.argon2AsmPath // argon2-asm.min.js script location, without trailing slash
                 }).then(argonCallback);
             };
 
-            applyArgon2(masterPassword, argon2.ArgonType.Argon2i, function (hashArgon2i) {
+            applyArgon2(algoParams.masterPassword, argon2.ArgonType.Argon2i, function (hashArgon2i) {
                 //  console.log("======>hash", Argon2i.hashHex, Argon2i.encoded);
                 applyArgon2(hashArgon2i.hashHex, argon2.ArgonType.Argon2d, function (hashArgon2d) {
                     var outputPassword = upb.makeHashHumanReadable(hashArgon2d.hash);
@@ -118,9 +118,11 @@
         return ((x != 0) && !(x & (x - 1)));
     };
 
+    var iconAlgoParams = { algorithm: 'scrypt', locationSalt: '', difficulty: 2, userSalt: 'salt' };
     upb.displayIcons = function(password, iconContainer) {
         iconContainer.classList.remove('hidden');
-        upb.generate('scrypt', '', 2, password, 'salt', function(generatedPassword, hash) {
+        iconAlgoParams.masterPassword = password;
+        upb.generate(iconAlgoParams, function(generatedPassword, hash) {
             while (iconContainer.firstChild) {
                 iconContainer.removeChild(iconContainer.firstChild);
             }

@@ -84,8 +84,15 @@ QUnit.test("should not allow empty master password", function(assert) {
     throws(
         function() {
             // Given
+            var algoParams = {
+                algorithm: 'scrypt',
+                locationSalt: 'https://github.com',
+                difficulty: 2,
+                masterPassword: undefined,
+                userSalt: ''
+            };
             // When
-           UniquePasswordBuilder.generate('scrypt', {protocol:'https:',host:'github.com'}, undefined, '')
+           UniquePasswordBuilder.generate(algoParams);
         },
         "should fail"
     );
@@ -106,17 +113,17 @@ QUnit.test("should transform hex to string", function(assert) {
 QUnit.module('getSaltOnLocation');
 
 QUnit.test("should get protocol and host on standard URL", function(assert) {
-    var r = UniquePasswordBuilder.getSaltOnLocation('https://github.com/paulgreg/UniquePasswordBuilder')
-    equal(r, 'https://github.com')
+    var r = UniquePasswordBuilder.getSaltOnLocation('https://github.com/paulgreg/UniquePasswordBuilder');
+    equal(r, 'https://github.com');
 });
 
 QUnit.test("should return string that are not an URL", function(assert) {
-    var r = UniquePasswordBuilder.getSaltOnLocation('someApp')
-    equal(r, 'someApp')
+    var r = UniquePasswordBuilder.getSaltOnLocation('someApp');
+    equal(r, 'someApp');
 });
 
 QUnit.test("should return string for `about` pages", function(assert) {
-    var r = UniquePasswordBuilder.getSaltOnLocation('about:debugging#addons')
-    equal(r, 'about:debugging#addons') // before #eef3ca9, it was about:debugging#addons//undefined (yes, it was bugged)
+    var r = UniquePasswordBuilder.getSaltOnLocation('about:debugging#addons');
+    equal(r, 'about:debugging#addons'); // before #eef3ca9, it was about:debugging#addons//undefined (yes, it was bugged)
 });
 

@@ -32,13 +32,21 @@ var githubTlsDefaultPasswordArgon2 = "k)C7G3!Sfi-xLH(Z";
 QUnit.test("generate for https://github.com with 'default-password'", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://github.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: undefined,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://github.com', undefined, 'default-password', undefined, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPasswordArgon2, "generate problem" );
         equal( generatedPassword.length, 16, "generate length problem" );
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 
@@ -48,28 +56,44 @@ var githubTlsDefaultPassword1RoundArgon2 = "wWgcR#Tw6%dY!:9A";
 QUnit.test("generate for https://github.com with 'default-password' for 2 round", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://github.com',
+        difficulty: 2,
+        masterPassword: 'default-password',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://github.com', 2, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubTlsDefaultPassword1RoundArgon2, "generate problem" );
         notEqual( githubTlsDefaultPasswordArgon2, githubTlsDefaultPassword1RoundArgon2, "same password than a single round" );
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 
-var githubDefaultPasswordArgon2 = "xz.%C1H9K8G6,YPq";
+var githubDefaultPasswordArgon2 = "YFklD_W!aUF#[S,m";
 
 QUnit.test("generate for http://github.com with 'default-password'", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'http://github.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', {protocol:'http:',host:'github.com'}, undefined, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, githubDefaultPasswordArgon2, "generate problem" );
         notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password without protocol");
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 
@@ -78,14 +102,22 @@ var googleTlsDefaultPasswordArgon2 = "G..P)tCuVT;-$D]w";
 QUnit.test("generate for https://www.google.com with 'default-password'", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2, "generate problem" );
         notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 });
 
 var googleTlsDefaultPassword2Argon2 = "D23k0ge-zTS!o7ug";
@@ -93,51 +125,75 @@ var googleTlsDefaultPassword2Argon2 = "D23k0ge-zTS!o7ug";
 QUnit.test("generate for https://www.google.com with 'default-password2'", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: undefined,
+        masterPassword: 'default-password2',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password2', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPassword2Argon2, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
         notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 
-var googleTlsDefaultPasswordArgon2Difficulty100 = "qFEI2U6EV!&:Ye:t";
+var googleTlsDefaultPasswordArgon2Difficulty15 = "qFEI2U6EV!&:Ye:t";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with 15 rounds", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: 15,
+        masterPassword: 'default-password',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', 15, 'default-password', 0, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
-        equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "generate problem" );
+        equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty15, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
         notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 });
 
-var googleTlsDefaultPasswordArgon2Difficulty200 = "ZXbOyr&_kU($+jUf";
+var googleTlsDefaultPasswordArgon2Difficulty20 = "ZXbOyr&_kU($+jUf";
 
 QUnit.test("generate for https://www.google.com with 'default-password' with 20 rounds", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: 20,
+        masterPassword: 'default-password',
+        userSalt: 0,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-     UniquePasswordBuilder.generate('argon2', 'https://www.google.com', 20, 'default-password', 0, function(generatedPassword) {
+     UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
          // Then
-         equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty200, "generate problem" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
+         equal( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty20, "generate problem" );
+         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty15, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
          notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
          notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
          done();
-     }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+     }, undefined);
 });
 
 var googleTlsDefaultPasswordArgon2OldKeyIndex1 = "XN6NkzaKD9LHSkr8";
@@ -145,18 +201,26 @@ var googleTlsDefaultPasswordArgon2OldKeyIndex1 = "XN6NkzaKD9LHSkr8";
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 1", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: 1,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-     UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 1, function(generatedPassword) {
+     UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
          // Then
          equal( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex1, "generate problem" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
+         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty15, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
          notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
-         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty200, "same password than google");
+         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty20, "same password than google");
          notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
          notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
          done();
-     }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+     }, undefined);
 });
 
 var googleTlsDefaultPasswordArgon2OldKeyIndex2 = "W:]rdccUEH:Ynvox";
@@ -164,19 +228,27 @@ var googleTlsDefaultPasswordArgon2OldKeyIndex2 = "W:]rdccUEH:Ynvox";
 QUnit.test("generate for https://www.google.com with 'default-password' with keyIndex 2", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: 2,
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 2, function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex2, "generate problem" );
-        notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty100, "same password than google" );
+        notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty15, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPassword2Argon2, "same password than google" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2, "same password than google" );
-        notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty200, "same password than google");
+        notEqual( generatedPassword, googleTlsDefaultPasswordArgon2Difficulty20, "same password than google");
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex1, "same password than google");
         notEqual( generatedPassword, githubDefaultPasswordArgon2, "same password than github" );
         notEqual( generatedPassword, githubTlsDefaultPasswordArgon2, "same password than github");
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 
@@ -185,13 +257,21 @@ var googleTlsDefaultPasswordArgon2UserSaltSomething= "9L(d9nP$;H=df!Of";
 QUnit.test("generate for https://www.google.com with 'default-password' with userSalt something", function(assert) {
      var done = assert.async();
     // Given
+    var algoParams = {
+        algorithm: 'argon2',
+        locationSalt: 'https://www.google.com',
+        difficulty: undefined,
+        masterPassword: 'default-password',
+        userSalt: 'something',
+        argon2AsmPath: '../node_modules/argon2-browser/dist'
+    };
     // When
-    UniquePasswordBuilder.generate('argon2', 'https://www.google.com', undefined, 'default-password', 'something', function(generatedPassword) {
+    UniquePasswordBuilder.generate(algoParams, function(generatedPassword) {
         // Then
         equal( generatedPassword, googleTlsDefaultPasswordArgon2UserSaltSomething, "generate problem" );
         notEqual( generatedPassword, googleTlsDefaultPasswordArgon2OldKeyIndex1, "same password than google" );
         done();
-    }, undefined, { argon2AsmPath: '../node_modules/argon2-browser/dist'});
+    }, undefined);
 
 });
 

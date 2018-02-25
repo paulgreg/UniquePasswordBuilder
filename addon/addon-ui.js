@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 passwordInput.value = "";
                 urlInput.value = tabs[0].url || "";
-                compute();
                 passwordInput.focus();
+                verifyAndComputePassword();
             });
         }, 50)
     });

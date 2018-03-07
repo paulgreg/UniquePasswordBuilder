@@ -33,9 +33,13 @@ var hideData = function() {
     if (hideSensitiveData.checked) {
         passwordIconMemo.classList.add('hidden');
         outputField.classList.add('hide');
+        usersaltInput.classList.add('hide');
     } else {
         outputField.classList.remove('hide');
-        UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
+        usersaltInput.classList.remove('hide');
+        if(passwordInput.value !== '') {
+            UniquePasswordBuilder.displayIcons(passwordInput.value, passwordIconMemo);
+        }
     }
 };
 
@@ -129,4 +133,3 @@ usersaltInput.addEventListener('change', compute, false);
 hideSensitiveData.addEventListener('change', hideData, false);
 optionsLink.addEventListener('click', toggleOptions, false);
 copyToClipboardBtn.addEventListener('click', copyToClipboard, false);
-

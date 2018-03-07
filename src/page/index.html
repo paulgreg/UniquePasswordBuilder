@@ -126,9 +126,10 @@
                 var load = function() {
                     algorithmInput.value = localStorage.algorithm || UniquePasswordBuilder.SCRYPT;
                     difficultyScryptInput.value = localStorage.difficulty || 8192;
+                    hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
+                    hideData();
                     if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2 | 10;
                     if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt;
-                    hideSensitiveData.checked = localStorage.hideSensitiveData === 'true';
                     if(localStorage.options === 'true') optionsDiv.classList.remove('hidden');
                     changeAlgorithm();
                 }

@@ -16,11 +16,12 @@ save = function() {
 function load (data) {
     if (data && data.prefs) {
         algorithmInput.value = data.prefs.algorithm || UniquePasswordBuilder.SCRYPT;
+        hideSensitiveData.checked = data.prefs.hideSensitiveData;
+        hideData();
         changeAlgorithm();
         difficultyScryptInput.value = data.prefs.difficulty || "8192";
         difficultyArgon2Input.value = data.prefs.difficultyArgon2 || 10;
         usersaltInput.value = data.prefs.usersalt || '';
-        hideSensitiveData.checked = data.prefs.hideSensitiveData;
         data.prefs.options && optionsDiv.classList.remove('hidden');
     } else {
         algorithmInput.value = UniquePasswordBuilder.SCRYPT;

@@ -11,7 +11,14 @@
             />
         </label>
         <label id="usefulUrl" class="small"></label>
-        <a href="" class="options">options</a>
+        <label class="checkbox">
+            <div>
+                Hide sensitive data:&nbsp;
+                <input type="checkbox" id="hideSensitiveData" />
+            </div>
+            <a href="" class="options">options</a>
+        </label>
+        
         <div class="options hidden">
             <label>Algorithm:
                 <select id="algorithm">
@@ -38,9 +45,6 @@
             </label>
             <label>User salt:
                 <input type="text" id="usersalt" value="" maxlength="80" />
-            </label>
-            <label class="checkbox">Hide sensitive data:&nbsp;
-                <input type="checkbox" id="hideSensitiveData" />
             </label>
         </div>
         <label>

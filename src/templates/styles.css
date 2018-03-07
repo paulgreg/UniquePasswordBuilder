@@ -1,6 +1,6 @@
 fieldset                  { border: 1px solid black; background-color: #70b1e254; padding: .5em; }
 label                     { display: flex; margin: .25em; align-items: center; }
-label.checkbox            { display: block; }
+label.checkbox            { justify-content: space-between; }
 input, select, #output    { margin-left: .25em; flex-grow: 1; }
 input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
 input                     { height: 18px; }
@@ -13,5 +13,5 @@ input[type="checkbox"]    { vertical-align:middle; margin-left: auto;}
 #output                   { font-family: monospace; border: 1px dashed black; padding: .5em .1em 0 .1em; text-align: center; background: white; color: black; font-weight: bold; font-size: 1.2em; }
 #output.hide              { background-color: black; }
 #output.error.hide        { background-color: none; }
-a.options                 { text-align: right; color: #5b93be; display: block; margin: 0 0 .5em 0; }
+a.options                 { color: #5b93be; }
 i#copyToClipboardBtn      { color: #5b93be; font-size: 32px; margin: 0 0 0 5px;}

@@ -4,6 +4,7 @@ var uglify = require('gulp-uglify');
 var rimraf = require('rimraf');
 var replace = require('gulp-replace');
 var fs = require("fs");
+var SHA384 = require("sha384");
 
 var formTemplateContent = fs.readFileSync("src/templates/form.html", "utf8");
 var cssTemplateContent = fs.readFileSync("src/templates/styles.css", "utf8");
@@ -65,9 +66,12 @@ gulp.task('font-awesome-fonts', function() {
 });
 
 gulp.task('page-html', function() {
+    var assetHash = SHA384(fs.readFileSync("dist/upb-main.min.js", "utf8")).toString("base64");
+
     return gulp.src('src/page/*.html')
       .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
       .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
+      .pipe(replace('{SRI_HASH}', assetHash))
       .pipe(gulp.dest('dist'));
 });
 
@@ -90,6 +94,6 @@ gulp.task('addon-copy-js', ['index'], function() {
 
 gulp.task('addon', ['addon-html', 'addon-copy-js']);
 
-gulp.task('page', ['page-html', 'index', 'assets']);
+gulp.task('page', ['index', 'assets', 'page-html']);
 
 gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);

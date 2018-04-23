@@ -23,7 +23,8 @@
     "gulp-uglify": "^3.0.0",
     "http-server": "^0.8.5",
     "qunitjs": "^1.19.0",
-    "rimraf": "^2.4.2"
+    "rimraf": "^2.4.2",
+    "sha384": "^1.0.0"
   },
   "dependencies": {
     "argon2-browser": "^1.1.0",

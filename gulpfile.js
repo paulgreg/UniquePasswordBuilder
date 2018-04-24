@@ -65,7 +65,7 @@ gulp.task('font-awesome-fonts', function() {
         .pipe(gulp.dest('addon/font-awesome/fonts'));
 });
 
-gulp.task('page-html', function() {
+gulp.task('page-html', ['index'], function() {
     var assetHash = SHA384(fs.readFileSync("dist/upb-main.min.js", "utf8")).toString("base64");
 
     return gulp.src('src/page/*.html')

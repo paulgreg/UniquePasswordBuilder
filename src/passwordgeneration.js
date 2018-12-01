@@ -14,7 +14,7 @@
     upb.makeHashHumanReadable = function(array) {
         var password = '';
         for(var i = 0; i < array.length; i+=2) {
-            var v = array[i] + array[i+1];
+            var v = array[i] + array[i+1]; // 6.28 bits per character of entropy, @see https://github.com/paulgreg/UniquePasswordBuilder/issues/17
             password += availableChars[v % availableChars.length];
         }
         return password;

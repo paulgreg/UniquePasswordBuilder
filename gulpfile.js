@@ -26,10 +26,10 @@ var paths = {
 };
 
 gulp.task('clean-dist', function(cb){
-  rimraf('dist/', cb);
+  return rimraf('dist/', cb);
 });
 
-gulp.task('clean', ['clean-dist']);
+gulp.task('clean', gulp.series('clean-dist'));
 
 gulp.task('bookmarklet', function() {
   return gulp.src(paths.bookmarklet)
@@ -51,8 +51,6 @@ gulp.task('argon2', function() {
       .pipe(gulp.dest('addon'));
 });
 
-gulp.task('font-awesome', ['font-awesome-css', 'font-awesome-fonts']);
-
 gulp.task('font-awesome-css', function() {
     return gulp.src('node_modules/font-awesome/css/*')
         .pipe(gulp.dest('dist/font-awesome/css'))
@@ -65,7 +63,9 @@ gulp.task('font-awesome-fonts', function() {
         .pipe(gulp.dest('addon/font-awesome/fonts'));
 });
 
-gulp.task('page-html', ['index'], function() {
+gulp.task('font-awesome', gulp.series('font-awesome-css', 'font-awesome-fonts'));
+
+gulp.task('page-html', gulp.series('index', function() {
     var assetHash = SHA384(fs.readFileSync("dist/upb-main.min.js", "utf8")).toString("base64");
 
     return gulp.src('src/page/*.html')
@@ -73,7 +73,7 @@ gulp.task('page-html', ['index'], function() {
       .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
       .pipe(replace('{SRI_HASH}', assetHash))
       .pipe(gulp.dest('dist'));
-});
+}));
 
 gulp.task('addon-html', function() {
     return gulp.src('src/addon/*.html')
@@ -87,13 +87,13 @@ gulp.task('assets', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('addon-copy-js', ['index'], function() {
-    gulp.src(paths.index)
+gulp.task('addon-copy-js', gulp.series('index', function() {
+    return gulp.src(paths.index)
     .pipe(gulp.dest('./addon'));
-});
+}));
 
-gulp.task('addon', ['addon-html', 'addon-copy-js']);
+gulp.task('addon', gulp.series('addon-html', 'addon-copy-js'));
 
-gulp.task('page', ['index', 'assets', 'page-html']);
+gulp.task('page', gulp.series('index', 'assets', 'page-html'));
 
-gulp.task('default', ['page', 'bookmarklet', 'addon', 'argon2', 'font-awesome']);
+gulp.task('default', gulp.series('page', 'bookmarklet', 'addon', 'argon2', 'font-awesome'));

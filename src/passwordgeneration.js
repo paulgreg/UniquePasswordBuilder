@@ -1,5 +1,11 @@
 (function(upb) {
 
+    // That constant is concatenated to the current domain and the user salt before applying the argon2 algorithm.
+    // It is a random string generated with http://passwordsgenerator.net/. The goal is to limit rainbow table attacks.
+    // If you have any concern, you can safely change that constant but be aware that it will break generated password before the change.
+    // @see https://github.com/paulgreg/UniquePasswordBuilder/issues/16
+    var ARGON2_PEPPER = '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP'
+
     var passwordLength = 16;
     upb.SCRYPT = 'scrypt';
     upb.ARGON2 = 'argon2';
@@ -72,8 +78,7 @@
             });
         } else {
             var difficulty = algoParams.difficulty || 10;
-            //Good long salt generated with http://passwordsgenerator.net/
-            var salt = algoParams.locationSalt + '|' + (algoParams.userSalt || '0') + '|' + '5yB8xbz*BsiMxI8yaz&_9!1u3=ZS$fEH16URassf2OzcZEuvIgt4So0sB2aMAp!SDc#HoHuPZ1_??|X-yw2&J+d+c?AKo-k!ifhH6Qp%25alTVdzE*UAFo9#WduBLCXXZhEjg9V&j#DJQba^e#^NNP';
+            var salt = algoParams.locationSalt + '|' + (algoParams.userSalt || '0') + '|' + ARGON2_PEPPER;
             // https://github.com/antelle/argon2-browser
             // Info: In Argon2, all the algorithm parameters are used as salt to increase entropy
             // so one change will generate a different result...

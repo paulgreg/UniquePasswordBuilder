@@ -93,14 +93,17 @@
         renderDomains()
     }
 
+    hideSensitiveData.addEventListener('change', renderDomains, false)
+
     var domainsTitle = document.querySelector('#domainsTitle')
     var list = document.querySelector('#domains')
     function renderDomains () {
         empty(list)
         var domains = getDomains()
-        var isEmpty = domains.length === 0
-        domainsTitle.style.display = isEmpty ? 'none' : 'block'
-        if (isEmpty) return
+        var stop = domains.length === 0 ||hideSensitiveData.checked
+        domainsTitle.style.display = stop ? 'none' : 'block'
+        if (stop) return
+
         domains.map(function (domain) {
             if (domain === '') return
             var li = document.createElement('li')

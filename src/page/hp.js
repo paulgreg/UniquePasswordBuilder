@@ -38,13 +38,9 @@
     }
 
     var copyBookmarkletToClipboard = function() {
-        var algorithmParameters
-        if (algorithmInput.value === 'argon2') {
-            algorithmParameters = "window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty='" + difficultyArgon2Input.value + "';window.salt='"+usersaltInput.value +"';window.argon2AsmPath='"+ window.location.href + "';"
-        }
-        else {
-            algorithmParameters = "window.uniquePasswordBuilderAlgorithm='scrypt';window.uniquePasswordBuilderDifficulty='" + difficultyScryptInput.value + "';window.uniquePasswordBuilderKeyIndex='" + usersaltInput.value + "';"
-        }
+        var algorithmParameters = (algorithmInput.value === 'argon2')
+            ? "window.uniquePasswordBuilderAlgorithm='argon2';window.uniquePasswordBuilderDifficulty='" + difficultyArgon2Input.value + "';window.salt='"+usersaltInput.value +"';window.argon2AsmPath='"+ window.location.href + "';"
+            : "window.uniquePasswordBuilderAlgorithm='scrypt';window.uniquePasswordBuilderDifficulty='" + difficultyScryptInput.value + "';window.uniquePasswordBuilderKeyIndex='" + usersaltInput.value + "';"
         var bookmarklet = "javascript:(function(){" + algorithmParameters + "document.body.appendChild(document.createElement('script')).src='"+ window.location.href +"upb.min.js';})();"
         copyTextToClipboard(bookmarklet)
     }

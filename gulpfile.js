@@ -16,6 +16,9 @@ var paths = {
         'src/common-ui.js',
         'node_modules/argon2-browser/lib/argon2.js'
     ],
+    hp: [
+        'src/page/hp.js'
+    ],
     bookmarklet: [
         'node_modules/scrypt-async/scrypt-async.js',
         'src/passwordgeneration.js',
@@ -45,6 +48,13 @@ gulp.task('index', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('hp', function() {
+  return gulp.src(paths.hp)
+    .pipe(uglify())
+    .pipe(concat('hp.min.js'))
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('argon2', function() {
     return gulp.src('node_modules/argon2-browser/dist/argon2-asm.min.js')
       .pipe(gulp.dest('dist'))
@@ -65,13 +75,15 @@ gulp.task('font-awesome-fonts', function() {
 
 gulp.task('font-awesome', gulp.series('font-awesome-css', 'font-awesome-fonts'));
 
-gulp.task('page-html', gulp.series('index', function() {
+gulp.task('page-html', gulp.series('index', 'hp', function() {
     var assetHash = SHA384(fs.readFileSync("dist/upb-main.min.js", "utf8")).toString("base64");
+    var hpHash = SHA384(fs.readFileSync("dist/hp.min.js", "utf8")).toString("base64");
 
     return gulp.src('src/page/*.html')
       .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
       .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
       .pipe(replace('{SRI_HASH}', assetHash))
+      .pipe(replace('{SRI_HP_HASH}', hpHash))
       .pipe(gulp.dest('dist'));
 }));
 

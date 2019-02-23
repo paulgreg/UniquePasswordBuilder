@@ -97,6 +97,7 @@
         url.value = domain
         saveDomain(domain)
         renderDomains()
+        compute()
     }
 
     function removeDomain (domain) {

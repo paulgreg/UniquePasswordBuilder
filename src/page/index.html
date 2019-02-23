@@ -19,9 +19,14 @@
             h2.important              { color: #F22; }
 
             p                         { margin: 0px 0px 9px; line-height: 1.25em; }
-            a                         { text-decoration: underline; }
+            a                         { text-decoration: underline; cursor: pointer; }
             pre                       { border: 1px solid black; padding: .25em; background-color: #D0E5F6; white-space: pre-wrap; }
             button                    { min-height: 30px; margin-left: 5px; background-color: #70b1e254; border-style: solid; border-color: #72B5E8; }
+            #domainsTitle          { margin: 1.5em 0 0 0; display: none; }
+            #domains               { margin: .5em 0 1.5em 0; }
+            #domains a             { padding: .25em; }
+            #domains a.domain      { color: darkblue; margin: }
+            #domains a.remove      { color: #F22; font-size: small; }
 {TEMPLATE_CSS}
         </style>
     </head>
@@ -30,6 +35,8 @@
 
         {TEMPLATE_HTML}
 
+<h4 id="domainsTitle">Previous URLs:</h4>
+<ul id="domains"></ul>
 <a href="" id="displayInfos" class="hidden">More informations</a>
 <div id="infos">
 

@@ -64,10 +64,26 @@
         return domains = domains ? JSON.parse(domains) : []
     }
 
+    function moveOnTop (arr, idx) {
+        return move(arr, idx, 0)
+    }
+    function move(arr, oldIndex, newIndex) {
+        if (newIndex >= arr.length) {
+            var k = newIndex - arr.length + 1
+            while (k--) arr.push(undefined)
+        }
+        arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0])
+        return arr
+    };
+
     function saveDomain (domain) {
         var domains = getDomains()
-        if (domains.indexOf(domain) !== -1) return
-        domains.push(domain)
+        var idx = domains.indexOf(domain)
+        if (idx !== -1) {
+            moveOnTop(domains, idx)
+        } else {
+            domains.unshift(domain)
+        }
         localStorage.domains = JSON.stringify(domains)
     }
 
@@ -79,6 +95,8 @@
 
     function selectDomain (domain) {
         url.value = domain
+        saveDomain(domain)
+        renderDomains()
     }
 
     function removeDomain (domain) {

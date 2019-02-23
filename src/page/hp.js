@@ -23,7 +23,7 @@
         hideData()
         if (localStorage.difficultyArgon2) difficultyArgon2Input.value = localStorage.difficultyArgon2 | 10
         if (localStorage.usersalt) usersaltInput.value = localStorage.usersalt
-        if(localStorage.options === 'true') optionsDiv.classList.remove('hidden')
+        if (localStorage.options === 'true') optionsDiv.classList.remove('hidden')
         changeAlgorithm()
         renderDomains()
     }

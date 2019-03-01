@@ -17,6 +17,10 @@ UniquePasswordBuilder is available via 3 tools :
 `npm install && gulp` to build output files in `dist` directory.
 You can run `gulp clean` to remove the `dist` folder.
 
+## Self-hosting the PWA
+
+You can simply checkout the branch `gh-pages` (already built) or build the application (see above) then copy the `dist` folder on your server.
+
 ## Build the Addon
 
 Gulp generates some files into the addon directory.

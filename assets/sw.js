@@ -1,4 +1,5 @@
 const CACHE = 'network-or-cache'
+const TIMEOUT = 50
 
 self.addEventListener('install', evt => {
   console.log('Service worker is being installed.')
@@ -9,7 +10,7 @@ self.addEventListener('activate', evt => {
 });
 
 self.addEventListener('fetch', evt => {
-  evt.respondWith(fromNetwork(evt.request, 500).catch(() => {
+  evt.respondWith(fromNetwork(evt.request, TIMEOUT).catch(() => {
     return fromCache(evt.request)
   }))
 })

@@ -33,5 +33,11 @@
         "default_icon": "imgs/icon-96.png",
         "default_title": "UniquePaswordBuilder",
         "default_popup": "index.html"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "UniquePasswordBuilder@paulgreg.me",
+            "strict_min_version": "57.0"
+        }
     }
 }

@@ -12,20 +12,35 @@ UniquePasswordBuilder is available via 3 tools :
   * a [bookmarklet](http://paulgreg.me/UniquePasswordBuilder),
   * a [Firefox](https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon) and [Chrome](https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie) Add-on.
 
+## Dependencies
+
+UniquePasswordBuilder is depending on some dependencies in order to be build (gulp) and needs 3 libraries for runtime :
+
+- argon2-browser 1.5.3
+- scrypt-async 2.0.1
+- font-awesome 4.7.0
+
+Dependencies are installed via npm.
+
+The `package-lock.json` file contains the URL from where dependencies are downloaded.
+
 ## Build the webpage and the bookmarklet
 
 `npm install && gulp` to build output files in `dist` directory.
+
 You can run `gulp clean` to remove the `dist` folder.
-
-## Self-hosting the PWA
-
-You can simply checkout the branch `gh-pages` (already built) or build the application (see above) then copy the `dist` folder on your server.
 
 ## Build the Addon
 
 Gulp generates some files into the addon directory.
-So be sure to launch `gulp` the first time and each time you change JS source files.
+
+So be sure to launch `npm install && gulp` the first time and each time you change JS source files.
+
 When ready, use `addon/build.sh` to generate the zip.
+
+## Self-hosting the PWA
+
+You can simply checkout the branch `gh-pages` (already built) or build the application (see above) then copy the `dist` folder on your server.
 
 ## Publish the web page
 

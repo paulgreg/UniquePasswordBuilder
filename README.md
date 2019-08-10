@@ -36,7 +36,7 @@ Gulp generates some files into the addon directory.
 
 So be sure to launch `npm install && gulp` the first time and each time you change JS source files.
 
-When ready, use `addon/build.sh` to generate the zip.
+Then, use `addon/build.sh` to generate the zip.
 
 ## Self-hosting the PWA
 

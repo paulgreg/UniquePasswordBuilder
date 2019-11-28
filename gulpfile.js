@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var execSync = require('child_process').execSync;
 var rimraf = require('rimraf');
 var replace = require('gulp-replace');
 var fs = require("fs");
@@ -82,8 +83,9 @@ gulp.task('page-html', gulp.series('index', 'hp', function() {
     return gulp.src('src/page/*.html')
       .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
       .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
-      .pipe(replace('{SRI_HASH}', assetHash))
-      .pipe(replace('{SRI_HP_HASH}', hpHash))
+      .pipe(replace('{SRI_HASH}', `integrity="sha384-${assetHash}"`))
+      .pipe(replace('{SRI_HP_HASH}', `integrity="sha384-${hpHash}"`))
+      .pipe(replace('{COMMIT_HASH}', execSync('git rev-parse HEAD').toString()))
       .pipe(gulp.dest('dist'));
 }));
 

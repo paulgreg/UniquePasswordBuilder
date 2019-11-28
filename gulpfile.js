@@ -82,8 +82,8 @@ gulp.task('page-html', gulp.series('index', 'hp', function() {
     return gulp.src('src/page/*.html')
       .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))
       .pipe(replace('{TEMPLATE_CSS}', cssTemplateContent))
-      .pipe(replace('{SRI_HASH}', assetHash))
-      .pipe(replace('{SRI_HP_HASH}', hpHash))
+      .pipe(replace('{SRI_HASH}', `integrity="sha384-${assetHash}"`))
+      .pipe(replace('{SRI_HP_HASH}', `integrity="sha384-${hpHash}"`))
       .pipe(gulp.dest('dist'));
 }));
 

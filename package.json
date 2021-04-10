@@ -18,7 +18,7 @@
   "homepage": "https://github.com/paulgreg/UniquePasswordBuilder",
   "devDependencies": {
     "gulp": "^4.0.0",
-    "gulp-concat": "^2.6.0",
+    "gulp-concat": "^2.6.1",
     "gulp-replace": "^0.6.1",
     "gulp-uglify": "^3.0.0",
     "qunitjs": "^1.19.0",

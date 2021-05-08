@@ -1,0 +1,24 @@
+{
+    "name": "Unique Password Builder",
+    "short_name": "UPB",
+    "description": "A password builder to generate a strong and different password for each website",
+    "start_url": "./#pwa",
+    "lang": "en-EN",
+    "display": "minimal-ui",
+    "theme_color": "#D0E5F6",
+    "background_color": "#D0E5F6",
+    "icons": [
+      {
+        "src": "icon.png",
+        "sizes": "48x48 64x64"
+      },
+      {
+        "src": "icon-128.png",
+        "sizes": "72x72 96x96 128x128"
+      },
+      {
+        "src": "icon-512.png",
+        "sizes": "256x256 512x512"
+      }
+    ]
+  }

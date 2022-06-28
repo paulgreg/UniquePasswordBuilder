@@ -5,10 +5,18 @@ var execSync = require('child_process').execSync;
 var rimraf = require('rimraf');
 var replace = require('gulp-replace');
 var fs = require("fs");
-var SHA384 = require("sha384");
+var crypto = require('crypto');
 
 var formTemplateContent = fs.readFileSync("src/templates/form.html", "utf8");
 var cssTemplateContent = fs.readFileSync("src/templates/styles.css", "utf8");
+
+const sha384 = str => {
+    const hash = crypto.createHash('sha384')
+    const data = hash.update(str, 'utf-8')
+    return data.digest('base64')
+}
+
+const buildSriFromFile = filepath => sha384(fs.readFileSync(filepath, "utf8"))
 
 var paths = {
     index: [
@@ -76,9 +84,10 @@ gulp.task('font-awesome-fonts', function() {
 
 gulp.task('font-awesome', gulp.series('font-awesome-css', 'font-awesome-fonts'));
 
+
 gulp.task('page-html', gulp.series('index', 'hp', function() {
-    var assetHash = SHA384(fs.readFileSync("dist/upb-main.min.js", "utf8")).toString("base64");
-    var hpHash = SHA384(fs.readFileSync("dist/hp.min.js", "utf8")).toString("base64");
+    var assetHash = buildSriFromFile("dist/upb-main.min.js")
+    var hpHash = buildSriFromFile("dist/hp.min.js")
 
     return gulp.src('src/page/*.html')
       .pipe(replace('{TEMPLATE_HTML}', formTemplateContent))

@@ -1,8 +1,8 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "short_name": "UniquePasswordBuider",
     "name": "UniquePasswordBuider",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "description": "A strong password generator per site",
     "homepage_url": "https://paulgreg.me/UniquePasswordBuilder/",
     "icons": {
@@ -10,18 +10,12 @@
         "48": "imgs/icon-48.png",
         "96": "imgs/icon-96.png"
     },
-    "applications": {
-        "gecko": {
-            "id": "UniquePasswordBuilder@paulgreg.me",
-            "strict_min_version": "45.0"
-        }
-    },
     "commands": {
-        "_execute_browser_action": {
-          "suggested_key": {
-            "default": "Ctrl+Shift+L",
-            "mac": "Command+Shift+L"
-          }
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+L",
+                "mac": "Command+Shift+L"
+            }
         }
     },
     "permissions": [
@@ -29,15 +23,9 @@
         "storage",
         "clipboardWrite"
     ],
-    "browser_action": {
+    "action": {
         "default_icon": "imgs/icon-96.png",
         "default_title": "UniquePaswordBuilder",
         "default_popup": "index.html"
-    },
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "UniquePasswordBuilder@paulgreg.me",
-            "strict_min_version": "57.0"
-        }
     }
 }

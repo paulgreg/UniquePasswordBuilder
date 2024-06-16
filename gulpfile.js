@@ -82,7 +82,7 @@ gulp.task("font-awesome-css", function () {
 
 gulp.task("font-awesome-fonts", function () {
     return gulp
-        .src("node_modules/font-awesome/fonts/*")
+        .src("node_modules/font-awesome/fonts/*", { encoding: false })
         .pipe(gulp.dest("dist/font-awesome/fonts"))
         .pipe(gulp.dest("addon/font-awesome/fonts"));
 });
@@ -123,7 +123,7 @@ gulp.task("addon-html", function () {
 });
 
 gulp.task("assets", function () {
-    return gulp.src("assets/*").pipe(gulp.dest("dist"));
+    return gulp.src("assets/*", { encoding: false }).pipe(gulp.dest("dist"));
 });
 
 gulp.task(

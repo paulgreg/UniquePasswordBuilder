@@ -22,7 +22,7 @@
     "gulp-replace": "^0.6.1",
     "gulp-uglify": "^3.0.2",
     "qunitjs": "^1.19.0",
-    "rimraf": "^2.4.2"
+    "rimraf": "^5.0.7"
   },
   "dependencies": {
     "argon2-browser": "1.5.3",

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="index, follow"/>
+        <meta name="author" content="Gr&eacute;gory Paul"/>
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no" />
+        <meta name="theme-color" content="#D0E5F6"/>
+        <meta name="description" content="Generate strong and per site passwords"/>
+        <title>Unique Password Builder</title>
+        <link rel="icon" type="image/png" href="icon.png" />
+        <link rel="manifest" href="manifest.webmanifest">
+        <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
+        <style>
+            body                      { margin: .75em; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; color: #333; font-size: 1em; }
+
+            h1, h2, h3, h4, h5, h6    { margin: 0px; font-weight: bold; text-rendering: optimizelegibility; }
+            h1                        { font-size: 30px; line-height: 1.25em; }
+            h2                        { border-bottom: 1px solid black; width: 98%; margin: .75em 0 .5em 0; }
+            h2.important              { color: #F22; }
+
+            p                         { margin: 0px 0px 9px; line-height: 1.25em; }
+            a                         { text-decoration: underline; cursor: pointer; }
+            pre                       { border: 1px solid black; padding: .25em; background-color: #D0E5F6; white-space: pre-wrap; }
+            button                    { min-height: 30px; margin-left: 5px; background-color: #70b1e254; border-style: solid; border-color: #72B5E8; }
+            #domainsTitle          { margin: 1.5em 0 0 0; display: none; }
+            #domains               { margin: .5em 0 1.5em 0; }
+            #domains a             { display: inline-block; padding: .25em 0; margin: .25em 0; }
+            #domains a.domain      { color: darkblue; }
+            #domains a.remove      { color: grey; margin-left: 1em; font-size: small; }
+fieldset                  { border: 1px solid black; background-color: #70b1e254; padding: .5em; }
+label                     { display: flex; margin: .25em; align-items: center; }
+label.checkbox            { justify-content: space-between; }
+label.checkbox div        { min-width: 200px; }
+input, select, #output    { margin-left: .25em; flex-grow: 1; }
+input, select             { padding: 4px; line-height: 1.25em; color: #555; border: 1px solid #CCC; border-radius: 3px; background-color: white; }
+input                     { height: 18px; }
+input:focus, select:focus { border-color: #72B5E8; box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6); outline: 0px none; }
+input.hide                { background-color: black; color: black;}
+#usefulUrl                { font-size: 11px; min-height: 14px; }
+.error                    { border: 2px solid #F22; color: #F22; font-weight: bold; }
+.icons                    { margin: 0 0 0 5px; display: flex; justify-content: space-between; }
+.hidden                   { display: none; }
+input[type="checkbox"]    { vertical-align:middle; margin-left: auto;}
+#output                   { font-family: monospace; border: 1px dashed black; padding: .5em .1em 0 .1em; text-align: center; background: white; color: black; font-weight: bold; font-size: 1.2em; min-height: 20px; }
+#output.hide              { background-color: black; }
+#output.error.hide        { background-color: none; }
+a.options                 { color: darkblue; }
+i#copyToClipboardBtn      { color: #5b93be; font-size: 26px; margin: 0 0 0 5px;}
+
+        </style>
+    </head>
+    <body>
+        <h1>Unique Password Builder</h1>
+
+        <form>
+    <fieldset>
+        <label>
+            Master password:
+            <input type="password" id="password" placeholder="Alpha-numeric, lower and upper case characters are required" />
+            <div id='passwordIconMemo' class="icons hidden"></div>
+        </label>
+        <label>
+            <abbr title="Uniform Resource Locator">URL</abbr> (or Key):
+            <input type="text" id="url" placeholder="Paste here the URL of a website (or type a key)"
+            />
+        </label>
+        <label id="usefulUrl"></label>
+        <label class="checkbox">
+            <div>
+                Hide sensitive data:&nbsp;
+                <input type="checkbox" id="hideSensitiveData" />
+            </div>
+            <a href="" class="options">options</a>
+        </label>
+
+        <div class="options hidden">
+            <label>Algorithm:
+                <select id="algorithm">
+                    <option value="scrypt" selected="selected">Scrypt</option>
+                    <option value="argon2">Argon2 (newer and more secure)</option>
+                </select>
+            </label>
+            <label>Difficulty:
+                <select id="difficultyScrypt">
+                    <option value="256">256 (2^8)</option>
+                    <option value="512">512 (2^9)</option>
+                    <option value="1024">1024 (2^10)</option>
+                    <option value="2048">2048 (2^11)</option>
+                    <option value="4096">4096 (2^12)</option>
+                    <option value="8192">8192 (2^13)</option>
+                    <option value="16384">16384 (2^14)</option>
+                    <option value="32768">32768 (2^15)</option>
+                    <option value="65536">65536 (2^16)</option>
+                    <option value="131072">131072 (2^17)</option>
+                    <option value="262144">262144 (2^18)</option>
+                    <option value="524288">524288 (2^19)</option>
+                </select>
+                <input type="number" id='difficultyArgon2' value='10' max="1000" min="1" class="hidden" />
+            </label>
+            <label>User salt:
+                <input type="text" id="usersalt" value="" maxlength="80" />
+            </label>
+        </div>
+        <label>
+            <span id="output"></span>
+            <i class="fa fa-clipboard" aria-hidden="true" id="copyToClipboardBtn" class="hidden" title="Copy to clipboard"></i>
+        </label>
+    </fieldset>
+</form>
+
+
+<h4 id="domainsTitle">Previously used URLs:</h4>
+<ul id="domains"></ul>
+<a href="" id="displayInfos" class="hidden">More informations</a>
+<div id="infos">
+
+        <h2>What is it ?</h2>
+        <p>Unique Password Builder’s goal is to generate a strong and different password for each website you want to login while still typing the same password (which I call the <strong>master password</strong>) everywhere.</p>
+        <p>You can use Unique Password Builder via one of these options :</p>
+        <ul>
+            <li>This page (which is a Progressive Web App and that you can install as an app on mobile),</li>
+            <li><a href="https://addons.mozilla.org/en-US/firefox/addon/uniquepasswordbuilder-addon/">Firefox</a> and <a href="https://chrome.google.com/webstore/detail/uniquepasswordbuider/egilgkfibealmbllcigihfhglhipnmie/">Chrome</a> add-ons generating your password that you can then copy and paste,</li>
+            <li>A <a href="http://en.wikipedia.org/wiki/Bookmarklet" title="More on bookmarklet">bookmarklet</a> for other browsers that will ask your <strong>master password</strong> and then add a "fill password" link after all password fields.
+            Clicking on that link will compute a <strong>unique password</strong> using the <strong>current domain</strong> and your <strong>master password</strong> so it makes a different but very strong password for each website.</li>
+        </ul>
+
+        <h2 class="important">Disclaimer / security concerns</h2>
+        <p>Generating passwords is a sensitive piece of code, so, I strongly suggest you get the <a href="https://github.com/paulgreg/UniquePasswordBuilder">source code</a> (eventually inspect it) and host the code (including that page) yourself on a SSL/TLS server.</p>
+        <p>If you’re not convinced, tell yourself what if I change the password generation code, if there’s a critical bug or if that page is deleted some day...</p>
+
+        <p>You could also verify the security of generated password using the site <a href="https://howsecureismypassword.net/" target="about:_blank">howsecureismypassword.net</a>
+            (<strong>don't try with one of the password you use</strong>, only with some you just generated with dummy values...)</p>
+
+        <p>Also, UniquePasswordBuilder has been « inspected » from several people on the internet (from whom I’m not related), like <a href="https://twitter.com/AaronToponce" rel="nofollow noreferrer">Aaron Toponce</a> on <a href="https://icanhaz.pw/" rel="nofollow noopener">icanhaz.pw</a> and <a href="https://twitter.com/WPalant" rel="nofollow noopener">Wladimir Palant</a> on <a href="https://palant.de/2016/04/20/security-considerations-for-password-generators/" rel="nofollow noopener">palant.de/2016/04/20/security-considerations-for-password-generators</a> (note that issues from that post, like scrypt small default cost factor, have been fixed since).
+
+        <h2>Bookmarklet installation</h2>
+        <ol>
+            <li>Configure the <b>options</b> section above (or leave to the default values).</li>
+            <li><button id="copyBookmarkletToClipboard">Copy the bookmarklet code in the clipboard</button></li>
+            <li>Create a bookmark and paste the copied code inside the <strong>address field</strong> of the bookmark,</li>
+        </ol>
+        <p>It’s done !</p>
+
+        <h2>Bookmarklet usage</h2>
+        <ol>
+            <li>Go to any login form,</li>
+            <li>Click on the bookmarklet,</li>
+            <li>A form asking your "master password" will appear,</li>
+            <li>Type your <strong>master password</strong> in that password field and press <strong>enter</strong>,</li>
+            <li>Each password field on the page should then be followed by a "fill password" link,</li>
+            <li>Clicking on that link will generate a password, unique for that URL and your master password and will fill it into the password field,</li>
+            <li>Optionally, before pressing enter, you can open the developer console to see the new generated password and information about the URL used.</li>
+        </ol>
+        <p>It’s done, you can submit the form to login.</p>
+
+        <h2>Which algorithm to choose?</h2>
+        <p>To better protect your <strong>master password</strong>, we recommand you to choose <strong>argon2</strong> algorithm which is newer and more secure.</p>
+        <p>Note that both <strong>scrypt</strong> (still there for compatibility) and <strong>argon2</strong> generate equally secured passwords.</p>
+
+        <h2>Under the hood</h2>
+        <p>We use 2 password-based <a href="https://en.wikipedia.org/wiki/Key_derivation_function">key derivation functions</a> (depending of your options) to generate the password for a site:
+            <a href="http://en.wikipedia.org/wiki/Scrypt">scrypt</a> (by <a href="https://twitter.com/cperciva">Colin Percival</a>) and <a href="http://en.wikipedia.org/wiki/Argon2">argon2</a> (by Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich).
+
+        <p>To make the password unique for each site, we use 2 information: the <strong>protocol</strong> and the <strong>host</strong>.
+            The <strong>Protocol</strong> is "http://" or "https://" ; The <strong>host</strong> is the complete domain (including subdomain).</p>
+        <h3>Example for password 'MyMasterPassword4UPB' and URL 'https://login.yourdomain.com/login'</h3>
+        <pre>'(QZlpar;YomE%qMz' = scrypt('MyMasterPassword4UPB', 'https://login.yourdomain.com', 8192, 8, 1, 64)</pre>
+        <p>
+            <strong>Beware that, if your master password, the protocol (http/https) or the domain/subdomain changes, the generated password will be different and you won’t be able to login !</strong><br/>
+            If that happens, you can always generate the old password using the form above with previous information.
+        </p>
+
+        <p>The <strong>user salt</strong> is a parameter added to the URL allowing you to change generated password without changing your master password.</p>
+        <p>The Firefox or Chrome addon, that page and the bookmarklet shares the code about password generation. You can use one or the other and still get the same password when using the same parameters.</p>
+        <p>The code includes <a href="https://github.com/dchest/scrypt-async-js">scrypt-async-js</a> (by <a href="https://github.com/dchest">Dmitry Chestnykh</a>),
+            <a href="https://github.com/antelle/argon2-browser">argon2-browser</a> (by <a href="https://github.com/antelle/argon2-browser">Antelle</a>) and icon set <a href="http://ikons.piotrkwiatkowski.co.uk/">ikons</a> (by <a href="http://piotrkwiatkowski.co.uk/">Piotr Adam Kwiatkowski</a>). Many thanks !</p>
+        <p>Thanks to <a href="https://github.com/pmiossec">Philippe Miossec</a> for its contributions and argon2 support.</p>
+        <p>You may check the <a href="https://github.com/paulgreg/UniquePasswordBuilder/">source code on github</a> (This page was generated from commit: f404be5d78dd018b2dae03d05db2c24271c9eea4
+) or find more about me on <a href="http://paulgreg.me">paulgreg.me</a>.
+
+        <h2>Make it stronger...</h2>
+        <p>You could specify a <strong>user salt</strong> to make it more resilient against <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table attacks (the longer is the better.)</a>.</p>
+        <h3>For scrypt</h3>
+        <p>We use 8192 difficulty by default.</p>
+        <p>You can adjust it to the value you want but it should be a power of two. The higher the number, the longer it is to brute-force but also will take more time on your platform to generate (that could be an issue on mobile devices)...<p>
+        <h3>For argon2</h3>
+        <p>We use 10 difficulty by default. You could choose a greater value.</p>
+</div>
+        <script integrity="sha384-X4P0/3XuXl/EYLE2XZRaSE8cj9ZuWkNa0gZHAopBJRbyE/du/72+5uxik8eIucCv" src="upb-main.min.js"></script>
+        <script integrity="sha384-Y2z6wSpen0L93ywBUekSeXomCTmZwzmY7I9swlNOuuboqNkooLlXGMz1P/Z1mkg0" src="hp.min.js"></script>
+    </body>
+</html>
